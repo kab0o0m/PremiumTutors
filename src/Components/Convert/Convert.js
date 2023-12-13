@@ -56,7 +56,9 @@ const Convert = () => {
         "Location: " + location
       }\n${"Duration: " + duration}\n${"Timing: " + timing}\n\n${
         "Fees: " + fees
-      }\n\n${commission}\n\n${remarks}\n\n${interested_applicants}\n\n${application_form}`
+      }\n\n${"Commission: " + commission}\n\n${
+        "Remarks: " + remarks
+      }\n\n${interested_applicants}\n\n${application_form}`
     );
   };
 
