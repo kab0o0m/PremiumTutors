@@ -6,7 +6,9 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Route path="/PremiumTutors/" element={<Convert />} />
+        <Routes>
+          <Route path="/PremiumTutors/" element={<Convert />} />
+        </Routes>
       </div>
     </Router>
   );
