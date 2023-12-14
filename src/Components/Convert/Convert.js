@@ -6,6 +6,93 @@ const Convert = () => {
   const [textOutput, setTextOutput] = useState(null);
   const [textFormat, setTextFormat] = useState(null);
   const [address, setAddress] = useState(null);
+  const fees = {
+    "pre school": {
+      PTT: "$25 - $30",
+      FTT: "$35 - $45",
+      moe: "$50 -$65",
+    },
+    "Pri 1": {
+      PTT: "$25 - $30",
+      FTT: "$35 - $45",
+      moe: "$50 -$65",
+    },
+    "Pri 2": {
+      PTT: "$25 - $30",
+      FTT: "$35 - $45",
+      moe: "$50 -$65",
+    },
+    "Pri 3": {
+      PTT: "$25 - $30",
+      FTT: "$35 - $45",
+      moe: "$50 -$65",
+    },
+    "Pri 4": {
+      PTT: "$30 - $35",
+      FTT: "$40 - $50",
+      moe: "$60 -$75",
+    },
+    "Pri 5": {
+      PTT: "$30 - $35",
+      FTT: "$40 - $50",
+      moe: "$60 -$75",
+    },
+    "Pri 6": {
+      PTT: "$30 - $35",
+      FTT: "$40 - $50",
+      moe: "$60 -$75",
+    },
+    "Sec 1": {
+      PTT: "$35 - $40",
+      FTT: "$45 - $55",
+      moe: "$60 -$80",
+    },
+    "Sec 2": {
+      PTT: "$35 - $40",
+      FTT: "$45 - $55",
+      moe: "$60 -$80",
+    },
+    "Sec 3": {
+      PTT: "$35 - $45",
+      FTT: "$45 - $60",
+      moe: "$65 -$90",
+    },
+    "Sec 4": {
+      PTT: "$35 - $45",
+      FTT: "$45 - $60",
+      moe: "$65 -$90",
+    },
+    "Sec 5": {
+      PTT: "$35 - $45",
+      FTT: "$45 - $60",
+      moe: "$65 -$90",
+    },
+    JC: {
+      PTT: "$40 - $55",
+      FTT: "$65 - $80",
+      moe: "$90-$120",
+    },
+    IGCSE: {
+      PTT: "$35 - $50",
+      FTT: "$45 - $75",
+      moe: "$60 -$110",
+    },
+    "IB Diploma": {
+      PTT: "$40 - $55",
+      FTT: "$65 - $85",
+      moe: "$90 -$120",
+    },
+    Tertiary: {
+      PTT: "$40 - $60",
+      FTT: "$60 - $90",
+      moe: "$100 -$120",
+    },
+    Languages: {
+      PTT: "$35 - $45",
+      FTT: "$50 - $70",
+      moe: "$70 -$100",
+    },
+  };
 
   const getFullAddress = async (postalCode) => {
     try {
@@ -76,7 +163,7 @@ const Convert = () => {
 
       const timing = clientInfo["Timings"];
       const typeOfTutor = clientInfo["Category of Tutor (For Academic)"];
-      const fees = "$40 - $50/hour Graduate/Full-time Tutors";
+
       const commission = `First ${parseInt(frequency[0]) * 2} lessons`;
       const remarks = clientInfo["Remarks"];
 
