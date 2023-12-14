@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./Convert.css";
+import { type } from "@testing-library/user-event/dist/type";
 
 const Convert = () => {
   const [textInput, setTextInput] = useState("");
@@ -10,87 +11,87 @@ const Convert = () => {
     "pre school": {
       PTT: "$25 - $30",
       FTT: "$35 - $45",
-      moe: "$50 -$65",
+      moe: "$50 - $65",
     },
     "Pri 1": {
       PTT: "$25 - $30",
       FTT: "$35 - $45",
-      moe: "$50 -$65",
+      moe: "$50 - $65",
     },
     "Pri 2": {
       PTT: "$25 - $30",
       FTT: "$35 - $45",
-      moe: "$50 -$65",
+      moe: "$50 - $65",
     },
     "Pri 3": {
       PTT: "$25 - $30",
       FTT: "$35 - $45",
-      moe: "$50 -$65",
+      moe: "$50 - $65",
     },
     "Pri 4": {
       PTT: "$30 - $35",
       FTT: "$40 - $50",
-      moe: "$60 -$75",
+      moe: "$60 - $75",
     },
     "Pri 5": {
       PTT: "$30 - $35",
       FTT: "$40 - $50",
-      moe: "$60 -$75",
+      moe: "$60 - $75",
     },
     "Pri 6": {
       PTT: "$30 - $35",
       FTT: "$40 - $50",
-      moe: "$60 -$75",
+      moe: "$60 - $75",
     },
     "Sec 1": {
       PTT: "$35 - $40",
       FTT: "$45 - $55",
-      moe: "$60 -$80",
+      moe: "$60 - $80",
     },
     "Sec 2": {
       PTT: "$35 - $40",
       FTT: "$45 - $55",
-      moe: "$60 -$80",
+      moe: "$60 - $80",
     },
     "Sec 3": {
       PTT: "$35 - $45",
       FTT: "$45 - $60",
-      moe: "$65 -$90",
+      moe: "$65 - $90",
     },
     "Sec 4": {
       PTT: "$35 - $45",
       FTT: "$45 - $60",
-      moe: "$65 -$90",
+      moe: "$65 - $90",
     },
     "Sec 5": {
       PTT: "$35 - $45",
       FTT: "$45 - $60",
-      moe: "$65 -$90",
+      moe: "$65 - $90",
     },
     JC: {
       PTT: "$40 - $55",
       FTT: "$65 - $80",
-      moe: "$90-$120",
+      moe: "$90- $120",
     },
     IGCSE: {
       PTT: "$35 - $50",
       FTT: "$45 - $75",
-      moe: "$60 -$110",
+      moe: "$60 - $110",
     },
     "IB Diploma": {
       PTT: "$40 - $55",
       FTT: "$65 - $85",
-      moe: "$90 -$120",
+      moe: "$90 - $120",
     },
     Tertiary: {
       PTT: "$40 - $60",
       FTT: "$60 - $90",
-      moe: "$100 -$120",
+      moe: "$100 - $120",
     },
     Languages: {
       PTT: "$35 - $45",
       FTT: "$50 - $70",
-      moe: "$70 -$100",
+      moe: "$70 - $100",
     },
   };
 
@@ -141,7 +142,20 @@ const Convert = () => {
         setTextFormat(JSON.stringify(clientInfo, null, 2));
       });
 
-      const level = clientInfo["Level (Drop down)"];
+      const level = clientInfo["Level (Drop down)"].replace("Primary", "Pri");
+      const levelFees = fees[level];
+      console.log(levelFees);
+      const typeOfTutor = clientInfo["Category of Tutor (For Academic)"];
+      let fullTypeOfTutor;
+      if (typeOfTutor === "PTT") {
+        fullTypeOfTutor = "Part Time/Undergrad Tutor";
+      } else if (typeOfTutor === "FTT") {
+        fullTypeOfTutor = "Full Time/Graduate Tutor";
+      } else if (typeOfTutor === "moe") {
+        fullTypeOfTutor = "Ex /Current School Teachers";
+      }
+      const rates = levelFees[typeOfTutor];
+
       const subject = clientInfo["Subject (Drop down)"];
       const level_subject = level + " " + subject;
       const location = clientInfo["Postal Code"];
@@ -162,7 +176,6 @@ const Convert = () => {
         frequency[1];
 
       const timing = clientInfo["Timings"];
-      const typeOfTutor = clientInfo["Category of Tutor (For Academic)"];
 
       const commission = `First ${parseInt(frequency[0]) * 2} lessons`;
       const remarks = clientInfo["Remarks"];
@@ -177,7 +190,7 @@ const Convert = () => {
         `${level_subject + " @ " + location}\n\n${"Details of assignment"}\n${
           "Location: " + address
         }\n${"Duration: " + duration}\n${"Timing: " + timing}\n\n${
-          "Fees: " + fees
+          "Fees: " + rates + "/hour " + fullTypeOfTutor
         }\n\n${"Commission: " + commission}\n\n${
           "Remarks: " + remarks
         }\n\n${interested_applicants}\n\n${application_form}`
