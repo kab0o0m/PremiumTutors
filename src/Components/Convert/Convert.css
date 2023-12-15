@@ -4,6 +4,16 @@
 }
 
 .convert-form {
+  width: 50rem;
+}
+.convert-form form {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem;
+  align-items: start;
+}
+
+.convert-input{
   display: flex;
   flex-direction: column;
   margin: 2rem;
