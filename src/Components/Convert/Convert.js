@@ -6,35 +6,40 @@ const Convert = () => {
   const [textInput, setTextInput] = useState("");
   const [textOutput, setTextOutput] = useState(null);
   const [textFormat, setTextFormat] = useState(null);
-  const [clientName, setClientName] = useState("");
-  const [contactNo, setContactNo] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [clientLevel, setClientLevel] = useState("");
-  const [clientSubject, setClientSubject] = useState("");
-  const [clientFrequency, setClientFrequency] = useState("");
-  const [clientDuration, setClientDuration] = useState("");
-  const [clientTiming, setClientTiming] = useState("");
-  const [clientCategory, setClientCategory] = useState("");
+  const [formData, setFormData] = useState({
+    client_name: "",
+    contact: "",
+    postal: "",
+    level: "",
+    subject: "",
+    frequency: "",
+    duration: "",
+    timings: "",
+    tutor1: false,
+    tutor2: false,
+    tutor3: false,
+    remarks: "",
+  });
 
   const fees = {
     "pre school": {
       ptt: "$25 - $30",
-      FTT: "$35 - $45",
+      ftt: "$35 - $45",
       moe: "$50 - $65",
     },
     "primary 1": {
       ptt: "$25 - $30",
-      FTT: "$35 - $45",
+      ftt: "$35 - $45",
       moe: "$50 - $65",
     },
     "primary 2": {
       ptt: "$25 - $30",
-      FTT: "$35 - $45",
+      ftt: "$35 - $45",
       moe: "$50 - $65",
     },
     "primary 3": {
       ptt: "$25 - $30",
-      FTT: "$35 - $45",
+      ftt: "$35 - $45",
       moe: "$50 - $65",
     },
     "primary 4": {
@@ -103,6 +108,12 @@ const Convert = () => {
       moe: "$70 - $100",
     },
   };
+
+  const interested_applicants =
+    "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications";
+
+  const application_form =
+    "Application Form for Registered Tutors: https://forms.gle/VCuCj7Pkdm7kMRX49";
 
   // Get Full address from Onemap API
   const getFullAddress = async (postal) => {
@@ -194,12 +205,6 @@ const Convert = () => {
       const commission = `First ${parseInt(frequency[0]) * 2} lessons`;
       const remarks = clientInfo["Remarks"];
 
-      const interested_applicants =
-        "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications";
-
-      const application_form =
-        "Application Form for Registered Tutors: https://forms.gle/VCuCj7Pkdm7kMRX49";
-
       setTextOutput(
         `${level_subject + " @ " + location}\n\n${"Details of assignment"}\n${
           "Location: " + address
@@ -214,37 +219,197 @@ const Convert = () => {
     }
   };
 
+  //Updates form data as user updates it
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  //Submit form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form data submitted:", formData);
+    const clientName =
+      formData["client_name"].charAt(0).toUpperCase() +
+      formData["client_name"].slice(1);
+    const clientContact = formData["contact"];
+    const clientPostal = formData["postal"];
+    const clientAddress = await getFullAddress(clientPostal);
+    const level = formData["level"].toLowerCase();
+    let clientLevel = level
+      .replace(/\bprimary\b/i, "Primary")
+      .replace(/\bpri\b/i, "Primary")
+      .replace(/\bp\b/i, "Primary")
+      .replace(/\bsecondary\b/i, "Secondary")
+      .replace(/\bsec\b/i, "Secondary")
+      .replace(/\bjunior college\b/i, "Secondary")
+      .replace(/\bjunior\b/i, "Secondary")
+      .replace(/\bjc\b/i, "Junior College")
+      .replace(/\bpolytechnic\b/i, "Secondary")
+      .replace(/\bpoly\b/i, "PolyTechnic")
+      .replace(/\binternational\b/i, "Secondary")
+      .replace(/\binternational school\b/i, "Secondary")
+      .replace(/\bis\b/i, "International School")
+      .replace(/\bu\b/i, "University")
+      .replace(/\buni\b/i, "University")
+      .replace(/\buniversity\b/i, "University")
+      .replace(/\bal\b/i, "Adult Learner")
+      .replace(/\badult\b/i, "Adult Learner")
+      .replace(/\badult learner\b/i, "Adult Learner");
+    const clientSubject =
+      formData["subject"].charAt(0).toUpperCase() +
+      formData["subject"].slice(1);
+    const clientFrequency = formData["frequency"];
+    const clientDuration = formData["duration"];
+    const clientTimings = formData["timings"];
+    let clientFees = "";
+
+    const rate = fees[clientLevel.toLowerCase()];
+    console.log(rate);
+    if (formData["tutor1"]) {
+      clientFees =
+        clientFees + rate["ptt"] + "/hour" + "Part Time/Undergrad Tutor" + "\n";
+      console.log(clientFees);
+    }
+    if (formData["tutor2"]) {
+      clientFees =
+        clientFees + rate["ftt"] + "/hour" + "Full Time/Graduate Tutor" + "\n";
+      console.log(clientFees);
+    }
+    if (formData["tutor3"]) {
+      clientFees =
+        clientFees + rate["moe"] + "/hour " + "Ex /Current School Teachers";
+      console.log(clientFees);
+    }
+
+    const commission = `First ${parseInt(clientFrequency) * 2} lessons`;
+
+    const clientRemarks = formData["remarks"];
+    setTextOutput(
+      `${
+        clientLevel + " " + clientSubject + " @ " + clientPostal
+      }\n\n${"Details of assignment"}\n${"Location: " + clientAddress}\n${
+        "Duration: " + clientFrequency + "x " + clientDuration + "/ week"
+      }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n\n${
+        "Commission: " + commission
+      }\n\n${
+        "Remarks: " + clientRemarks
+      }\n\n${interested_applicants}\n\n${application_form}`
+    );
+  };
+
   return (
     <div className="convert">
       {/* Left Side of the screen (form) */}
       <div className="convert-form">
-        <form action="">
+        <form action="" onSubmit={handleSubmit}>
           <label htmlFor="client_name">Client Name</label>
-          <input type="text" id="client_name" name="client_name" />
+          <input
+            type="text"
+            id="client_name"
+            name="client_name"
+            value={formData.client_name}
+            onChange={handleInputChange}
+          />
           <label htmlFor="contact">Client Contact no.</label>
-          <input type="text" id="contact" name="contact" />
+          <input
+            type="text"
+            id="contact"
+            name="contact"
+            value={formData.contact}
+            onChange={handleInputChange}
+          />
           <label htmlFor="postal">Postal Code</label>
-          <input type="text" id="postal" name="postal" />
+          <input
+            type="text"
+            id="postal"
+            name="postal"
+            value={formData.postal}
+            onChange={handleInputChange}
+          />
           <label htmlFor="level">Level</label>
-          <input type="text" id="level" name="level" />
+          <input
+            type="text"
+            id="level"
+            name="level"
+            value={formData.level}
+            onChange={handleInputChange}
+          />
           <label htmlFor="subject">Subject</label>
-          <input type="text" id="subject" name="subject" />
-          <label htmlFor="frequency">Frequency</label>
-          <input type="text" id="frequency" name="frequency" />
-          <label htmlFor="duration">Duration</label>
-          <input type="text" id="duration" name="duration" />
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            value={formData.subject}
+            onChange={handleInputChange}
+          />
+          <label htmlFor="frequency">Frequency (/week)</label>
+          <input
+            type="text"
+            id="frequency"
+            name="frequency"
+            value={formData.frequency}
+            onChange={handleInputChange}
+          />
+
+          <label htmlFor="duration">Duration (hours)</label>
+          <input
+            type="text"
+            id="duration"
+            name="duration"
+            value={formData.duration}
+            onChange={handleInputChange}
+          />
           <label htmlFor="timings">Timings</label>
-          <input type="text" id="timings" name="timings" />
+          <input
+            type="text"
+            id="timings"
+            name="timings"
+            value={formData.timings}
+            onChange={handleInputChange}
+          />
           <label htmlFor="tutor">Category of Tutor</label>
-          <input type="checkbox" id="tutor1" name="tutor1" value="ftt" />
+          <input
+            type="checkbox"
+            id="tutor1"
+            name="tutor1"
+            value="ftt"
+            checked={formData.tutor1}
+            onChange={handleInputChange}
+          />
           <label htmlFor="tutor1">Part Time/Undergrad Tutor</label>
           <br />
-          <input type="checkbox" id="tutor2" name="tutor2" value="ftt" />
+          <input
+            type="checkbox"
+            id="tutor2"
+            name="tutor2"
+            value="ftt"
+            checked={formData.tutor2}
+            onChange={handleInputChange}
+          />
           <label htmlFor="tutor2">Full Time/Graduate Tutor</label>
           <br />
-          <input type="checkbox" id="tutor3" name="tutor3" value="ftt" />
+          <input
+            type="checkbox"
+            id="tutor3"
+            name="tutor3"
+            value="ftt"
+            checked={formData.tutor3}
+            onChange={handleInputChange}
+          />
           <label htmlFor="tutor3">Ex /Current School Teachers</label>
           <br />
+          <label htmlFor="timings">Remarks</label>
+          <input
+            type="text"
+            id="remarks"
+            name="remarks"
+            value={formData.remarks}
+            onChange={handleInputChange}
+          />
           <input type="submit" id="submit" value="Submit" />
         </form>
       </div>
