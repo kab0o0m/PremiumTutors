@@ -189,21 +189,64 @@ const Convert = () => {
       return "Error fetching address";
     }
   };
-  const findNearestMRT = async (latitude, longitude) => {
+  const getNearbyMRTStations = async (latitude, longitude) => {
+    const radius = 1000; // 1 km radius
+    // Singapore's bounding box coordinates
+    const singaporeBounds = {
+      minLat: 1.130475,
+      maxLat: 1.450475,
+      minLon: 103.600006,
+      maxLon: 104.100006,
+    };
+
+    // Check if the coordinates are within Singapore
+    if (
+      latitude < singaporeBounds.minLat ||
+      latitude > singaporeBounds.maxLat ||
+      longitude < singaporeBounds.minLon ||
+      longitude > singaporeBounds.maxLon
+    ) {
+      return "Location is not within Singapore";
+    }
+
+    const query = `
+        [out:json];
+        (
+            node["railway"="station"](around:${radius},${latitude},${longitude});
+        );
+        out;`;
+    const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(
+      query
+    )}`;
+
     try {
-      const response = await fetch(
-        `http://localhost:3001/findNearestMRT?latitude=${latitude}&longitude=${longitude}`
-      );
+      const response = await fetch(overpassUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      return data.results[0]?.name || "No MRT station found within 1km radius";
+      return data.elements; // Returns an array of MRT stations
     } catch (error) {
-      console.error("Error fetching MRT station:", error);
-      return "Error fetching MRT station";
+      console.error("Error fetching MRT stations:", error);
+      return [];
     }
   };
+
+  const getDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3; // metres
+    const φ1 = (lat1 * Math.PI) / 180;
+    const φ2 = (lat2 * Math.PI) / 180;
+    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
+    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return R * c;
+  };
+
   // Convert to Json format first
   const convertToFormat = async () => {
     try {
@@ -299,7 +342,43 @@ const Convert = () => {
     const clientPostal = formData["postal"];
     const clientAddress = await getFullAddress(clientPostal);
     console.log(clientAddress.latitude);
-    const nearestMRT = await findNearestMRT(
+    const nearbyStations = await getNearbyMRTStations(
+      clientAddress.latitude,
+      clientAddress.longitude
+    );
+    console.log("Nearby Stations:", nearbyStations);
+
+    const findNearestStation = (stations, latitude, longitude) => {
+      if (stations.length === 0) {
+        return "No nearby MRT station found";
+      }
+
+      let nearestStation = stations[0];
+      let minDistance = getDistance(
+        latitude,
+        longitude,
+        nearestStation.lat,
+        nearestStation.lon
+      );
+
+      stations.forEach((station) => {
+        const distance = getDistance(
+          latitude,
+          longitude,
+          station.lat,
+          station.lon
+        );
+        if (distance < minDistance) {
+          minDistance = distance;
+          nearestStation = station;
+        }
+      });
+
+      return nearestStation.tags.name;
+    };
+
+    const nearestStationName = findNearestStation(
+      nearbyStations,
       clientAddress.latitude,
       clientAddress.longitude
     );
@@ -369,7 +448,7 @@ const Convert = () => {
       const clientRemarks = formData["remarks"];
       setTextOutput(
         `${
-          clientLevel + " " + clientSubject + " @ " + clientPostal
+          clientLevel + " " + clientSubject + " @ " + nearestStationName
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
