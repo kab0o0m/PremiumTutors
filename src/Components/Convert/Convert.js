@@ -114,8 +114,8 @@ const Convert = () => {
   };
 
   const codeGeneration = (clientName, clientLevel) => {
-    const first_digit = "C";
-    let second_third_digit = clientLevel
+    const first_letter = "C";
+    let second_third_letter = clientLevel
       .replace(/\bPre School\b/i, "PS")
       .replace(/\bPrimary\b/i, "P")
       .replace(/\bSecondary\b/i, "S")
@@ -126,6 +126,18 @@ const Convert = () => {
       .replace(/\bIB Diploma\b/i, "IB")
       .replace(/\blangauges\b/i, "LA")
       .replace(/\s+/g, "");
+    const extractFirstTwoLetters = (name) => {
+      // Remove common prefixes from the name
+      const cleanedName = name.replace(/^(Mr|Ms|Mrs|Dr|Doc|Mdm|Md)\.?\s+/i, "");
+
+      // Extract the first two letters of the remaining name
+
+      return cleanedName.slice(0, 2).toUpperCase();
+    };
+
+    const fourth_fifth_letter = extractFirstTwoLetters(clientName);
+
+    return first_letter + second_third_letter + fourth_fifth_letter;
   };
 
   const interested_applicants =
@@ -159,11 +171,12 @@ const Convert = () => {
         const data = await response.json();
 
         if (data && data.results && data.results.length > 0) {
-          const address = data.results[0].ADDRESS;
-
-          console.log("Address:", address);
-
-          return address;
+          const result = data.results[0];
+          return {
+            address: result.ADDRESS,
+            latitude: result.LATITUDE,
+            longitude: result.LONGITUDE,
+          };
         } else {
           return "Address not found";
         }
@@ -176,7 +189,21 @@ const Convert = () => {
       return "Error fetching address";
     }
   };
-
+  const findNearestMRT = async (latitude, longitude) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/findNearestMRT?latitude=${latitude}&longitude=${longitude}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      return data.results[0]?.name || "No MRT station found within 1km radius";
+    } catch (error) {
+      console.error("Error fetching MRT station:", error);
+      return "Error fetching MRT station";
+    }
+  };
   // Convert to Json format first
   const convertToFormat = async () => {
     try {
@@ -220,8 +247,7 @@ const Convert = () => {
       const location = clientInfo["Postal Code"];
 
       // Wait for the address to be fetched before proceeding
-      const address = await getFullAddress(location);
-      console.log(address);
+      const fullAddress = await getFullAddress(location);
 
       const frequency = clientInfo["Frequency"]
         .split("/")
@@ -241,7 +267,7 @@ const Convert = () => {
 
       setTextOutput(
         `${level_subject + " @ " + location}\n\n${"Details of assignment"}\n${
-          "Location: " + address
+          "Location: " + fullAddress
         }\n${"Duration: " + duration}\n${"Timing: " + timing}\n\n${
           "Fees: " + rates + "/hour " + fullTypeOfTutor
         }\n\n${"Commission: " + commission}\n\n${
@@ -272,6 +298,11 @@ const Convert = () => {
     const clientContact = formData["contact"];
     const clientPostal = formData["postal"];
     const clientAddress = await getFullAddress(clientPostal);
+    console.log(clientAddress.latitude);
+    const nearestMRT = await findNearestMRT(
+      clientAddress.latitude,
+      clientAddress.longitude
+    );
     const level = formData["level"].toLowerCase();
 
     let clientLevel = level
@@ -300,7 +331,6 @@ const Convert = () => {
       .replace(/\badult learner\b/i, "Adult Learner");
     console.log("clientLevel: " + clientLevel);
     const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
-    const subjectCount = subjects.length;
     let perSubject = "";
     if (subjects.length > 1) {
       perSubject = " per subject";
@@ -320,7 +350,6 @@ const Convert = () => {
           "/hour" +
           " Part Time/Undergrad Tutor" +
           "\n";
-        console.log(clientFees);
       }
       if (formData["tutor2"]) {
         clientFees =
@@ -329,7 +358,6 @@ const Convert = () => {
           "/hour" +
           " Full Time/Graduate Tutor" +
           "\n";
-        console.log(clientFees);
       }
       if (formData["tutor3"]) {
         clientFees =
@@ -338,7 +366,6 @@ const Convert = () => {
           "/hour" +
           " Ex/Current School Teachers" +
           "\n";
-        console.log(clientFees);
       }
 
       const commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
@@ -347,13 +374,17 @@ const Convert = () => {
       setTextOutput(
         `${
           clientLevel + " " + clientSubject + " @ " + clientPostal
-        }\n\n${"Details of assignment"}\n${"Location: " + clientAddress}\n${
-          "Duration: " + clientFrequency + perSubject
-        }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n${
+        }\n\n${"Details of assignment"}\n${
+          "Location: " + clientAddress.address
+        }\n${"Duration: " + clientFrequency + perSubject}\n${
+          "Timing: " + clientTimings
+        }\n\n${"Fees: " + clientFees}\n${
           "Commission: " + commission + perSubject
         }\n\n${
           "Remarks: " + clientRemarks
-        }\n\n${interested_applicants}\n\n${application_form}`
+        }\n\n${interested_applicants}\n\n${application_form}\n\n${
+          "Code: " + codeGeneration(clientName, clientLevel)
+        }`
       );
     } catch (error) {
       console.log(error);
@@ -411,7 +442,7 @@ const Convert = () => {
             value={formData.subject}
             onChange={handleInputChange}
           />
-          <label htmlFor="frequency">Frequency</label>
+          <label htmlFor="frequency">Duration</label>
           <input
             type="text"
             id="frequency"
