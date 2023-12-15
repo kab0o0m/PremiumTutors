@@ -82,7 +82,7 @@ const Convert = () => {
       ftt: "$45 - $60",
       moe: "$65 - $90",
     },
-    jc: {
+    "junior college": {
       ptt: "$40 - $55",
       ftt: "$65 - $80",
       moe: "$90- $120",
@@ -184,6 +184,7 @@ const Convert = () => {
       console.log(levelFees);
       const typeOfTutor =
         clientInfo["Category of Tutor (For Academic)"].toLowerCase();
+      console.log(clientInfo);
       const rates = levelFees[typeOfTutor];
       let fullTypeOfTutor;
       if (typeOfTutor === "ptt") {
@@ -262,8 +263,8 @@ const Convert = () => {
       .replace(/\bjunior college\b/i, "Secondary")
       .replace(/\bjunior\b/i, "Secondary")
       .replace(/\bjc\b/i, "Junior College")
-      .replace(/\bpolytechnic\b/i, "Secondary")
-      .replace(/\bpoly\b/i, "PolyTechnic")
+      .replace(/\bpoly\b/i, "Tertiary")
+      .replace(/\bpolytechnic\b/i, "Tertiary")
       .replace(/\binternational\b/i, "Secondary")
       .replace(/\binternational school\b/i, "Secondary")
       .replace(/\bis\b/i, "International School")
@@ -273,6 +274,7 @@ const Convert = () => {
       .replace(/\bal\b/i, "Adult Learner")
       .replace(/\badult\b/i, "Adult Learner")
       .replace(/\badult learner\b/i, "Adult Learner");
+    console.log(clientLevel);
     const clientSubject =
       formData["subject"].charAt(0).toUpperCase() +
       formData["subject"].slice(1);
@@ -280,9 +282,7 @@ const Convert = () => {
     const clientDuration = formData["duration"];
     const clientTimings = formData["timings"];
     let clientFees = "";
-
     const rate = fees[clientLevel.toLowerCase()];
-    console.log(rate);
     if (formData["tutor1"]) {
       clientFees =
         clientFees +
