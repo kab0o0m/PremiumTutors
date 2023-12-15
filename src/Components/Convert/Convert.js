@@ -115,6 +115,20 @@ const Convert = () => {
   const application_form =
     "Application Form for Registered Tutors: https://forms.gle/VCuCj7Pkdm7kMRX49";
 
+  const sampleText = ` 
+  1. Client Name: Ms Nana  
+  2. Client Contact No.: 92983609
+  3. Postal Code: 760453
+  4. Level (Drop down): Primary 5
+  5. Subject (Drop down): Maths, Science
+  6. Same tutor/Separate tutor (for multiple subjects): Same tutor 
+  7. Frequency: 1 / week
+  8. Duration: 2 hours
+  9. Timings: Wednesday 2pm onwards
+  10. Category of Tutor (For Academic): FTT
+  11. Rates (For Academic & Music): -
+  12. Remarks: Tutor to be patient.`;
+
   // Get Full address from Onemap API
   const getFullAddress = async (postal) => {
     try {
@@ -271,17 +285,21 @@ const Convert = () => {
     console.log(rate);
     if (formData["tutor1"]) {
       clientFees =
-        clientFees + rate["ptt"] + "/hour" + "Part Time/Undergrad Tutor" + "\n";
+        clientFees +
+        rate["ptt"] +
+        "/hour" +
+        " Part Time/Undergrad Tutor" +
+        "\n";
       console.log(clientFees);
     }
     if (formData["tutor2"]) {
       clientFees =
-        clientFees + rate["ftt"] + "/hour" + "Full Time/Graduate Tutor" + "\n";
+        clientFees + rate["ftt"] + "/hour" + " Full Time/Graduate Tutor" + "\n";
       console.log(clientFees);
     }
     if (formData["tutor3"]) {
       clientFees =
-        clientFees + rate["moe"] + "/hour " + "Ex /Current School Teachers";
+        clientFees + rate["moe"] + "/hour " + " Ex /Current School Teachers";
       console.log(clientFees);
     }
 
@@ -292,8 +310,13 @@ const Convert = () => {
       `${
         clientLevel + " " + clientSubject + " @ " + clientPostal
       }\n\n${"Details of assignment"}\n${"Location: " + clientAddress}\n${
-        "Duration: " + clientFrequency + "x " + clientDuration + "/ week"
-      }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n\n${
+        "Duration: " +
+        clientFrequency +
+        "x " +
+        clientDuration +
+        "hours" +
+        "/ week"
+      }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n${
         "Commission: " + commission
       }\n\n${
         "Remarks: " + clientRemarks
@@ -305,23 +328,29 @@ const Convert = () => {
     <div className="convert">
       {/* Left Side of the screen (form) */}
       <div className="convert-form">
+        <div className="form-title">Client Form</div>
         <form action="" onSubmit={handleSubmit}>
-          <label htmlFor="client_name">Client Name</label>
-          <input
-            type="text"
-            id="client_name"
-            name="client_name"
-            value={formData.client_name}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="contact">Client Contact no.</label>
-          <input
-            type="text"
-            id="contact"
-            name="contact"
-            value={formData.contact}
-            onChange={handleInputChange}
-          />
+          <div className="name">
+            <label htmlFor="client_name">Client Name</label>
+            <input
+              type="text"
+              id="client_name"
+              name="client_name"
+              value={formData.client_name}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="contact">
+            <label htmlFor="contact">Client Contact no.</label>
+            <input
+              type="text"
+              id="contact"
+              name="contact"
+              value={formData.contact}
+              onChange={handleInputChange}
+            />
+          </div>
+
           <label htmlFor="postal">Postal Code</label>
           <input
             type="text"
@@ -372,35 +401,42 @@ const Convert = () => {
             onChange={handleInputChange}
           />
           <label htmlFor="tutor">Category of Tutor</label>
-          <input
-            type="checkbox"
-            id="tutor1"
-            name="tutor1"
-            value="ftt"
-            checked={formData.tutor1}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="tutor1">Part Time/Undergrad Tutor</label>
+          <div id="tutor1">
+            <input
+              type="checkbox"
+              id="tutor1"
+              name="tutor1"
+              value="ftt"
+              checked={formData.tutor1}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="tutor1">Part Time/Undergrad Tutor</label>
+          </div>
           <br />
-          <input
-            type="checkbox"
-            id="tutor2"
-            name="tutor2"
-            value="ftt"
-            checked={formData.tutor2}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="tutor2">Full Time/Graduate Tutor</label>
+          <div id="tutor2">
+            <input
+              type="checkbox"
+              id="tutor2"
+              name="tutor2"
+              value="ftt"
+              checked={formData.tutor2}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="tutor2">Full Time/Graduate Tutor</label>
+          </div>
           <br />
-          <input
-            type="checkbox"
-            id="tutor3"
-            name="tutor3"
-            value="ftt"
-            checked={formData.tutor3}
-            onChange={handleInputChange}
-          />
-          <label htmlFor="tutor3">Ex /Current School Teachers</label>
+          <div id="tutor3">
+            <input
+              type="checkbox"
+              id="tutor3"
+              name="tutor3"
+              value="ftt"
+              checked={formData.tutor3}
+              onChange={handleInputChange}
+            />
+            <label htmlFor="tutor3">Ex /Current School Teachers</label>
+          </div>
+
           <br />
           <label htmlFor="timings">Remarks</label>
           <input
@@ -415,19 +451,21 @@ const Convert = () => {
       </div>
       {/* Middle section of the screen (input) */}
       <div className="convert-input">
+        <div className="convert-input-title">Copy paste </div>
         <textarea
           onChange={(e) => setTextInput(e.target.value)}
           name=""
           id=""
           cols="50"
           rows="30"
-          placeholder="Enter details"
+          placeholder={sampleText}
         ></textarea>
         <button onClick={() => convertToFormat()}>Convert</button>
       </div>
 
       {/* Right section of the screen (output) */}
       <div className="convert-output">
+        <div className="convert-output-header">Output</div>
         <textarea
           name=""
           id=""
