@@ -13,7 +13,6 @@ const Convert = () => {
     level: "",
     subject: "",
     frequency: "",
-    duration: "",
     timings: "",
     tutor1: false,
     tutor2: false,
@@ -112,6 +111,21 @@ const Convert = () => {
       ftt: "$50 - $70",
       moe: "$70 - $100",
     },
+  };
+
+  const codeGeneration = (clientName, clientLevel) => {
+    const first_digit = "C";
+    let second_third_digit = clientLevel
+      .replace(/\bPre School\b/i, "PS")
+      .replace(/\bPrimary\b/i, "P")
+      .replace(/\bSecondary\b/i, "S")
+      .replace(/\bJunior College\b/i, "JC")
+      .replace(/\bTertiary\b/i, "TE")
+      .replace(/\bUniversity\b/i, "UN")
+      .replace(/\bIGCSE\b/i, "IG")
+      .replace(/\bIB Diploma\b/i, "IB")
+      .replace(/\blangauges\b/i, "LA")
+      .replace(/\s+/g, "");
   };
 
   const interested_applicants =
@@ -261,6 +275,8 @@ const Convert = () => {
     const level = formData["level"].toLowerCase();
 
     let clientLevel = level
+      .replace(/\bpre\b/i, "Pre school")
+      .replace(/\bpreschool\b/i, "Pre school")
       .replace(/(pri|primary|p)(\d+)/i, "Primary $2")
       .replace(/\bprimary\b/i, "Primary")
       .replace(/\bpri\b/i, "Primary")
@@ -271,23 +287,28 @@ const Convert = () => {
       .replace(/\bjunior college\b/i, "Junior College")
       .replace(/\bjunior\b/i, "Junior College")
       .replace(/\bjc\b/i, "Junior College")
+      .replace(/\bis\b/i, "IGCSE")
+      .replace(/\bigcse\b/i, "IGCSE")
+      .replace(/\bib/i, "IB Diploma")
       .replace(/\bpoly\b/i, "Tertiary")
       .replace(/\bpolytechnic\b/i, "Tertiary")
-      .replace(/\binternational\b/i, "International School")
-      .replace(/\binternational school\b/i, "International School")
-      .replace(/\bis\b/i, "International School")
       .replace(/\bu\b/i, "University")
       .replace(/\buni\b/i, "University")
       .replace(/\buniversity\b/i, "University")
       .replace(/\bal\b/i, "Adult Learner")
       .replace(/\badult\b/i, "Adult Learner")
       .replace(/\badult learner\b/i, "Adult Learner");
-    console.log(clientLevel);
-    const clientSubject =
-      formData["subject"].charAt(0).toUpperCase() +
-      formData["subject"].slice(1);
+    console.log("clientLevel: " + clientLevel);
+    const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
+    const subjectCount = subjects.length;
+    let perSubject = "";
+    if (subjects.length > 1) {
+      perSubject = " per subject";
+    }
+    const clientSubject = subjects
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
+      .join(", ");
     const clientFrequency = formData["frequency"];
-    const clientDuration = formData["duration"];
     const clientTimings = formData["timings"];
     let clientFees = "";
     try {
@@ -320,21 +341,16 @@ const Convert = () => {
         console.log(clientFees);
       }
 
-      const commission = `First ${parseInt(clientFrequency) * 2} lessons`;
+      const commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
 
       const clientRemarks = formData["remarks"];
       setTextOutput(
         `${
           clientLevel + " " + clientSubject + " @ " + clientPostal
         }\n\n${"Details of assignment"}\n${"Location: " + clientAddress}\n${
-          "Duration: " +
-          clientFrequency +
-          "x " +
-          clientDuration +
-          "hours" +
-          "/ week"
+          "Duration: " + clientFrequency + perSubject
         }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n${
-          "Commission: " + commission
+          "Commission: " + commission + perSubject
         }\n\n${
           "Remarks: " + clientRemarks
         }\n\n${interested_applicants}\n\n${application_form}`
@@ -395,7 +411,7 @@ const Convert = () => {
             value={formData.subject}
             onChange={handleInputChange}
           />
-          <label htmlFor="frequency">Frequency (/week)</label>
+          <label htmlFor="frequency">Frequency</label>
           <input
             type="text"
             id="frequency"
@@ -404,14 +420,6 @@ const Convert = () => {
             onChange={handleInputChange}
           />
 
-          <label htmlFor="duration">Duration (hours)</label>
-          <input
-            type="text"
-            id="duration"
-            name="duration"
-            value={formData.duration}
-            onChange={handleInputChange}
-          />
           <label htmlFor="timings">Timings</label>
           <input
             type="text"
