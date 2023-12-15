@@ -190,7 +190,7 @@ const Convert = () => {
     }
   };
   const getNearbyMRTStations = async (latitude, longitude) => {
-    const radius = 1000; // 1 km radius
+    const radius = 2000; // 1 km radius
     // Singapore's bounding box coordinates
     const singaporeBounds = {
       minLat: 1.130475,
@@ -353,6 +353,17 @@ const Convert = () => {
         return "No nearby MRT station found";
       }
 
+      const filterMRTStations = (stations) => {
+        return stations.filter((station) => {
+          // Check if the station's wikipedia tag contains 'MRT' and does not contain 'LRT'
+          if (station.tags && station.tags.wikipedia) {
+            // Further check if the wikipedia tag contains 'MRT' and does not contain 'LRT'
+            return station.tags.wikipedia.includes("MRT");
+          }
+        });
+      };
+      stations = filterMRTStations(stations);
+
       let nearestStation = stations[0];
       let minDistance = getDistance(
         latitude,
@@ -455,9 +466,7 @@ const Convert = () => {
           "Timing: " + clientTimings
         }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
           "Remarks: " + clientRemarks
-        }\n\n${interested_applicants}\n\n${application_form}\n\n${
-          "Code: " + codeGeneration(clientName, clientLevel)
-        }`
+        }\n\n${interested_applicants}\n\n${application_form}`
       );
     } catch (error) {
       console.log(error);
