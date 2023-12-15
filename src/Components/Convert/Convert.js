@@ -331,10 +331,6 @@ const Convert = () => {
       .replace(/\badult learner\b/i, "Adult Learner");
     console.log("clientLevel: " + clientLevel);
     const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
-    let perSubject = "";
-    if (subjects.length > 1) {
-      perSubject = " per subject";
-    }
     const clientSubject = subjects
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
       .join(", ");
@@ -376,11 +372,9 @@ const Convert = () => {
           clientLevel + " " + clientSubject + " @ " + clientPostal
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
-        }\n${"Duration: " + clientFrequency + perSubject}\n${
+        }\n${"Duration: " + clientFrequency}\n${
           "Timing: " + clientTimings
-        }\n\n${"Fees: " + clientFees}\n${
-          "Commission: " + commission + perSubject
-        }\n\n${
+        }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
           "Remarks: " + clientRemarks
         }\n\n${interested_applicants}\n\n${application_form}\n\n${
           "Code: " + codeGeneration(clientName, clientLevel)
