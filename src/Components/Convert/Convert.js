@@ -102,6 +102,11 @@ const Convert = () => {
       ftt: "$60 - $90",
       moe: "$100 - $120",
     },
+    university: {
+      ptt: "$40 - $60",
+      ftt: "$60 - $90",
+      moe: "$100 - $120",
+    },
     languages: {
       ptt: "$35 - $45",
       ftt: "$50 - $70",
@@ -254,10 +259,13 @@ const Convert = () => {
     const clientPostal = formData["postal"];
     const clientAddress = await getFullAddress(clientPostal);
     const level = formData["level"].toLowerCase();
+
     let clientLevel = level
+      .replace(/(pri|primary|p)(\d+)/i, "Primary $2")
       .replace(/\bprimary\b/i, "Primary")
       .replace(/\bpri\b/i, "Primary")
       .replace(/\bp\b/i, "Primary")
+      .replace(/(sec|secondary)(\d+)/i, "Secondary $2")
       .replace(/\bsecondary\b/i, "Secondary")
       .replace(/\bsec\b/i, "Secondary")
       .replace(/\bjunior college\b/i, "Junior College")
@@ -282,46 +290,58 @@ const Convert = () => {
     const clientDuration = formData["duration"];
     const clientTimings = formData["timings"];
     let clientFees = "";
-    const rate = fees[clientLevel.toLowerCase()];
-    if (formData["tutor1"]) {
-      clientFees =
-        clientFees +
-        rate["ptt"] +
-        "/hour" +
-        " Part Time/Undergrad Tutor" +
-        "\n";
-      console.log(clientFees);
-    }
-    if (formData["tutor2"]) {
-      clientFees =
-        clientFees + rate["ftt"] + "/hour" + " Full Time/Graduate Tutor" + "\n";
-      console.log(clientFees);
-    }
-    if (formData["tutor3"]) {
-      clientFees =
-        clientFees + rate["moe"] + "/hour " + " Ex /Current School Teachers";
-      console.log(clientFees);
-    }
+    try {
+      const rate = fees[clientLevel.toLowerCase()];
+      if (formData["tutor1"]) {
+        clientFees =
+          clientFees +
+          rate["ptt"] +
+          "/hour" +
+          " Part Time/Undergrad Tutor" +
+          "\n";
+        console.log(clientFees);
+      }
+      if (formData["tutor2"]) {
+        clientFees =
+          clientFees +
+          rate["ftt"] +
+          "/hour" +
+          " Full Time/Graduate Tutor" +
+          "\n";
+        console.log(clientFees);
+      }
+      if (formData["tutor3"]) {
+        clientFees =
+          clientFees +
+          rate["moe"] +
+          "/hour" +
+          " Ex/Current School Teachers" +
+          "\n";
+        console.log(clientFees);
+      }
 
-    const commission = `First ${parseInt(clientFrequency) * 2} lessons`;
+      const commission = `First ${parseInt(clientFrequency) * 2} lessons`;
 
-    const clientRemarks = formData["remarks"];
-    setTextOutput(
-      `${
-        clientLevel + " " + clientSubject + " @ " + clientPostal
-      }\n\n${"Details of assignment"}\n${"Location: " + clientAddress}\n${
-        "Duration: " +
-        clientFrequency +
-        "x " +
-        clientDuration +
-        "hours" +
-        "/ week"
-      }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n${
-        "Commission: " + commission
-      }\n\n${
-        "Remarks: " + clientRemarks
-      }\n\n${interested_applicants}\n\n${application_form}`
-    );
+      const clientRemarks = formData["remarks"];
+      setTextOutput(
+        `${
+          clientLevel + " " + clientSubject + " @ " + clientPostal
+        }\n\n${"Details of assignment"}\n${"Location: " + clientAddress}\n${
+          "Duration: " +
+          clientFrequency +
+          "x " +
+          clientDuration +
+          "hours" +
+          "/ week"
+        }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n${
+          "Commission: " + commission
+        }\n\n${
+          "Remarks: " + clientRemarks
+        }\n\n${interested_applicants}\n\n${application_form}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -465,7 +485,7 @@ const Convert = () => {
 
       {/* Right section of the screen (output) */}
       <div className="convert-output">
-        <div className="convert-output-header">Output</div>
+        <div className="convert-output-title">Output</div>
         <textarea
           name=""
           id=""

@@ -5,8 +5,9 @@
 }
 
 .convert-form {
-  width: 60rem;
   font-size: 1rem;
+  margin: 2rem;
+  
 }
 .convert-form form {
   display: flex;
@@ -34,6 +35,11 @@
   display: flex;
   flex-direction: column;
   margin: 2rem;
+}
+
+.convert-input-title,
+.convert-output-title {
+  margin: 0 0 2rem 0;
 }
 
 .convert-output {
