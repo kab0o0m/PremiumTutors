@@ -5,8 +5,7 @@ import getNearestMrt from "nearest-mrt";
 const Convert = () => {
   const [textInput, setTextInput] = useState("");
   const [textOutput1, setTextOutput1] = useState(null);
-  const [textOutput2, setTextOutput2] = useState(null);
-  const [textFormat, setTextFormat] = useState(null);
+  //const [textFormat, setTextFormat] = useState(null);
   const initialFormData = {
     client_name: "",
     contact: "",
@@ -25,6 +24,7 @@ const Convert = () => {
 
   const handleReset = () => {
     setFormData(initialFormData);
+    setTextOutput1("");
   };
 
   const fees = {
@@ -113,14 +113,14 @@ const Convert = () => {
       ftt: "$60 - $90",
       moe: "$100 - $120",
     },
-    languages: {
+    "adult learner": {
       ptt: "$35 - $45",
       ftt: "$50 - $70",
       moe: "$70 - $100",
     },
   };
 
-  /*const codeGeneration = (clientName, clientLevel) => {
+  const codeGeneration = (clientName, clientLevel) => {
     const first_letter = "C";
     let second_third_letter = clientLevel
       .replace(/\bPre School\b/i, "PS")
@@ -133,6 +133,10 @@ const Convert = () => {
       .replace(/\bIB Diploma\b/i, "IB")
       .replace(/\blangauges\b/i, "LA")
       .replace(/\s+/g, "");
+    second_third_letter = (
+      second_third_letter[0] + second_third_letter[1]
+    ).toUpperCase();
+
     const extractFirstTwoLetters = (name) => {
       // Remove common prefixes from the name
       const cleanedName = name.replace(/^(Mr|Ms|Mrs|Dr|Doc|Mdm|Md)\.?\s+/i, "");
@@ -145,7 +149,7 @@ const Convert = () => {
     const fourth_fifth_letter = extractFirstTwoLetters(clientName);
 
     return first_letter + second_third_letter + fourth_fifth_letter;
-  };*/
+  };
 
   const interested_applicants =
     "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications";
@@ -197,8 +201,8 @@ const Convert = () => {
     }
   };
 
-  // Second row converting
-  const convertToFormat = async () => {
+  // Second row converting (Used for converting format to format)
+  /*const convertToFormat = async () => {
     try {
       // Split lines when there is a new line
       const lines = textInput.split("\n");
@@ -313,7 +317,7 @@ const Convert = () => {
     } catch (error) {
       console.error("Error converting to format:", error);
     }
-  };
+  };*/
 
   //Updates form data as user updates it
   const handleInputChange = (e) => {
@@ -381,7 +385,7 @@ const Convert = () => {
     }
 
     //Extract Study Level
-    const level = formData["level"].toLowerCase().replace(/\s/g, "");
+    const level = formData["level"].toLowerCase();
 
     let clientLevel = level
       .replace(/\bpre\b/i, "Pre school")
@@ -408,6 +412,7 @@ const Convert = () => {
       .replace(/\badult\b/i, "Adult Learner")
       .replace(/\badult learner\b/i, "Adult Learner");
 
+    console.log(clientLevel);
     //Extract Subjects
     const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
 
@@ -421,46 +426,50 @@ const Convert = () => {
 
     //Gets timings
     const clientTimings = formData["timings"];
+    //Calculate commission for the company
+    let commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
 
+    if (clientFrequency.includes("per subject")) {
+      commission = commission + " per subject";
+    }
+
+    //Gets Remarks
+    const clientRemarks = formData["remarks"];
     //Calculate Fees
     let clientFees = "";
+
     try {
-      const rate = fees[clientLevel.toLowerCase()];
-      if (formData["tutor1"]) {
-        clientFees =
-          clientFees +
-          rate["ptt"] +
-          "/hour" +
-          " Part Time/Undergrad Tutor" +
-          "\n";
+      if (clientLevel.replace(/\s/g, "").toLowerCase() in fees) {
+        const rate = fees[clientLevel.replace(/\s/g, "").toLowerCase()];
+        if (formData["tutor1"]) {
+          clientFees =
+            clientFees +
+            rate["ptt"] +
+            "/hour" +
+            " Part Time/Undergrad Tutor" +
+            "\n";
+        }
+        if (formData["tutor2"]) {
+          clientFees =
+            clientFees +
+            rate["ftt"] +
+            "/hour" +
+            " Full Time/Graduate Tutor" +
+            "\n";
+        }
+        if (formData["tutor3"]) {
+          clientFees =
+            clientFees +
+            rate["moe"] +
+            "/hour" +
+            " Ex/Current School Teachers" +
+            "\n";
+        }
+      } else {
+        clientFees = "";
+        clientLevel =
+          clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       }
-      if (formData["tutor2"]) {
-        clientFees =
-          clientFees +
-          rate["ftt"] +
-          "/hour" +
-          " Full Time/Graduate Tutor" +
-          "\n";
-      }
-      if (formData["tutor3"]) {
-        clientFees =
-          clientFees +
-          rate["moe"] +
-          "/hour" +
-          " Ex/Current School Teachers" +
-          "\n";
-      }
-
-      //Calculate commission for the company
-      let commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
-
-      if (clientFrequency.includes("per subject")) {
-        commission = commission + " per subject";
-      }
-
-      //Gets Remarks
-      const clientRemarks = formData["remarks"];
-
       //Set output
       setTextOutput1(
         `${
@@ -471,7 +480,9 @@ const Convert = () => {
           "Timing: " + clientTimings
         }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
           "Remarks: " + clientRemarks
-        }\n\n${interested_applicants}\n\n${application_form}`
+        }\n\n${interested_applicants}\n\n${application_form}\n\n${
+          "Code: " + codeGeneration(clientName, clientLevel)
+        }`
       );
     } catch (error) {
       console.log(error);
@@ -601,7 +612,7 @@ const Convert = () => {
             <button className="submit-form">
               <input type="submit" id="submit" value="Submit" />
             </button>
-            <button onClick={handleReset} className="clear-form">
+            <button type="button" onClick={handleReset} className="clear-form">
               Clear Form
             </button>
           </div>
@@ -612,7 +623,7 @@ const Convert = () => {
         <div className="guide-title">Guide (Shortcuts)</div>
         <div className="guide-description">
           <p>Pre School</p>
-          <p>"pre", "preschool"</p>
+          <p>"pre", "preschool", "Pre school"</p>
           <p>Primary 1-6</p>
           <p>"p1", "Pri 5", "primary2"</p>
           <p>Secondary 1-5</p>
@@ -628,7 +639,7 @@ const Convert = () => {
           <p>University</p>
           <p>"u","uni", "university"</p>
           <p>Adult Learner</p>
-          <p>"al", "adult", "adult learner"</p>
+          <p>"adult", "adult learner"</p>
         </div>
       </div>
       {/* First row Right section (form-output) */}
@@ -640,51 +651,6 @@ const Convert = () => {
           cols="50"
           rows="30"
           value={textOutput1}
-          readOnly
-        ></textarea>
-      </div>
-      {/* Second Row */}
-      {/* Second row left section copy paste */}
-      <div className="convert-input">
-        <div className="convert-input-title">Copy paste </div>
-        <textarea
-          onChange={(e) => setTextInput(e.target.value)}
-          name=""
-          id=""
-          cols="50"
-          rows="30"
-          placeholder={sampleText}
-        ></textarea>
-        <button onClick={() => convertToFormat()}>Convert</button>
-      </div>
-      {/* Second row middle section (Guide) */}
-      <div className="guide">
-        <div className="guide-title">Sample Format</div>
-        <div className="guide-description-2">
-          <p>1. Client name: </p>
-          <p>2. Client Contact No.: </p>
-          <p>3. Postal Code: </p>
-          <p>4. Level (DropDown): </p>
-          <p>5. Subject (DropDown): </p>
-          <p>6. Same tutor/Separate tutor (for multiple subjects): </p>
-          <p>7. Frequency:</p>
-          <p>8. Duration:</p>
-          <p>9. Timings:</p>
-          <p>10. Category of Tutor (For Academic):</p>
-          <p>11. Rates (For Academic & Music):</p>
-          <p>12. Remarks:</p>
-        </div>
-      </div>
-      {/* Second row right section output */}
-      <div className="convert-output">
-        <div className="convert-output-title">Output</div>
-        <textarea
-          name=""
-          id=""
-          cols="50"
-          rows="30"
-          value={textOutput2}
-          readOnly
         ></textarea>
       </div>
     </div>
