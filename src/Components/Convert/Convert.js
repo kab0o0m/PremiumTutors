@@ -5,6 +5,7 @@ import getNearestMrt from "nearest-mrt";
 const Convert = () => {
   const [textInput, setTextInput] = useState("");
   const [textOutput1, setTextOutput1] = useState(null);
+  const [textOutput2, setTextOutput2] = useState(null);
   //const [textFormat, setTextFormat] = useState(null);
   const initialFormData = {
     client_name: "",
@@ -151,7 +152,7 @@ const Convert = () => {
     return first_letter + second_third_letter + fourth_fifth_letter;
   };
 
-  const interested_applicants =
+  let interested_applicants =
     "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications";
 
   const application_form =
@@ -484,6 +485,21 @@ const Convert = () => {
           "Code: " + codeGeneration(clientName, clientLevel)
         }`
       );
+      interested_applicants =
+        "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:";
+      setTextOutput2(
+        `${
+          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
+        }\n\n${"Details of assignment"}\n${
+          "Location: " + clientAddress.address
+        }\n${"Duration: " + clientFrequency}\n${
+          "Timing: " + clientTimings
+        }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
+          "Remarks: " + clientRemarks
+        }\n\n${interested_applicants}\n\n${application_form}\n\n${
+          "Code: " + codeGeneration(clientName, clientLevel)
+        }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`
+      );
     } catch (error) {
       console.log(error);
     }
@@ -644,13 +660,24 @@ const Convert = () => {
       </div>
       {/* First row Right section (form-output) */}
       <div className="convert-output">
-        <div className="convert-output-title">Client Form Output</div>
+        <div className="convert-output-title">Telegram</div>
         <textarea
           name=""
           id=""
           cols="50"
           rows="30"
           value={textOutput1}
+        ></textarea>
+      </div>
+      {/* Second row Right section (form-output) */}
+      <div className="convert-output-2">
+        <div className="convert-output-title-2">Many Tutors</div>
+        <textarea
+          name=""
+          id=""
+          cols="70"
+          rows="30"
+          value={textOutput2}
         ></textarea>
       </div>
     </div>
