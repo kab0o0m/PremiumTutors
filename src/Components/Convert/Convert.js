@@ -1,12 +1,13 @@
 import { useState } from "react";
 import "./Convert.css";
-import { type } from "@testing-library/user-event/dist/type";
+import getNearestMrt from "nearest-mrt";
 
 const Convert = () => {
   const [textInput, setTextInput] = useState("");
-  const [textOutput, setTextOutput] = useState(null);
+  const [textOutput1, setTextOutput1] = useState(null);
+  const [textOutput2, setTextOutput2] = useState(null);
   const [textFormat, setTextFormat] = useState(null);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     client_name: "",
     contact: "",
     postal: "",
@@ -18,7 +19,13 @@ const Convert = () => {
     tutor2: false,
     tutor3: false,
     remarks: "",
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const handleReset = () => {
+    setFormData(initialFormData);
+  };
 
   const fees = {
     "pre school": {
@@ -113,7 +120,7 @@ const Convert = () => {
     },
   };
 
-  const codeGeneration = (clientName, clientLevel) => {
+  /*const codeGeneration = (clientName, clientLevel) => {
     const first_letter = "C";
     let second_third_letter = clientLevel
       .replace(/\bPre School\b/i, "PS")
@@ -138,7 +145,7 @@ const Convert = () => {
     const fourth_fifth_letter = extractFirstTwoLetters(clientName);
 
     return first_letter + second_third_letter + fourth_fifth_letter;
-  };
+  };*/
 
   const interested_applicants =
     "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications";
@@ -189,65 +196,8 @@ const Convert = () => {
       return "Error fetching address";
     }
   };
-  const getNearbyMRTStations = async (latitude, longitude) => {
-    const radius = 2000; // 1 km radius
-    // Singapore's bounding box coordinates
-    const singaporeBounds = {
-      minLat: 1.130475,
-      maxLat: 1.450475,
-      minLon: 103.600006,
-      maxLon: 104.100006,
-    };
 
-    // Check if the coordinates are within Singapore
-    if (
-      latitude < singaporeBounds.minLat ||
-      latitude > singaporeBounds.maxLat ||
-      longitude < singaporeBounds.minLon ||
-      longitude > singaporeBounds.maxLon
-    ) {
-      return "Location is not within Singapore";
-    }
-
-    const query = `
-        [out:json];
-        (
-            node["railway"="station"](around:${radius},${latitude},${longitude});
-        );
-        out;`;
-    const overpassUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(
-      query
-    )}`;
-
-    try {
-      const response = await fetch(overpassUrl);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      return data.elements; // Returns an array of MRT stations
-    } catch (error) {
-      console.error("Error fetching MRT stations:", error);
-      return [];
-    }
-  };
-
-  const getDistance = (lat1, lon1, lat2, lon2) => {
-    const R = 6371e3; // metres
-    const φ1 = (lat1 * Math.PI) / 180;
-    const φ2 = (lat2 * Math.PI) / 180;
-    const Δφ = ((lat2 - lat1) * Math.PI) / 180;
-    const Δλ = ((lon2 - lon1) * Math.PI) / 180;
-
-    const a =
-      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-    return R * c;
-  };
-
-  // Convert to Json format first
+  // Second row converting
   const convertToFormat = async () => {
     try {
       // Split lines when there is a new line
@@ -268,29 +218,66 @@ const Convert = () => {
         setTextFormat(JSON.stringify(clientInfo, null, 2));
       });
 
-      const level = clientInfo["Level (Drop down)"].toLowerCase();
+      let level = clientInfo["Level (Drop down)"].toLowerCase();
+
       const levelFees = fees[level];
       console.log(levelFees);
       const typeOfTutor =
         clientInfo["Category of Tutor (For Academic)"].toLowerCase();
       console.log(clientInfo);
-      const rates = levelFees[typeOfTutor];
-      let fullTypeOfTutor;
-      if (typeOfTutor === "ptt") {
-        fullTypeOfTutor = "Part Time/Undergrad Tutor";
-      } else if (typeOfTutor === "ftt") {
-        fullTypeOfTutor = "Full Time/Graduate Tutor";
-      } else if (typeOfTutor === "moe") {
-        fullTypeOfTutor = "Ex /Current School Teachers";
+      let fullTypeOfTutor = "";
+
+      if (typeOfTutor.toLowerCase().includes("ptt")) {
+        fullTypeOfTutor +=
+          levelFees["ptt"] + "/hour " + "Part Time/Undergrad Tutor\n";
+      }
+      if (typeOfTutor.toLowerCase().includes("ftt")) {
+        fullTypeOfTutor +=
+          levelFees["ftt"] + "/hour " + "Full Time/Graduate Tutor\n";
+      }
+      if (typeOfTutor.toLowerCase().includes("moe")) {
+        fullTypeOfTutor +=
+          levelFees["moe"] + "/hour " + "Ex /Current School Teachers\n";
       }
 
       const subject = clientInfo["Subject (Drop down)"];
+      level = level
+        .replace(/\s/g, "")
+        .replace(/\bpre\b/i, "Pre school")
+        .replace(/\bpreschool\b/i, "Pre school")
+        .replace(/(pri|primary|p)(\d+)/i, "Primary $2")
+        .replace(/\bprimary\b/i, "Primary")
+        .replace(/\bpri\b/i, "Primary")
+        .replace(/\bp\b/i, "Primary")
+        .replace(/(sec|secondary)(\d+)/i, "Secondary $2")
+        .replace(/\bsecondary\b/i, "Secondary")
+        .replace(/\bsec\b/i, "Secondary")
+        .replace(/\bjunior college\b/i, "Junior College")
+        .replace(/\bjunior\b/i, "Junior College")
+        .replace(/\bjc\b/i, "Junior College")
+        .replace(/\bis\b/i, "IGCSE")
+        .replace(/\bigcse\b/i, "IGCSE")
+        .replace(/\bib/i, "IB Diploma")
+        .replace(/\bpoly\b/i, "Tertiary")
+        .replace(/\bpolytechnic\b/i, "Tertiary")
+        .replace(/\bu\b/i, "University")
+        .replace(/\buni\b/i, "University")
+        .replace(/\buniversity\b/i, "University")
+        .replace(/\bal\b/i, "Adult Learner")
+        .replace(/\badult\b/i, "Adult Learner")
+        .replace(/\badult learner\b/i, "Adult Learner");
       const level_subject =
         level.charAt(0).toUpperCase() + level.slice(1) + " " + subject;
       const location = clientInfo["Postal Code"];
 
       // Wait for the address to be fetched before proceeding
       const fullAddress = await getFullAddress(location);
+      console.log(fullAddress);
+      const fullAddressLatLong = [
+        parseFloat(fullAddress.longitude),
+        parseFloat(fullAddress.latitude),
+      ];
+      const nearestMRT = getNearestMrt(fullAddressLatLong, false, 2000);
 
       const frequency = clientInfo["Frequency"]
         .split("/")
@@ -305,14 +292,20 @@ const Convert = () => {
 
       const timing = clientInfo["Timings"];
 
-      const commission = `First ${parseInt(frequency[0]) * 2} lessons`;
+      let commission = `First ${parseInt(frequency[0]) * 2} lessons`;
+      if (duration.includes("per subject")) {
+        commission += " per subject";
+      }
+
       const remarks = clientInfo["Remarks"];
 
-      setTextOutput(
-        `${level_subject + " @ " + location}\n\n${"Details of assignment"}\n${
-          "Location: " + fullAddress
+      setTextOutput2(
+        `${
+          level_subject + " @ " + nearestMRT.result[0].station.name
+        }\n\n${"Details of assignment"}\n${
+          "Location: " + fullAddress.address
         }\n${"Duration: " + duration}\n${"Timing: " + timing}\n\n${
-          "Fees: " + rates + "/hour " + fullTypeOfTutor
+          "Fees: " + fullTypeOfTutor
         }\n\n${"Commission: " + commission}\n\n${
           "Remarks: " + remarks
         }\n\n${interested_applicants}\n\n${application_form}`
@@ -331,69 +324,64 @@ const Convert = () => {
     }));
   };
 
-  //Submit form
+  //Submit form (First Row)
   const handleSubmit = async (e) => {
+    //Stops page from refreshing
     e.preventDefault();
+
+    //Saves form data
     console.log("Form data submitted:", formData);
+
+    //Extract Client Name
     const clientName =
       formData["client_name"].charAt(0).toUpperCase() +
       formData["client_name"].slice(1);
     const clientContact = formData["contact"];
-    const clientPostal = formData["postal"];
+
+    // Handle get address
+    // Extract postal code from the form
+    let clientPostal = "";
+
+    if (formData["postal"].length === 6) {
+      clientPostal = formData["postal"];
+    }
+
+    //Fetch full address using the getFullAddress(postal) function
     const clientAddress = await getFullAddress(clientPostal);
-    console.log(clientAddress.latitude);
-    const nearbyStations = await getNearbyMRTStations(
-      clientAddress.latitude,
-      clientAddress.longitude
-    );
-    console.log("Nearby Stations:", nearbyStations);
+    let clientLatLong = "";
+    let nearestMRT = "";
+    let nameOfNearestMrt = "Not Found";
 
-    const findNearestStation = (stations, latitude, longitude) => {
-      if (stations.length === 0) {
-        return "No nearby MRT station found";
-      }
+    //Extract lat and long to calculate nearest mrt if clientAddress returns
 
-      const filterMRTStations = (stations) => {
-        return stations.filter((station) => {
-          // Check if the station's wikipedia tag contains 'MRT' and does not contain 'LRT'
-          if (station.tags && station.tags.wikipedia) {
-            // Further check if the wikipedia tag contains 'MRT' and does not contain 'LRT'
-            return station.tags.wikipedia.includes("MRT");
-          }
-        });
-      };
-      stations = filterMRTStations(stations);
+    // Ensure clientAddress is valid and not "Address not found"
+    if (clientAddress && clientAddress !== "Address not found") {
+      clientLatLong = [
+        parseFloat(clientAddress.longitude),
+        parseFloat(clientAddress.latitude),
+      ];
+      console.log("Client Latitude and Longitude:", clientLatLong);
 
-      let nearestStation = stations[0];
-      let minDistance = getDistance(
-        latitude,
-        longitude,
-        nearestStation.lat,
-        nearestStation.lon
-      );
+      try {
+        // Assuming getNearestMrt returns an array, even if it's empty
+        nearestMRT = getNearestMrt(clientLatLong, false, 2000);
+        nameOfNearestMrt = nearestMRT.result[0].station.name;
+        console.log("Nearest MRT:", nearestMRT);
 
-      stations.forEach((station) => {
-        const distance = getDistance(
-          latitude,
-          longitude,
-          station.lat,
-          station.lon
-        );
-        if (distance < minDistance) {
-          minDistance = distance;
-          nearestStation = station;
+        // Check if nearestMRT is defined and has at least one element
+        if (nearestMRT.result <= 0) {
+          alert("No MRT station found within the specified radius.");
         }
-      });
+      } catch (error) {
+        console.error("Error in finding nearest MRT:", error);
+        alert("Error in finding nearest MRT");
+      }
+    } else {
+      alert("Cannot find nearest MRT due to invalid address.");
+    }
 
-      return nearestStation.tags.name;
-    };
-
-    const nearestStationName = findNearestStation(
-      nearbyStations,
-      clientAddress.latitude,
-      clientAddress.longitude
-    );
-    const level = formData["level"].toLowerCase();
+    //Extract Study Level
+    const level = formData["level"].toLowerCase().replace(/\s/g, "");
 
     let clientLevel = level
       .replace(/\bpre\b/i, "Pre school")
@@ -419,13 +407,22 @@ const Convert = () => {
       .replace(/\bal\b/i, "Adult Learner")
       .replace(/\badult\b/i, "Adult Learner")
       .replace(/\badult learner\b/i, "Adult Learner");
-    console.log("clientLevel: " + clientLevel);
+
+    //Extract Subjects
     const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
+
+    //Handle multiple subjects
     const clientSubject = subjects
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
       .join(", ");
+
+    //Gets frequency
     const clientFrequency = formData["frequency"];
+
+    //Gets timings
     const clientTimings = formData["timings"];
+
+    //Calculate Fees
     let clientFees = "";
     try {
       const rate = fees[clientLevel.toLowerCase()];
@@ -454,12 +451,20 @@ const Convert = () => {
           "\n";
       }
 
-      const commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
+      //Calculate commission for the company
+      let commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
 
+      if (clientFrequency.includes("per subject")) {
+        commission = commission + " per subject";
+      }
+
+      //Gets Remarks
       const clientRemarks = formData["remarks"];
-      setTextOutput(
+
+      //Set output
+      setTextOutput1(
         `${
-          clientLevel + " " + clientSubject + " @ " + nearestStationName
+          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
@@ -475,30 +480,29 @@ const Convert = () => {
 
   return (
     <div className="convert">
-      {/* Left Side of the screen (form) */}
+      {/* First Row */}
+      {/* First row left section (form)*/}
       <div className="convert-form">
         <div className="form-title">Client Form</div>
         <form action="" onSubmit={handleSubmit}>
-          <div className="name">
-            <label htmlFor="client_name">Client Name</label>
-            <input
-              type="text"
-              id="client_name"
-              name="client_name"
-              value={formData.client_name}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="contact">
-            <label htmlFor="contact">Client Contact no.</label>
-            <input
-              type="text"
-              id="contact"
-              name="contact"
-              value={formData.contact}
-              onChange={handleInputChange}
-            />
-          </div>
+          <label htmlFor="client_name">Client Name</label>
+          <input
+            type="text"
+            id="client_name"
+            name="client_name"
+            value={formData.client_name}
+            onChange={handleInputChange}
+            placeholder="Eg. Ms Nana"
+          />
+          <label htmlFor="contact">Client Contact no.</label>
+          <input
+            type="text"
+            id="contact"
+            name="contact"
+            value={formData.contact}
+            onChange={handleInputChange}
+            placeholder="Eg. 91234567"
+          />
 
           <label htmlFor="postal">Postal Code</label>
           <input
@@ -507,6 +511,7 @@ const Convert = () => {
             name="postal"
             value={formData.postal}
             onChange={handleInputChange}
+            placeholder="Eg. 051531"
           />
           <label htmlFor="level">Level</label>
           <input
@@ -515,6 +520,7 @@ const Convert = () => {
             name="level"
             value={formData.level}
             onChange={handleInputChange}
+            placeholder="Eg. p5"
           />
           <label htmlFor="subject">Subject</label>
           <input
@@ -523,6 +529,7 @@ const Convert = () => {
             name="subject"
             value={formData.subject}
             onChange={handleInputChange}
+            placeholder="Eg. math, science, english"
           />
           <label htmlFor="frequency">Duration</label>
           <input
@@ -531,6 +538,7 @@ const Convert = () => {
             name="frequency"
             value={formData.frequency}
             onChange={handleInputChange}
+            placeholder="Eg. 1 x 2 hrs/ week"
           />
 
           <label htmlFor="timings">Timings</label>
@@ -540,6 +548,7 @@ const Convert = () => {
             name="timings"
             value={formData.timings}
             onChange={handleInputChange}
+            placeholder="Eg. Wednesday 7pm-8pm"
           />
           <label htmlFor="tutor">Category of Tutor</label>
           <div id="tutor1">
@@ -586,11 +595,56 @@ const Convert = () => {
             name="remarks"
             value={formData.remarks}
             onChange={handleInputChange}
+            placeholder="Tutor to be patient"
           />
-          <input type="submit" id="submit" value="Submit" />
+          <div className="button">
+            <button className="submit-form">
+              <input type="submit" id="submit" value="Submit" />
+            </button>
+            <button onClick={handleReset} className="clear-form">
+              Clear Form
+            </button>
+          </div>
         </form>
       </div>
-      {/* Middle section of the screen (input) */}
+      {/* First row middle section (Guide) */}
+      <div className="guide">
+        <div className="guide-title">Guide (Shortcuts)</div>
+        <div className="guide-description">
+          <p>Pre School</p>
+          <p>"pre", "preschool"</p>
+          <p>Primary 1-6</p>
+          <p>"p1", "Pri 5", "primary2"</p>
+          <p>Secondary 1-5</p>
+          <p>"sec1", "Sec 3", "Secondary4"</p>
+          <p>Junior College (JC)</p>
+          <p>"jc", "junior", "junior college"</p>
+          <p>IGCSE</p>
+          <p>"is", "igcse"</p>
+          <p>IB Diploma</p>
+          <p>"ib"</p>
+          <p>Tertiary</p>
+          <p>"poly", "polytechnic"</p>
+          <p>University</p>
+          <p>"u","uni", "university"</p>
+          <p>Adult Learner</p>
+          <p>"al", "adult", "adult learner"</p>
+        </div>
+      </div>
+      {/* First row Right section (form-output) */}
+      <div className="convert-output">
+        <div className="convert-output-title">Client Form Output</div>
+        <textarea
+          name=""
+          id=""
+          cols="50"
+          rows="30"
+          value={textOutput1}
+          readOnly
+        ></textarea>
+      </div>
+      {/* Second Row */}
+      {/* Second row left section copy paste */}
       <div className="convert-input">
         <div className="convert-input-title">Copy paste </div>
         <textarea
@@ -603,8 +657,25 @@ const Convert = () => {
         ></textarea>
         <button onClick={() => convertToFormat()}>Convert</button>
       </div>
-
-      {/* Right section of the screen (output) */}
+      {/* Second row middle section (Guide) */}
+      <div className="guide">
+        <div className="guide-title">Sample Format</div>
+        <div className="guide-description-2">
+          <p>1. Client name: </p>
+          <p>2. Client Contact No.: </p>
+          <p>3. Postal Code: </p>
+          <p>4. Level (DropDown): </p>
+          <p>5. Subject (DropDown): </p>
+          <p>6. Same tutor/Separate tutor (for multiple subjects): </p>
+          <p>7. Frequency:</p>
+          <p>8. Duration:</p>
+          <p>9. Timings:</p>
+          <p>10. Category of Tutor (For Academic):</p>
+          <p>11. Rates (For Academic & Music):</p>
+          <p>12. Remarks:</p>
+        </div>
+      </div>
+      {/* Second row right section output */}
       <div className="convert-output">
         <div className="convert-output-title">Output</div>
         <textarea
@@ -612,7 +683,7 @@ const Convert = () => {
           id=""
           cols="50"
           rows="30"
-          value={textOutput}
+          value={textOutput2}
           readOnly
         ></textarea>
       </div>

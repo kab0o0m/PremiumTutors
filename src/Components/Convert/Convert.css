@@ -1,14 +1,49 @@
 .convert {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: top;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
-.convert-form {
+.convert-form,
+.convert-output,
+.guide {
   font-size: 1rem;
   margin: 2rem;
-  
 }
+
+.guide {
+  display: flex;
+  flex-direction: column;
+}
+
+.guide-description,
+.guide-description-2{
+  display: flex;
+  flex-direction: column;
+  align-items: start; 
+  padding: 0 1rem 1rem 1rem;
+}
+
+
+
+.guide-description p,
+.guide-description-2 p {
+  color: #555555; /* Slightly lighter text color for paragraphs */
+  margin-bottom: 10px; /* Space below each paragraph */
+  margin: 0;
+
+}
+
+/* Style for the 'shortcut' phrases */
+.guide-description p:nth-child(odd) {
+  font-weight: bold; /* Bold for categories */
+  padding: 0.2rem 0 0.2rem 0;
+}
+
+.guide-description p:nth-child(even) {
+  font-style: italic; /* Italic for examples */
+  margin-left: 20px; /* Indent for examples */
+}
+
 .convert-form form {
   display: flex;
   flex-direction: column;
@@ -22,7 +57,7 @@
 
 .convert-form form input {
   padding: 0.5rem;
-  width: 20rem;
+  width: 100%;
 }
 .name, 
 .contact {
@@ -38,13 +73,11 @@
 }
 
 .convert-input-title,
-.convert-output-title {
+.convert-output-title,
+.guide-title {
   margin: 0 0 2rem 0;
 }
 
-.convert-output {
-  margin: 2rem;
-}
 
 .tutor1, 
 .tutor2,
@@ -57,12 +90,27 @@
 #tutor3 input {
   width: 2rem;
 }
-
+.button {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+  padding: 1rem 0 1rem 0; 
+}
 #submit {
-  margin: 0.5rem 0 2rem 0;
+  cursor: pointer;
+  margin: 0;
+  border: 0;
+  width: 100%;
+  background-color: #EFEFEF;
+}
+
+.submit-form,
+.clear-form {
   width: 10rem;
   cursor: pointer;
-}
+} 
+
+
 
 
 
