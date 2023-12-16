@@ -507,168 +507,175 @@ const Convert = () => {
 
   return (
     <div className="convert">
-      {/* First Row */}
-      {/* First row left section (form)*/}
-      <div className="convert-form">
-        <div className="form-title">Client Form</div>
-        <form action="" onSubmit={handleSubmit}>
-          <label htmlFor="client_name">Client Name</label>
-          <input
-            type="text"
-            id="client_name"
-            name="client_name"
-            value={formData.client_name}
-            onChange={handleInputChange}
-            placeholder="Eg. Ms Nana"
-          />
-          <label htmlFor="contact">Client Contact no.</label>
-          <input
-            type="text"
-            id="contact"
-            name="contact"
-            value={formData.contact}
-            onChange={handleInputChange}
-            placeholder="Eg. 91234567"
-          />
-
-          <label htmlFor="postal">Postal Code</label>
-          <input
-            type="text"
-            id="postal"
-            name="postal"
-            value={formData.postal}
-            onChange={handleInputChange}
-            placeholder="Eg. 051531"
-          />
-          <label htmlFor="level">Level</label>
-          <input
-            type="text"
-            id="level"
-            name="level"
-            value={formData.level}
-            onChange={handleInputChange}
-            placeholder="Eg. p5"
-          />
-          <label htmlFor="subject">Subject</label>
-          <input
-            type="text"
-            id="subject"
-            name="subject"
-            value={formData.subject}
-            onChange={handleInputChange}
-            placeholder="Eg. math, science, english"
-          />
-          <label htmlFor="frequency">Duration</label>
-          <input
-            type="text"
-            id="frequency"
-            name="frequency"
-            value={formData.frequency}
-            onChange={handleInputChange}
-            placeholder="Eg. 1 x 2 hrs/ week"
-          />
-
-          <label htmlFor="timings">Timings</label>
-          <input
-            type="text"
-            id="timings"
-            name="timings"
-            value={formData.timings}
-            onChange={handleInputChange}
-            placeholder="Eg. Wednesday 7pm-8pm"
-          />
-          <label htmlFor="tutor">Category of Tutor</label>
-          <div id="tutor1">
+      <div className="convert-row-1">
+        {/* First Row */}
+        {/* First row left section (form)*/}
+        <div className="convert-form">
+          <div className="form-title">Client Form</div>
+          <form action="" onSubmit={handleSubmit}>
+            <label htmlFor="client_name">Client Name</label>
             <input
-              type="checkbox"
-              id="tutor1"
-              name="tutor1"
-              value="ftt"
-              checked={formData.tutor1}
+              type="text"
+              id="client_name"
+              name="client_name"
+              value={formData.client_name}
               onChange={handleInputChange}
+              placeholder="Eg. Ms Nana"
             />
-            <label htmlFor="tutor1">Part Time/Undergrad Tutor</label>
-          </div>
-          <br />
-          <div id="tutor2">
+            <label htmlFor="contact">Client Contact no.</label>
             <input
-              type="checkbox"
-              id="tutor2"
-              name="tutor2"
-              value="ftt"
-              checked={formData.tutor2}
+              type="text"
+              id="contact"
+              name="contact"
+              value={formData.contact}
               onChange={handleInputChange}
+              placeholder="Eg. 91234567"
             />
-            <label htmlFor="tutor2">Full Time/Graduate Tutor</label>
-          </div>
-          <br />
-          <div id="tutor3">
-            <input
-              type="checkbox"
-              id="tutor3"
-              name="tutor3"
-              value="ftt"
-              checked={formData.tutor3}
-              onChange={handleInputChange}
-            />
-            <label htmlFor="tutor3">Ex /Current School Teachers</label>
-          </div>
 
-          <br />
-          <label htmlFor="timings">Remarks</label>
-          <input
-            type="text"
-            id="remarks"
-            name="remarks"
-            value={formData.remarks}
-            onChange={handleInputChange}
-            placeholder="Tutor to be patient"
-          />
-          <div className="button">
-            <button className="submit-form">
-              <input type="submit" id="submit" value="Submit" />
-            </button>
-            <button type="button" onClick={handleReset} className="clear-form">
-              Clear Form
-            </button>
+            <label htmlFor="postal">Postal Code</label>
+            <input
+              type="text"
+              id="postal"
+              name="postal"
+              value={formData.postal}
+              onChange={handleInputChange}
+              placeholder="Eg. 051531"
+            />
+            <label htmlFor="level">Level</label>
+            <input
+              type="text"
+              id="level"
+              name="level"
+              value={formData.level}
+              onChange={handleInputChange}
+              placeholder="Eg. p5"
+            />
+            <label htmlFor="subject">Subject</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              value={formData.subject}
+              onChange={handleInputChange}
+              placeholder="Eg. math, science, english"
+            />
+            <label htmlFor="frequency">Duration</label>
+            <input
+              type="text"
+              id="frequency"
+              name="frequency"
+              value={formData.frequency}
+              onChange={handleInputChange}
+              placeholder="Eg. 1 x 2 hrs/ week"
+            />
+
+            <label htmlFor="timings">Timings</label>
+            <input
+              type="text"
+              id="timings"
+              name="timings"
+              value={formData.timings}
+              onChange={handleInputChange}
+              placeholder="Eg. Wednesday 7pm-8pm"
+            />
+            <label htmlFor="tutor">Category of Tutor</label>
+            <div id="tutor1">
+              <input
+                type="checkbox"
+                id="tutor1"
+                name="tutor1"
+                value="ftt"
+                checked={formData.tutor1}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="tutor1">Part Time/Undergrad Tutor</label>
+            </div>
+            <br />
+            <div id="tutor2">
+              <input
+                type="checkbox"
+                id="tutor2"
+                name="tutor2"
+                value="ftt"
+                checked={formData.tutor2}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="tutor2">Full Time/Graduate Tutor</label>
+            </div>
+            <br />
+            <div id="tutor3">
+              <input
+                type="checkbox"
+                id="tutor3"
+                name="tutor3"
+                value="ftt"
+                checked={formData.tutor3}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="tutor3">Ex /Current School Teachers</label>
+            </div>
+
+            <br />
+            <label htmlFor="timings">Remarks</label>
+            <input
+              type="text"
+              id="remarks"
+              name="remarks"
+              value={formData.remarks}
+              onChange={handleInputChange}
+              placeholder="Tutor to be patient"
+            />
+            <div className="button">
+              <button className="submit-form">
+                <input type="submit" id="submit" value="Submit" />
+              </button>
+              <button
+                type="button"
+                onClick={handleReset}
+                className="clear-form"
+              >
+                Clear Form
+              </button>
+            </div>
+          </form>
+        </div>
+        {/* First row middle section (Guide) */}
+        <div className="guide">
+          <div className="guide-title">Guide (Shortcuts)</div>
+          <div className="guide-description">
+            <p>Pre School</p>
+            <p>"pre", "preschool", "Pre school"</p>
+            <p>Primary 1-6</p>
+            <p>"p1", "Pri 5", "primary2"</p>
+            <p>Secondary 1-5</p>
+            <p>"sec1", "Sec 3", "Secondary4"</p>
+            <p>Junior College (JC)</p>
+            <p>"jc", "junior", "junior college"</p>
+            <p>IGCSE</p>
+            <p>"is", "igcse"</p>
+            <p>IB Diploma</p>
+            <p>"ib"</p>
+            <p>Tertiary</p>
+            <p>"poly", "polytechnic"</p>
+            <p>University</p>
+            <p>"u","uni", "university"</p>
+            <p>Adult Learner</p>
+            <p>"adult", "adult learner"</p>
           </div>
-        </form>
-      </div>
-      {/* First row middle section (Guide) */}
-      <div className="guide">
-        <div className="guide-title">Guide (Shortcuts)</div>
-        <div className="guide-description">
-          <p>Pre School</p>
-          <p>"pre", "preschool", "Pre school"</p>
-          <p>Primary 1-6</p>
-          <p>"p1", "Pri 5", "primary2"</p>
-          <p>Secondary 1-5</p>
-          <p>"sec1", "Sec 3", "Secondary4"</p>
-          <p>Junior College (JC)</p>
-          <p>"jc", "junior", "junior college"</p>
-          <p>IGCSE</p>
-          <p>"is", "igcse"</p>
-          <p>IB Diploma</p>
-          <p>"ib"</p>
-          <p>Tertiary</p>
-          <p>"poly", "polytechnic"</p>
-          <p>University</p>
-          <p>"u","uni", "university"</p>
-          <p>Adult Learner</p>
-          <p>"adult", "adult learner"</p>
+        </div>
+        {/* First row Right section (form-output) */}
+        <div className="convert-output">
+          <div className="convert-output-title">Telegram</div>
+          <textarea
+            name=""
+            id=""
+            cols="50"
+            rows="30"
+            value={textOutput1}
+          ></textarea>
         </div>
       </div>
-      {/* First row Right section (form-output) */}
-      <div className="convert-output">
-        <div className="convert-output-title">Telegram</div>
-        <textarea
-          name=""
-          id=""
-          cols="50"
-          rows="30"
-          value={textOutput1}
-        ></textarea>
-      </div>
+
       {/* Second row Right section (form-output) */}
       <div className="convert-output-2">
         <div className="convert-output-title-2">Many Tutors</div>
