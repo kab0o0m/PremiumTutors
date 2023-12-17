@@ -397,6 +397,8 @@ const Convert = () => {
         }
         if (formData["music"]) {
           clientFees = clientFees + rate[musicSubject] + "/lesson";
+          interested_applicants =
+            "Interested applicants, please apply via https://forms.gle/G38YJgFVxLwTpvSr7 or message @PHTapplications";
         }
       } else {
         clientFees = "";
