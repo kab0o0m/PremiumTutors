@@ -23,6 +23,7 @@
 .guide {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .guide-description{
@@ -52,12 +53,12 @@
 }
 
 /* Style for the 'shortcut' phrases */
-.guide-description p:nth-child(even) {
+.guide-description p:nth-child(odd) {
   font-weight: bold; /* Bold for categories */
   padding: 0.2rem 0 0.2rem 0;
 }
 
-.guide-description p:nth-child(odd) {
+.guide-description p:nth-child(even) {
   font-style: italic; /* Italic for examples */
   margin-left: 20px; /* Indent for examples */
 }

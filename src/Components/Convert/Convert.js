@@ -369,6 +369,7 @@ const Convert = () => {
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
         console.log(rate);
+        console.log(rate[musicSubject]);
         if (formData["tutor1"]) {
           clientFees =
             clientFees +
@@ -587,7 +588,6 @@ const Convert = () => {
           <div className="guide-title">Guide (Shortcuts)</div>
           <div className="guide-description">
             <div className="academic">
-              <h3>Academic and Many Tutors Template</h3>
               <p>Pre School</p>
               <p>"pre", "preschool", "Pre school"</p>
               <p>Nursery</p>
@@ -612,7 +612,6 @@ const Convert = () => {
               <p>"adult", "adult learner"</p>
             </div>
             <div className="music">
-              <h3>Music / Sports Template</h3>
               <p>Beginner (Music)</p>
               <p>"b", "beginner"</p>
               <p>Grade 1-8 (Music)</p>
