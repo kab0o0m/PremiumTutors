@@ -4,11 +4,11 @@ import getNearestMrt from "nearest-mrt";
 import fees from "../../Fees";
 
 const Convert = () => {
-  const [textInput, setTextInput] = useState(" ");
+  //Text output1 and output2 is used to generate formatted data
   const [textOutput1, setTextOutput1] = useState(" ");
   const [textOutput2, setTextOutput2] = useState(" ");
 
-  //const [textFormat, setTextFormat] = useState(null);
+  //Empty form
   const initialFormData = {
     client_name: "",
     contact: "",
@@ -24,16 +24,26 @@ const Convert = () => {
     remarks: "",
   };
 
+  //Initialise form to be empty
   const [formData, setFormData] = useState(initialFormData);
 
+  //Reset all to empty
   const handleReset = () => {
     setFormData(initialFormData);
     setTextOutput1("");
     setTextOutput2("");
   };
 
+  /*Code generation:
+    First letter is "C"
+    Second and third letter is obtained from client level
+    Fourth and Fifth letter is obtained from client name
+  */
   const codeGeneration = (clientName, clientLevel) => {
+    //First letter
     const first_letter = "C";
+
+    //Second and third letter
     let second_third_letter = clientLevel
       .replace(/\bPre School\b/i, "PS")
       .replace(/\bPrimary\b/i, "P")
@@ -49,41 +59,30 @@ const Convert = () => {
       second_third_letter[0] + second_third_letter[1]
     ).toUpperCase();
 
+    //Extracts first two letters of any string for fourth and fifth letter of the code generator
     const extractFirstTwoLetters = (name) => {
       // Remove common prefixes from the name
       const cleanedName = name.replace(/^(Mr|Ms|Mrs|Dr|Doc|Mdm|Md)\.?\s+/i, "");
 
       // Extract the first two letters of the remaining name
-
       return cleanedName.slice(0, 2).toUpperCase();
     };
 
+    //Fourth and fifth letter
     const fourth_fifth_letter = extractFirstTwoLetters(clientName);
 
     return first_letter + second_third_letter + fourth_fifth_letter;
   };
 
+  //For academic template
   let interested_applicants =
     "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications";
 
+  //For many tutors template
   const application_form =
     "Application Form for Registered Tutors: https://forms.gle/VCuCj7Pkdm7kMRX49";
 
-  const sampleText = ` 
-  1. Client Name: Ms Nana  
-  2. Client Contact No.: 92983609
-  3. Postal Code: 760453
-  4. Level (Drop down): Primary 5
-  5. Subject (Drop down): Maths, Science
-  6. Same tutor/Separate tutor (for multiple subjects): Same tutor 
-  7. Frequency: 1 / week
-  8. Duration: 2 hours
-  9. Timings: Wednesday 2pm onwards
-  10. Category of Tutor (For Academic): FTT
-  11. Rates (For Academic & Music): -
-  12. Remarks: Tutor to be patient.`;
-
-  // Get Full address from Onemap API
+  // Get Full address from Onemap API, postal code is obtained from form
   const getFullAddress = async (postal) => {
     try {
       const url = `https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${postal}&returnGeom=Y&getAddrDetails=Y&pageNum=1`;
@@ -299,6 +298,7 @@ const Convert = () => {
     //Extract Study Level
     const level = formData["level"].toLowerCase();
 
+    //Replace all short forms
     let clientLevel = level
       .replace(/\bnursery\b/i, "Nursery")
       .replace(/\bn\b/i, "Nursery")
@@ -338,6 +338,7 @@ const Convert = () => {
       .replace(/\bbadminton\b/i, "Badminton")
       .replace(/\bdiploma\b/i, "Diploma");
     console.log(clientLevel);
+
     //Extract Subjects
     const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
 
@@ -346,6 +347,7 @@ const Convert = () => {
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
       .join(", ");
 
+    //gets music subject
     const musicSubject = formData["subject"].toLowerCase();
     console.log(musicSubject);
 
@@ -354,18 +356,18 @@ const Convert = () => {
 
     //Gets timings
     const clientTimings = formData["timings"];
+
     //Calculate commission for the company
     let commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
-
     if (clientFrequency.includes("per subject")) {
       commission = commission + " per subject";
     }
 
     //Gets Remarks
     const clientRemarks = formData["remarks"];
+
     //Calculate Fees
     let clientFees = "";
-
     try {
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
@@ -405,6 +407,7 @@ const Convert = () => {
         clientLevel =
           clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       }
+
       //Set output
       setTextOutput1(
         `${
