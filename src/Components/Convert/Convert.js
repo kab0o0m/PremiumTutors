@@ -29,6 +29,7 @@ const Convert = () => {
   const handleReset = () => {
     setFormData(initialFormData);
     setTextOutput1("");
+    setTextOutput2("");
   };
 
   const codeGeneration = (clientName, clientLevel) => {
