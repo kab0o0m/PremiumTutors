@@ -334,8 +334,8 @@ const Convert = () => {
       .replace(/(g|grade)(\d+)/i, "Grade $2")
       .replace(/\bleisure\b/i, "Leisure")
       .replace(/\btennis\b/i, "Tennis")
-      .replace(/\bbadminton\b/i, "Badminton");
-
+      .replace(/\bbadminton\b/i, "Badminton")
+      .replace(/\bdiploma\b/i, "Diploma");
     console.log(clientLevel);
     //Extract Subjects
     const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
