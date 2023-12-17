@@ -5,7 +5,12 @@
 
 .convert-row-1 {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+.convert-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .convert-form,
@@ -20,31 +25,39 @@
   flex-direction: column;
 }
 
-.guide-description,
-.guide-description-2{
+.guide-description{
   display: flex;
-  flex-direction: column;
   align-items: start; 
   padding: 0 1rem 1rem 1rem;
+  gap: 2rem;  
+}
+
+.academic {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.music {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 
 
-
-.guide-description p,
-.guide-description-2 p {
+.guide-description p{
   color: #555555; /* Slightly lighter text color for paragraphs */
   margin-bottom: 10px; /* Space below each paragraph */
   margin: 0;
-
 }
 
 /* Style for the 'shortcut' phrases */
-.guide-description p:nth-child(odd) {
+.guide-description p:nth-child(even) {
   font-weight: bold; /* Bold for categories */
   padding: 0.2rem 0 0.2rem 0;
 }
 
-.guide-description p:nth-child(even) {
+.guide-description p:nth-child(odd) {
   font-style: italic; /* Italic for examples */
   margin-left: 20px; /* Indent for examples */
 }
@@ -79,20 +92,24 @@
 
 .convert-input-title,
 .convert-output-title,
-.guide-title {
+.guide-title,
+.convert-output-title-3,
+.convert-output-title-2 {
   margin: 0 0 2rem 0;
 }
 
 
 .tutor1, 
 .tutor2,
-.tutor3 {
+.tutor3,
+.music {
   display: flex;
 }
 
 #tutor1 input, 
 #tutor2 input,
-#tutor3 input {
+#tutor3 input,
+#music input {
   width: 2rem;
 }
 .button {
@@ -115,9 +132,13 @@
   cursor: pointer;
 } 
 
-.convert-output-2 {
-  margin: 2rem;
+.convert-output-2,
+.convert-output-3 {
+  margin: auto;
 }
 
-
+.subject {
+  display: flex;
+  flex-direction: column;
+}
 

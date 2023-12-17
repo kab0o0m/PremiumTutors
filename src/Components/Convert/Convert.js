@@ -1,11 +1,13 @@
 import { useState } from "react";
 import "./Convert.css";
 import getNearestMrt from "nearest-mrt";
+import fees from "../../Fees";
 
 const Convert = () => {
-  const [textInput, setTextInput] = useState("");
-  const [textOutput1, setTextOutput1] = useState(null);
-  const [textOutput2, setTextOutput2] = useState(null);
+  const [textInput, setTextInput] = useState(" ");
+  const [textOutput1, setTextOutput1] = useState(" ");
+  const [textOutput2, setTextOutput2] = useState(" ");
+
   //const [textFormat, setTextFormat] = useState(null);
   const initialFormData = {
     client_name: "",
@@ -18,6 +20,7 @@ const Convert = () => {
     tutor1: false,
     tutor2: false,
     tutor3: false,
+    music: false,
     remarks: "",
   };
 
@@ -26,99 +29,6 @@ const Convert = () => {
   const handleReset = () => {
     setFormData(initialFormData);
     setTextOutput1("");
-  };
-
-  const fees = {
-    "pre school": {
-      ptt: "$25 - $30",
-      ftt: "$35 - $45",
-      moe: "$50 - $65",
-    },
-    "primary 1": {
-      ptt: "$25 - $30",
-      ftt: "$35 - $45",
-      moe: "$50 - $65",
-    },
-    "primary 2": {
-      ptt: "$25 - $30",
-      ftt: "$35 - $45",
-      moe: "$50 - $65",
-    },
-    "primary 3": {
-      ptt: "$25 - $30",
-      ftt: "$35 - $45",
-      moe: "$50 - $65",
-    },
-    "primary 4": {
-      ptt: "$30 - $35",
-      ftt: "$40 - $50",
-      moe: "$60 - $75",
-    },
-    "primary 5": {
-      ptt: "$30 - $35",
-      ftt: "$40 - $50",
-      moe: "$60 - $75",
-    },
-    "primary 6": {
-      ptt: "$30 - $35",
-      ftt: "$40 - $50",
-      moe: "$60 - $75",
-    },
-    "secondary 1": {
-      ptt: "$35 - $40",
-      ftt: "$45 - $55",
-      moe: "$60 - $80",
-    },
-    "secondary 2": {
-      ptt: "$35 - $40",
-      ftt: "$45 - $55",
-      moe: "$60 - $80",
-    },
-    "secondary 3": {
-      ptt: "$35 - $45",
-      ftt: "$45 - $60",
-      moe: "$65 - $90",
-    },
-    "secondary 4": {
-      ptt: "$35 - $45",
-      ftt: "$45 - $60",
-      moe: "$65 - $90",
-    },
-    "secondary 5": {
-      ptt: "$35 - $45",
-      ftt: "$45 - $60",
-      moe: "$65 - $90",
-    },
-    "junior college": {
-      ptt: "$40 - $55",
-      ftt: "$65 - $80",
-      moe: "$90- $120",
-    },
-    igcse: {
-      ptt: "$35 - $50",
-      ftt: "$45 - $75",
-      moe: "$60 - $110",
-    },
-    "ib diploma": {
-      ptt: "$40 - $55",
-      ftt: "$65 - $85",
-      moe: "$90 - $120",
-    },
-    tertiary: {
-      ptt: "$40 - $60",
-      ftt: "$60 - $90",
-      moe: "$100 - $120",
-    },
-    university: {
-      ptt: "$40 - $60",
-      ftt: "$60 - $90",
-      moe: "$100 - $120",
-    },
-    "adult learner": {
-      ptt: "$35 - $45",
-      ftt: "$50 - $70",
-      moe: "$70 - $100",
-    },
   };
 
   const codeGeneration = (clientName, clientLevel) => {
@@ -389,6 +299,11 @@ const Convert = () => {
     const level = formData["level"].toLowerCase();
 
     let clientLevel = level
+      .replace(/\bnursery\b/i, "Nursery")
+      .replace(/\bn\b/i, "Nursery")
+      .replace(/\bk\b/i, "Kindergarten")
+      .replace(/\bkindergarten\b/i, "Kindergarten")
+      .replace(/(k|kindergarten)(\d+)/i, "Kindergarten $2")
       .replace(/\bpre\b/i, "Pre school")
       .replace(/\bpreschool\b/i, "Pre school")
       .replace(/(pri|primary|p)(\d+)/i, "Primary $2")
@@ -404,14 +319,22 @@ const Convert = () => {
       .replace(/\bis\b/i, "IGCSE")
       .replace(/\bigcse\b/i, "IGCSE")
       .replace(/\bib/i, "IB Diploma")
-      .replace(/\bpoly\b/i, "Tertiary")
-      .replace(/\bpolytechnic\b/i, "Tertiary")
+      .replace(/\bpoly\b/i, "Polytechnic")
+      .replace(/\bpolytechnic\b/i, "Polytechnic")
       .replace(/\bu\b/i, "University")
       .replace(/\buni\b/i, "University")
       .replace(/\buniversity\b/i, "University")
       .replace(/\bal\b/i, "Adult Learner")
       .replace(/\badult\b/i, "Adult Learner")
-      .replace(/\badult learner\b/i, "Adult Learner");
+      .replace(/\badult learner\b/i, "Adult Learner")
+      .replace(/\bbeginnner\b/i, "Beginner")
+      .replace(/\bb\b/i, "Beginner")
+      .replace(/\bgrade\b/i, "Grade")
+      .replace(/\bg\b/i, "Grade")
+      .replace(/(g|grade)(\d+)/i, "Grade $2")
+      .replace(/\bleisure\b/i, "Leisure")
+      .replace(/\btennis\b/i, "Tennis")
+      .replace(/\bbadminton\b/i, "Badminton");
 
     console.log(clientLevel);
     //Extract Subjects
@@ -421,6 +344,9 @@ const Convert = () => {
     const clientSubject = subjects
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
       .join(", ");
+
+    const musicSubject = formData["subject"].toLowerCase();
+    console.log(musicSubject);
 
     //Gets frequency
     const clientFrequency = formData["frequency"];
@@ -440,8 +366,9 @@ const Convert = () => {
     let clientFees = "";
 
     try {
-      if (clientLevel.replace(/\s/g, "").toLowerCase() in fees) {
-        const rate = fees[clientLevel.replace(/\s/g, "").toLowerCase()];
+      if (clientLevel.toLowerCase() in fees) {
+        const rate = fees[clientLevel.toLowerCase()];
+        console.log(rate);
         if (formData["tutor1"]) {
           clientFees =
             clientFees +
@@ -466,6 +393,9 @@ const Convert = () => {
             " Ex/Current School Teachers" +
             "\n";
         }
+        if (formData["music"]) {
+          clientFees = clientFees + rate[musicSubject] + "/lesson";
+        }
       } else {
         clientFees = "";
         clientLevel =
@@ -487,6 +417,7 @@ const Convert = () => {
       );
       interested_applicants =
         "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:";
+
       setTextOutput2(
         `${
           clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
@@ -614,6 +545,18 @@ const Convert = () => {
               />
               <label htmlFor="tutor3">Ex /Current School Teachers</label>
             </div>
+            <br />
+            <div id="music">
+              <input
+                type="checkbox"
+                id="music"
+                name="music"
+                value="music"
+                checked={formData.music}
+                onChange={handleInputChange}
+              />
+              <label htmlFor="tutor3">Music / Sports</label>
+            </div>
 
             <br />
             <label htmlFor="timings">Remarks</label>
@@ -643,29 +586,61 @@ const Convert = () => {
         <div className="guide">
           <div className="guide-title">Guide (Shortcuts)</div>
           <div className="guide-description">
-            <p>Pre School</p>
-            <p>"pre", "preschool", "Pre school"</p>
-            <p>Primary 1-6</p>
-            <p>"p1", "Pri 5", "primary2"</p>
-            <p>Secondary 1-5</p>
-            <p>"sec1", "Sec 3", "Secondary4"</p>
-            <p>Junior College (JC)</p>
-            <p>"jc", "junior", "junior college"</p>
-            <p>IGCSE</p>
-            <p>"is", "igcse"</p>
-            <p>IB Diploma</p>
-            <p>"ib"</p>
-            <p>Tertiary</p>
-            <p>"poly", "polytechnic"</p>
-            <p>University</p>
-            <p>"u","uni", "university"</p>
-            <p>Adult Learner</p>
-            <p>"adult", "adult learner"</p>
+            <div className="academic">
+              <h3>Academic and Many Tutors Template</h3>
+              <p>Pre School</p>
+              <p>"pre", "preschool", "Pre school"</p>
+              <p>Nursery</p>
+              <p>"n", "nursery"</p>
+              <p>Kindergarten 1-2</p>
+              <p>"k1", "kindergarten 2"</p>
+              <p>Primary 1-6</p>
+              <p>"p1", "Pri 5", "primary2"</p>
+              <p>Secondary 1-5</p>
+              <p>"sec1", "Sec 3", "Secondary4"</p>
+              <p>Junior College (JC)</p>
+              <p>"jc", "junior", "junior college"</p>
+              <p>IGCSE</p>
+              <p>"is", "igcse"</p>
+              <p>IB Diploma</p>
+              <p>"ib"</p>
+              <p>Tertiary</p>
+              <p>"poly", "polytechnic"</p>
+              <p>University</p>
+              <p>"u","uni", "university"</p>
+              <p>Adult Learner</p>
+              <p>"adult", "adult learner"</p>
+            </div>
+            <div className="music">
+              <h3>Music / Sports Template</h3>
+              <p>Beginner (Music)</p>
+              <p>"b", "beginner"</p>
+              <p>Grade 1-8 (Music)</p>
+              <p>"grade1", "g2", "g 5"</p>
+              <p>Diploma (Music)</p>
+              <p>"diploma"</p>
+              <p>Leisure (Music)</p>
+              <p>"leisure"</p>
+              <p>Badminton (Sports)</p>
+              <p>"badminton</p>
+              <p>Tennis (Sports)</p>
+              <p>"tennis"</p>
+              <br />
+              <br />
+              <p>Subjects available</p>
+              <p>Music: Piano, Guitar, Violin, Drums, Ukulele</p>
+              <br />
+              <p>Sports: private, pair, group</p>
+            </div>
           </div>
         </div>
         {/* First row Right section (form-output) */}
+      </div>
+
+      {/* Second row Right section (form-output) */}
+      <div className="convert-row-2">
         <div className="convert-output">
-          <div className="convert-output-title">Telegram</div>
+          <div className="convert-output-title">Telegram Template</div>
           <textarea
             name=""
             id=""
@@ -674,18 +649,16 @@ const Convert = () => {
             value={textOutput1}
           ></textarea>
         </div>
-      </div>
-
-      {/* Second row Right section (form-output) */}
-      <div className="convert-output-2">
-        <div className="convert-output-title-2">Many Tutors</div>
-        <textarea
-          name=""
-          id=""
-          cols="70"
-          rows="30"
-          value={textOutput2}
-        ></textarea>
+        <div className="convert-output-2">
+          <div className="convert-output-title-2">Many Tutors Template</div>
+          <textarea
+            name=""
+            id=""
+            cols="50"
+            rows="30"
+            value={textOutput2}
+          ></textarea>
+        </div>
       </div>
     </div>
   );
