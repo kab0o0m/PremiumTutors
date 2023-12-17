@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/PremiumTutors/static/css/main.d720eecc.css",
-    "main.js": "/PremiumTutors/static/js/main.beef6152.js",
+    "main.css": "/PremiumTutors/static/css/main.cc1ecf90.css",
+    "main.js": "/PremiumTutors/static/js/main.96082983.js",
     "static/js/787.38f16daf.chunk.js": "/PremiumTutors/static/js/787.38f16daf.chunk.js",
     "index.html": "/PremiumTutors/index.html",
-    "main.d720eecc.css.map": "/PremiumTutors/static/css/main.d720eecc.css.map",
-    "main.beef6152.js.map": "/PremiumTutors/static/js/main.beef6152.js.map",
+    "main.cc1ecf90.css.map": "/PremiumTutors/static/css/main.cc1ecf90.css.map",
+    "main.96082983.js.map": "/PremiumTutors/static/js/main.96082983.js.map",
     "787.38f16daf.chunk.js.map": "/PremiumTutors/static/js/787.38f16daf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d720eecc.css",
-    "static/js/main.beef6152.js"
+    "static/css/main.cc1ecf90.css",
+    "static/js/main.96082983.js"
   ]
 }
