@@ -39,25 +39,53 @@ const Convert = () => {
     Second and third letter is obtained from client level
     Fourth and Fifth letter is obtained from client name
   */
-  const codeGeneration = (clientName, clientLevel) => {
+  const codeGeneration = (clientName, clientLevel, clientSubject) => {
     //First letter
     const first_letter = "C";
+    let second_third_letter = "";
 
-    //Second and third letter
-    let second_third_letter = clientLevel
-      .replace(/\bPre School\b/i, "PS")
-      .replace(/\bPrimary\b/i, "P")
-      .replace(/\bSecondary\b/i, "S")
-      .replace(/\bJunior College\b/i, "JC")
-      .replace(/\bTertiary\b/i, "TE")
-      .replace(/\bUniversity\b/i, "UN")
-      .replace(/\bIGCSE\b/i, "IG")
-      .replace(/\bIB Diploma\b/i, "IB")
-      .replace(/\blangauges\b/i, "LA")
-      .replace(/\s+/g, "");
-    second_third_letter = (
-      second_third_letter[0] + second_third_letter[1]
-    ).toUpperCase();
+    //If client subject is music
+    if (formData["music"]) {
+      let second_letter = clientLevel
+        .replace(/\bBeginner\b/i, "B")
+        .replace(/\bGrade\b/i, "G")
+        .replace(/\bDiploma\b/i, "D")
+        .replace(/\bLeisure\b/i, "L")
+        .replace(/\bBadminton\b/i, "B")
+        .replace(/\bTennis\b/i, "B")
+        .replace(/\d+/g, "")
+        .replace(/\s+/g, "");
+
+      let third_letter = clientSubject
+        .replace(/\bPiano\b/i, "P")
+        .replace(/\bGuitar\b/i, "G")
+        .replace(/\bViolin\b/i, "V")
+        .replace(/\bDrums\b/i, "D")
+        .replace(/\bUkulele\b/i, "U")
+        .replace(/\bPrivate\b/i, "P")
+        .replace(/\bPair\b/i, "P")
+        .replace(/\bGroup\b/i, "G")
+        .replace(/\d+/g, "")
+        .replace(/\s+/g, "");
+
+      second_third_letter = (second_letter + third_letter).toUpperCase();
+    } else {
+      //Second and third letter
+      second_third_letter = clientLevel
+        .replace(/\bPre School\b/i, "PS")
+        .replace(/\bPrimary\b/i, "P")
+        .replace(/\bSecondary\b/i, "S")
+        .replace(/\bJunior College\b/i, "JC")
+        .replace(/\bTertiary\b/i, "TE")
+        .replace(/\bUniversity\b/i, "UN")
+        .replace(/\bIGCSE\b/i, "IG")
+        .replace(/\bIB Diploma\b/i, "IB")
+        .replace(/\blangauges\b/i, "LA")
+        .replace(/\s+/g, "");
+      second_third_letter = (
+        second_third_letter[0] + second_third_letter[1]
+      ).toUpperCase();
+    }
 
     //Extracts first two letters of any string for fourth and fifth letter of the code generator
     const extractFirstTwoLetters = (name) => {
@@ -328,7 +356,7 @@ const Convert = () => {
       .replace(/\bal\b/i, "Adult Learner")
       .replace(/\badult\b/i, "Adult Learner")
       .replace(/\badult learner\b/i, "Adult Learner")
-      .replace(/\bbeginnner\b/i, "Beginner")
+      .replace(/\bbeginner\b/i, "Beginner")
       .replace(/\bb\b/i, "Beginner")
       .replace(/\bgrade\b/i, "Grade")
       .replace(/\bg\b/i, "Grade")
@@ -419,7 +447,7 @@ const Convert = () => {
         }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
           "Remarks: " + clientRemarks
         }\n\n${interested_applicants}\n\n${application_form}\n\n${
-          "Code: " + codeGeneration(clientName, clientLevel)
+          "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
         }`
       );
       interested_applicants =
@@ -434,8 +462,8 @@ const Convert = () => {
           "Timing: " + clientTimings
         }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
           "Remarks: " + clientRemarks
-        }\n\n${interested_applicants}\n\n${application_form}\n\n${
-          "Code: " + codeGeneration(clientName, clientLevel)
+        }\n\n${interested_applicants}\n\n${
+          "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
         }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`
       );
     } catch (error) {
@@ -627,7 +655,7 @@ const Convert = () => {
               <p>Leisure (Music)</p>
               <p>"leisure"</p>
               <p>Badminton (Sports)</p>
-              <p>"badminton</p>
+              <p>"badminton"</p>
               <p>Tennis (Sports)</p>
               <p>"tennis"</p>
               <br />
