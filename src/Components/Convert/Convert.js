@@ -13,6 +13,7 @@ const Convert = () => {
     client_name: "",
     contact: "",
     postal: "",
+    online: false,
     level: "",
     subject: "",
     frequency: "",
@@ -284,13 +285,16 @@ const Convert = () => {
     // Handle get address
     // Extract postal code from the form
     let clientPostal = "";
+    let clientAddress = "";
 
     if (formData["postal"].length === 6) {
       clientPostal = formData["postal"];
     }
 
+    clientAddress = await getFullAddress(clientPostal);
+
     //Fetch full address using the getFullAddress(postal) function
-    const clientAddress = await getFullAddress(clientPostal);
+
     let clientLatLong = "";
     let nearestMRT = "";
     let nameOfNearestMrt = "Not Found";
@@ -312,12 +316,14 @@ const Convert = () => {
         console.log("Nearest MRT:", nearestMRT);
 
         // Check if nearestMRT is defined and has at least one element
-        if (nearestMRT.result <= 0) {
+        if (!formData["online"] && nearestMRT.result <= 0) {
           alert("No MRT station found within the specified radius.");
         }
       } catch (error) {
         console.error("Error in finding nearest MRT:", error);
-        alert("Error in finding nearest MRT");
+        if (!formData["online"]) {
+          alert("Error in finding nearest MRT");
+        }
       }
     } else {
       alert("Cannot find nearest MRT due to invalid address.");
@@ -325,6 +331,14 @@ const Convert = () => {
 
     //Extract Study Level
     const level = formData["level"].toLowerCase();
+
+    //If online checkbox is clicked
+    if (formData["online"]) {
+      nameOfNearestMrt = "Online";
+      clientAddress = {
+        address: "Online Lesson",
+      };
+    }
 
     //Replace all short forms
     let clientLevel = level
@@ -497,16 +511,29 @@ const Convert = () => {
               onChange={handleInputChange}
               placeholder="Eg. 91234567"
             />
+            <div className="postal-code">
+              <label htmlFor="postal">Postal Code</label>
+              <input
+                type="text"
+                id="postal"
+                name="postal"
+                value={formData.postal}
+                onChange={handleInputChange}
+                placeholder="Eg. 051531"
+              />
+              <div id="online">
+                <input
+                  type="checkbox"
+                  id="online"
+                  name="online"
+                  value="online"
+                  checked={formData.online}
+                  onChange={handleInputChange}
+                />
+                <label htmlFor="online">Online Lessons</label>
+              </div>
+            </div>
 
-            <label htmlFor="postal">Postal Code</label>
-            <input
-              type="text"
-              id="postal"
-              name="postal"
-              value={formData.postal}
-              onChange={handleInputChange}
-              placeholder="Eg. 051531"
-            />
             <label htmlFor="level">Level</label>
             <input
               type="text"

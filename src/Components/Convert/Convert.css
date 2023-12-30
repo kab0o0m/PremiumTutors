@@ -78,6 +78,7 @@
   padding: 0.5rem;
   width: 100%;
 }
+
 .name, 
 .contact {
   display: flex;
@@ -99,6 +100,13 @@
   margin: 0 0 2rem 0;
 }
 
+.postal-code {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: start;
+  align-items: start;
+}
 
 .tutor1, 
 .tutor2,
@@ -107,12 +115,21 @@
   display: flex;
 }
 
+
 #tutor1 input, 
 #tutor2 input,
 #tutor3 input,
-#music input {
+#music input,
+#online input {
   width: 2rem;
 }
+
+#online {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
 .button {
   display: flex;
   width: 100%;
