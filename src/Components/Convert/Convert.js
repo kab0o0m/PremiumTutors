@@ -124,7 +124,12 @@ const Convert = () => {
         if (data && data.results && data.results.length > 0) {
           const result = data.results[0];
           return {
-            address: result.ADDRESS,
+            address: result.ADDRESS.toLowerCase()
+              .split(" ")
+              .map(
+                (address) => address.charAt(0).toUpperCase() + address.slice(1)
+              )
+              .join(" "),
             latitude: result.LATITUDE,
             longitude: result.LONGITUDE,
           };
@@ -311,8 +316,10 @@ const Convert = () => {
 
       try {
         // Assuming getNearestMrt returns an array, even if it's empty
-        nearestMRT = getNearestMrt(clientLatLong, false, 2000);
-        nameOfNearestMrt = nearestMRT.result[0].station.name;
+        nearestMRT = getNearestMrt(clientLatLong, false, 3000);
+        nameOfNearestMrt = nearestMRT.result[0].station.name.toLowerCase();
+        nameOfNearestMrt =
+          nameOfNearestMrt.charAt(0).toUpperCase() + nameOfNearestMrt.slice(1);
         console.log("Nearest MRT:", nearestMRT);
 
         // Check if nearestMRT is defined and has at least one element
