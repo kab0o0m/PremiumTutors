@@ -34,6 +34,7 @@ const Convert = () => {
     setFormData(initialFormData);
     setTextOutput1("");
     setTextOutput2("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   /*Code generation:
@@ -373,6 +374,11 @@ const Convert = () => {
           "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
         }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`
       );
+
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
     } catch (error) {
       console.log(error);
     }
