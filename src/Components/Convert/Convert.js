@@ -604,7 +604,7 @@ const Convert = () => {
             name=""
             id=""
             cols="50"
-            rows="30"
+            rows="35"
             value={textOutput1}
             onChange={(e) => setTextOutput1(e.target.value)}
           ></textarea>
@@ -615,7 +615,7 @@ const Convert = () => {
             name=""
             id=""
             cols="50"
-            rows="30"
+            rows="35"
             value={textOutput2}
             onChange={(e) => setTextOutput2(e.target.value)}
           ></textarea>
