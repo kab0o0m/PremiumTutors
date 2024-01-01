@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./Convert.css";
 import getNearestMrt from "nearest-mrt";
 import fees from "../../Fees";
+import axios from "axios";
 
 const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
@@ -116,10 +117,10 @@ const Convert = () => {
     try {
       const url = `https://www.onemap.gov.sg/api/common/elastic/search?searchVal=${postal}&returnGeom=Y&getAddrDetails=Y&pageNum=1`;
 
-      const response = await fetch(url);
+      const response = await axios.get(url);
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        const data = response.data;
 
         if (data && data.results && data.results.length > 0) {
           const result = data.results[0];
@@ -200,8 +201,11 @@ const Convert = () => {
         // Assuming getNearestMrt returns an array, even if it's empty
         nearestMRT = getNearestMrt(clientLatLong, false, 3000);
         nameOfNearestMrt = nearestMRT.result[0].station.name.toLowerCase();
-        nameOfNearestMrt =
-          nameOfNearestMrt.charAt(0).toUpperCase() + nameOfNearestMrt.slice(1);
+        nameOfNearestMrt = nameOfNearestMrt
+          .toLowerCase()
+          .split(" ")
+          .map((address) => address.charAt(0).toUpperCase() + address.slice(1))
+          .join(" ");
         console.log("Nearest MRT:", nearestMRT);
 
         // Check if nearestMRT is defined and has at least one element
