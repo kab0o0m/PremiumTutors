@@ -1,0 +1,7 @@
+.tutor form {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0 0rem 2rem;
+  align-items: start;
+  gap: 0.2rem;
+}
