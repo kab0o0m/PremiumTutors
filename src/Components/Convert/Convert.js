@@ -162,9 +162,6 @@ const Convert = () => {
     //Stops page from refreshing
     e.preventDefault();
 
-    //Saves form data
-    console.log("Form data submitted:", formData);
-
     //Extract Client Name
     const clientName =
       formData["client_name"].charAt(0).toUpperCase() +
@@ -196,7 +193,6 @@ const Convert = () => {
         parseFloat(clientAddress.longitude),
         parseFloat(clientAddress.latitude),
       ];
-      console.log("Client Latitude and Longitude:", clientLatLong);
 
       try {
         // Assuming getNearestMrt returns an array, even if it's empty
@@ -207,7 +203,6 @@ const Convert = () => {
           .split(" ")
           .map((address) => address.charAt(0).toUpperCase() + address.slice(1))
           .join(" ");
-        console.log("Nearest MRT:", nearestMRT);
 
         // Check if nearestMRT is defined and has at least one element
         if (!formData["online"] && nearestMRT.result <= 0) {
@@ -307,8 +302,6 @@ const Convert = () => {
     try {
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
-        console.log(rate);
-        console.log(rate[musicSubject]);
         if (formData["tutor1"]) {
           clientFees =
             clientFees +
