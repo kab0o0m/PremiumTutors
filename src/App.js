@@ -2,6 +2,7 @@ import "./App.css";
 import ClientProfile from "./Components/ClientProfile/ClientProfile";
 import TutorProfile from "./Components/TutorProfile/TutorProfile";
 import Navbar from "./Components/Navbar/Navbar";
+import Chatgpt from "./Components/Chatgpt/Chatgpt";
 
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/PremiumTutors/client" element={<ClientProfile />} />
           <Route path="/PremiumTutors/tutor" element={<TutorProfile />} />
+          {/* <Route path="/PremiumTutors/gpt" element={<Chatgpt />} /> */}
         </Routes>
       </div>
     </Router>
