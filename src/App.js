@@ -1,5 +1,5 @@
 import "./App.css";
-import Convert from "./Components/Convert/Convert";
+import ClientProfile from "./Components/ClientProfile/ClientProfile";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route exact path="/PremiumTutors/" element={<Convert />} />
+          <Route exact path="/PremiumTutors/" element={<ClientProfile />} />
         </Routes>
       </div>
     </Router>

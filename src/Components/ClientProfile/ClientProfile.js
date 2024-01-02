@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Convert.css";
+import "./ClientProfile.css";
 import getNearestMrt from "nearest-mrt";
 import fees from "../../Fees";
 import axios from "axios";
@@ -268,7 +268,6 @@ const Convert = () => {
       .replace(/\btennis\b/i, "Tennis")
       .replace(/\bbadminton\b/i, "Badminton")
       .replace(/\bdiploma\b/i, "Diploma");
-    console.log(clientLevel);
 
     //Extract Subjects
     const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
@@ -280,7 +279,6 @@ const Convert = () => {
 
     //gets music subject
     const musicSubject = formData["subject"].toLowerCase();
-    console.log(musicSubject);
 
     //Gets frequency
     const clientFrequency = formData["frequency"];
@@ -337,7 +335,7 @@ const Convert = () => {
           clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       }
 
-      //Set output
+      //Set output for Telegram template
       setTextOutput1(
         `${
           clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
@@ -351,6 +349,8 @@ const Convert = () => {
           "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
         }`
       );
+
+      //Many Tutors Template
       interested_applicants =
         "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:";
 
@@ -368,6 +368,7 @@ const Convert = () => {
         }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`
       );
 
+      //Scroll to the Bottom of the page to see results
       window.scrollTo({
         top: document.documentElement.scrollHeight,
         behavior: "smooth",
