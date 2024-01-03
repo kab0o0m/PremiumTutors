@@ -187,7 +187,6 @@ const Convert = () => {
     let nameOfNearestMrt = "Not Found";
 
     //Extract lat and long to calculate nearest mrt if clientAddress returns
-
     // Ensure clientAddress is valid and not "Address not found"
     if (clientAddress && clientAddress !== "Address not found") {
       clientLatLong = [
@@ -219,10 +218,8 @@ const Convert = () => {
       alert("Cannot find nearest MRT due to invalid address.");
     }
 
-    //Extract Study Level
-    const level = formData["level"].toLowerCase();
-
     //If online checkbox is clicked
+    //Set Nearest mrt and client Address as "Online"
     if (formData["online"]) {
       nameOfNearestMrt = "Online";
       clientAddress = {
@@ -231,77 +228,91 @@ const Convert = () => {
     }
 
     //Replace all short forms
-    let clientLevel = level
-      .replace(/\bnursery\b/i, "Nursery")
-      .replace(/\bn\b/i, "Nursery")
-      .replace(/\bk\b/i, "Kindergarten")
-      .replace(/\bkindergarten\b/i, "Kindergarten")
-      .replace(/(k|kindergarten)(\d+)/i, "Kindergarten $2")
-      .replace(/\bpre\b/i, "Pre school")
-      .replace(/\bpreschool\b/i, "Pre school")
-      .replace(/(pri|primary|p)(\d+)/i, "Primary $2")
-      .replace(/\bprimary\b/i, "Primary")
-      .replace(/\bpri\b/i, "Primary")
-      .replace(/\bp\b/i, "Primary")
-      .replace(/(sec|secondary)(\d+)/i, "Secondary $2")
-      .replace(/\bsecondary\b/i, "Secondary")
-      .replace(/\bsec\b/i, "Secondary")
-      .replace(/\bjunior college\b/i, "Junior College")
-      .replace(/\bjunior\b/i, "Junior College")
-      .replace(/\bjc\b/i, "Junior College")
-      .replace(/\bis\b/i, "IGCSE")
-      .replace(/\bigcse\b/i, "IGCSE")
-      .replace(/\bib/i, "IB Diploma")
-      .replace(/\bpoly\b/i, "Polytechnic")
-      .replace(/\bpolytechnic\b/i, "Polytechnic")
-      .replace(/\bu\b/i, "University")
-      .replace(/\buni\b/i, "University")
-      .replace(/\buniversity\b/i, "University")
-      .replace(/\bal\b/i, "Adult Learner")
-      .replace(/\badult\b/i, "Adult Learner")
-      .replace(/\badult learner\b/i, "Adult Learner")
-      .replace(/\bbeginner\b/i, "Beginner")
-      .replace(/\bb\b/i, "Beginner")
-      .replace(/\bgrade\b/i, "Grade")
-      .replace(/\bg\b/i, "Grade")
-      .replace(/(g|grade)(\d+)/i, "Grade $2")
-      .replace(/\bleisure\b/i, "Leisure")
-      .replace(/\btennis\b/i, "Tennis")
-      .replace(/\bbadminton\b/i, "Badminton")
-      .replace(/\bdiploma\b/i, "Diploma");
+    const shortForm = () => {
+      //Extract Study Level
+      const level = formData["level"].toLowerCase();
+      return level
+        .replace(/\bnursery\b/i, "Nursery")
+        .replace(/\bn\b/i, "Nursery")
+        .replace(/\bk\b/i, "Kindergarten")
+        .replace(/\bkindergarten\b/i, "Kindergarten")
+        .replace(/(k|kindergarten)(\d+)/i, "Kindergarten $2")
+        .replace(/\bpre\b/i, "Pre school")
+        .replace(/\bpreschool\b/i, "Pre school")
+        .replace(/(pri|primary|p)(\d+)/i, "Primary $2")
+        .replace(/\bprimary\b/i, "Primary")
+        .replace(/\bpri\b/i, "Primary")
+        .replace(/\bp\b/i, "Primary")
+        .replace(/(sec|secondary)(\d+)/i, "Secondary $2")
+        .replace(/\bsecondary\b/i, "Secondary")
+        .replace(/\bsec\b/i, "Secondary")
+        .replace(/\bjunior college\b/i, "Junior College")
+        .replace(/\bjunior\b/i, "Junior College")
+        .replace(/\bjc\b/i, "Junior College")
+        .replace(/\bis\b/i, "IGCSE")
+        .replace(/\bigcse\b/i, "IGCSE")
+        .replace(/\bib/i, "IB Diploma")
+        .replace(/\bpoly\b/i, "Polytechnic")
+        .replace(/\bpolytechnic\b/i, "Polytechnic")
+        .replace(/\bu\b/i, "University")
+        .replace(/\buni\b/i, "University")
+        .replace(/\buniversity\b/i, "University")
+        .replace(/\bal\b/i, "Adult Learner")
+        .replace(/\badult\b/i, "Adult Learner")
+        .replace(/\badult learner\b/i, "Adult Learner")
+        .replace(/\bbeginner\b/i, "Beginner")
+        .replace(/\bb\b/i, "Beginner")
+        .replace(/\bgrade\b/i, "Grade")
+        .replace(/\bg\b/i, "Grade")
+        .replace(/(g|grade)(\d+)/i, "Grade $2")
+        .replace(/\bleisure\b/i, "Leisure")
+        .replace(/\btennis\b/i, "Tennis")
+        .replace(/\bbadminton\b/i, "Badminton")
+        .replace(/\bdiploma\b/i, "Diploma");
+    };
+
+    let clientLevel = shortForm();
 
     //Extract Subjects
-    let parts = formData["subject"].toLowerCase();
-    let subjects = "";
-    //Remove separate tutors first
-    if (parts.includes("separate tutor") || parts.includes("separate tutors")) {
-      parts = parts.replace(/separate tutors|separate tutor|\(|\)/gi, "");
-      setIsSeparateTutor(true);
-    }
-    //Split into different subjects
-    parts = parts.replace(/\s/g, "").split(/,|and/g).filter(Boolean);
-    console.log(parts);
-    //Join using "," and "and"
-    subjects = parts
-      .map((s, index) => {
-        const formatted = s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+    const clientSubject = () => {
+      let parts = formData["subject"].toLowerCase();
+      let subjects = "";
 
-        if (index === parts.length - 1) {
-          return "and " + formatted;
-        } else if (index === parts.length - 2) {
-          return formatted;
-        } else {
-          return formatted + ",";
-        }
-      })
-      .join(" ");
-    //Add back (Separate Tutors) if needed
-    let clientSubject = subjects;
+      //Remove separate tutors first
+      if (
+        parts.includes("separate tutor") ||
+        parts.includes("separate tutors")
+      ) {
+        parts = parts.replace(/separate tutors|separate tutor|\(|\)/gi, "");
+        setIsSeparateTutor(true);
+      }
 
-    if (isSeparateTutor) {
-      clientSubject = clientSubject + " (Separate Tutors)";
-    }
-    setIsSeparateTutor(false);
+      //Split into different subjects
+      parts = parts.replace(/\s/g, "").split(/,|and/g).filter(Boolean);
+      console.log(parts);
+
+      //Join using "," and "and"
+      subjects = parts
+        .map((s, index) => {
+          const formatted =
+            s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+
+          if (index === parts.length - 1) {
+            return "and " + formatted;
+          } else if (index === parts.length - 2) {
+            return formatted;
+          } else {
+            return formatted + ",";
+          }
+        })
+        .join(" ");
+
+      if (isSeparateTutor) {
+        subjects = subjects + " (Separate Tutors)";
+      }
+      setIsSeparateTutor(false);
+      return subjects;
+    };
 
     //gets music subject
     const musicSubject = formData["subject"].toLowerCase();
@@ -364,7 +375,7 @@ const Convert = () => {
       //Set output for Telegram template
       setTextOutput1(
         `${
-          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
+          clientLevel + " " + clientSubject() + " @ " + nameOfNearestMrt
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
@@ -378,7 +389,7 @@ const Convert = () => {
 
       setTextOutput2(
         `${
-          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
+          clientLevel + " " + clientSubject() + " @ " + nameOfNearestMrt
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
