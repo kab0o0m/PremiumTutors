@@ -297,13 +297,16 @@ const Convert = () => {
         .map((s, index) => {
           const formatted =
             s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-
-          if (index === parts.length - 1) {
-            return "and " + formatted;
-          } else if (index === parts.length - 2) {
-            return formatted;
+          if (parts.length > 1) {
+            if (index === parts.length - 1) {
+              return "and " + formatted;
+            } else if (index === parts.length - 2) {
+              return formatted;
+            } else {
+              return formatted + ",";
+            }
           } else {
-            return formatted + ",";
+            return formatted;
           }
         })
         .join(" ");
@@ -337,9 +340,9 @@ const Convert = () => {
     //Gets Remarks
     const clientRemarks = formData["remarks"];
 
-    //Calculate Fees
     let clientFees = "";
     try {
+      //Calculate Fees
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
         if (formData["tutor1"]) {
