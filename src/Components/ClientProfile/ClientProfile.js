@@ -59,7 +59,7 @@ const Convert = () => {
         .replace(/\d+/g, "")
         .replace(/\s+/g, "");
 
-      let third_letter = clientSubject
+      let third_letter = clientSubject()
         .replace(/\bPiano\b/i, "P")
         .replace(/\bGuitar\b/i, "G")
         .replace(/\bViolin\b/i, "V")
