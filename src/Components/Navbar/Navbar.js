@@ -8,7 +8,7 @@ const Navbar = () => {
       <img src={img} alt="Logo" />
       <ul className="navbar-list">
         <li className="navbar-client">
-          <Link to="/PremiumTutors/client">Client Profile</Link>
+          <Link to="/PremiumTutors/">Client Profile</Link>
         </li>
         <li className="navbar-tutor">
           <Link to="/PremiumTutors/tutor">Tutor Profile</Link>
