@@ -3,11 +3,15 @@ import "./ClientProfile.css";
 import getNearestMrt from "nearest-mrt";
 import fees from "../../Fees";
 import axios from "axios";
+import clipboard from "../../img/clipboard.png";
+import { set } from "countapi-js";
 
 const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
   const [textOutput1, setTextOutput1] = useState(" ");
   const [textOutput2, setTextOutput2] = useState(" ");
+  const [copy, setCopy] = useState(" ");
+  const [copy2, setCopy2] = useState(" ");
 
   //Empty form
   const initialFormData = {
@@ -34,7 +38,19 @@ const Convert = () => {
     setFormData(initialFormData);
     setTextOutput1("");
     setTextOutput2("");
+    setCopy("");
+    setCopy2("");
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Function to copy text to clipboard
+  const copyToClipboard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log("Text successfully copied to clipboard");
+    } catch (err) {
+      console.error("Unable to copy text to clipboard", err);
+    }
   };
 
   /*Code generation:
@@ -379,7 +395,8 @@ const Convert = () => {
         clientLevel =
           clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       }
-
+      setCopy(" ");
+      setCopy2(" ");
       //Set output for Telegram template
       setTextOutput1(
         `${
@@ -643,6 +660,19 @@ const Convert = () => {
             value={textOutput1}
             onChange={(e) => setTextOutput1(e.target.value)}
           ></textarea>
+          <div className="clip">
+            <button
+              className="clipboard"
+              onClick={() => {
+                copyToClipboard(textOutput1);
+                setCopy("✓ Copied to Clipboard!");
+                setCopy2(" ");
+              }}
+            >
+              <img src={clipboard} alt="" />
+            </button>
+            <span>{copy}</span>
+          </div>
         </div>
         <div className="convert-output-2">
           <div className="convert-output-title-2">Many Tutors Template</div>
@@ -654,6 +684,19 @@ const Convert = () => {
             value={textOutput2}
             onChange={(e) => setTextOutput2(e.target.value)}
           ></textarea>
+          <div className="clip">
+            <button
+              className="clipboard2"
+              onClick={() => {
+                copyToClipboard(textOutput2);
+                setCopy(" ");
+                setCopy2("✓ Copied to Clipboard!");
+              }}
+            >
+              <img src={clipboard} alt="" />
+            </button>
+            <span>{copy2}</span>
+          </div>
         </div>
       </div>
     </div>
