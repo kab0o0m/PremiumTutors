@@ -8,6 +8,7 @@ const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
   const [textOutput1, setTextOutput1] = useState(" ");
   const [textOutput2, setTextOutput2] = useState(" ");
+  const [isSeparateTutor, setIsSeparateTutor] = useState(false);
 
   //Empty form
   const initialFormData = {
@@ -270,12 +271,37 @@ const Convert = () => {
       .replace(/\bdiploma\b/i, "Diploma");
 
     //Extract Subjects
-    const subjects = formData["subject"].split(/[\s,]+/).filter(Boolean);
+    let parts = formData["subject"].toLowerCase();
+    let subjects = "";
+    //Remove separate tutors first
+    if (parts.includes("separate tutor") || parts.includes("separate tutors")) {
+      parts = parts.replace(/separate tutors|separate tutor|\(|\)/gi, "");
+      setIsSeparateTutor(true);
+    }
+    //Split into different subjects
+    parts = parts.replace(/\s/g, "").split(/,|and/g).filter(Boolean);
+    console.log(parts);
+    //Join using "," and "and"
+    subjects = parts
+      .map((s, index) => {
+        const formatted = s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 
-    //Handle multiple subjects
-    const clientSubject = subjects
-      .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
-      .join(", ");
+        if (index === parts.length - 1) {
+          return "and " + formatted;
+        } else if (index === parts.length - 2) {
+          return formatted;
+        } else {
+          return formatted + ",";
+        }
+      })
+      .join(" ");
+    //Add back (Separate Tutors) if needed
+    let clientSubject = subjects;
+
+    if (isSeparateTutor) {
+      clientSubject = clientSubject + " (Separate Tutors)";
+    }
+    setIsSeparateTutor(false);
 
     //gets music subject
     const musicSubject = formData["subject"].toLowerCase();
@@ -350,10 +376,6 @@ const Convert = () => {
         }`
       );
 
-      //Many Tutors Template
-      interested_applicants =
-        "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:";
-
       setTextOutput2(
         `${
           clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
@@ -363,7 +385,7 @@ const Convert = () => {
           "Timing: " + clientTimings
         }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
           "Remarks: " + clientRemarks
-        }\n\n${interested_applicants}\n\n${
+        }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${
           "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
         }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`
       );
