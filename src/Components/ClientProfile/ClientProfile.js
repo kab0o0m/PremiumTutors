@@ -75,7 +75,7 @@ const Convert = () => {
         .replace(/\d+/g, "")
         .replace(/\s+/g, "");
 
-      let third_letter = clientSubject()
+      let third_letter = clientSubject
         .replace(/\bPiano\b/i, "P")
         .replace(/\bGuitar\b/i, "G")
         .replace(/\bViolin\b/i, "V")
@@ -291,47 +291,7 @@ const Convert = () => {
     let clientLevel = shortForm();
 
     //Extract Subjects
-    const clientSubject = () => {
-      let parts = formData["subject"].toLowerCase();
-      let subjects = "";
-      let isSeparateTutor = false;
-
-      //Remove separate tutors first
-      if (
-        parts.includes("separate tutor") ||
-        parts.includes("separate tutors")
-      ) {
-        parts = parts.replace(/separate tutors|separate tutor|\(|\)/gi, "");
-        isSeparateTutor = true;
-        console.log();
-      }
-
-      //Split into different subjects
-      parts = parts.replace(/\s/g, "").split(/,|and/g).filter(Boolean);
-      //Join using "," and "and"
-      subjects = parts
-        .map((s, index) => {
-          const formatted =
-            s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
-          if (parts.length > 1) {
-            if (index === parts.length - 1) {
-              return "and " + formatted;
-            } else if (index === parts.length - 2) {
-              return formatted;
-            } else {
-              return formatted + ",";
-            }
-          } else {
-            return formatted;
-          }
-        })
-        .join(" ");
-
-      if (isSeparateTutor) {
-        subjects = subjects + " (Separate Tutors)";
-      }
-      return subjects;
-    };
+    const clientSubject = formData["subject"];
 
     //gets music subject
     const musicSubject = formData["subject"].toLowerCase();
@@ -400,7 +360,7 @@ const Convert = () => {
       //Set output for Telegram template
       setTextOutput1(
         `${
-          clientLevel + " " + clientSubject() + " @ " + nameOfNearestMrt
+          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
@@ -414,7 +374,7 @@ const Convert = () => {
 
       setTextOutput2(
         `${
-          clientLevel + " " + clientSubject() + " @ " + nameOfNearestMrt
+          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
