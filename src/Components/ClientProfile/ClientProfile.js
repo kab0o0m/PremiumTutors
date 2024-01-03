@@ -324,10 +324,15 @@ const Convert = () => {
     const clientTimings = formData["timings"];
 
     //Calculate commission for the company
-    let commission = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
-    if (clientFrequency.includes("per subject")) {
-      commission = commission + " per subject";
-    }
+    const calculateCommission = () => {
+      let calc = `First ${parseInt(clientFrequency[0]) * 2} lessons`;
+      if (clientFrequency.includes("per subject")) {
+        calc = calc + " per subject";
+      }
+      return calc;
+    };
+
+    const commission = calculateCommission();
 
     //Gets Remarks
     const clientRemarks = formData["remarks"];
