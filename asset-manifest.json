@@ -1,15 +1,16 @@
 {
   "files": {
-    "main.css": "/PremiumTutors/static/css/main.2837d6eb.css",
-    "main.js": "/PremiumTutors/static/js/main.b92b7d8d.js",
+    "main.css": "/PremiumTutors/static/css/main.03d3ed55.css",
+    "main.js": "/PremiumTutors/static/js/main.99f0dcff.js",
     "static/js/651.bfe13d17.chunk.js": "/PremiumTutors/static/js/651.bfe13d17.chunk.js",
+    "static/media/Logo.webp": "/PremiumTutors/static/media/Logo.a05964629283dd143898.webp",
     "index.html": "/PremiumTutors/index.html",
-    "main.2837d6eb.css.map": "/PremiumTutors/static/css/main.2837d6eb.css.map",
-    "main.b92b7d8d.js.map": "/PremiumTutors/static/js/main.b92b7d8d.js.map",
+    "main.03d3ed55.css.map": "/PremiumTutors/static/css/main.03d3ed55.css.map",
+    "main.99f0dcff.js.map": "/PremiumTutors/static/js/main.99f0dcff.js.map",
     "651.bfe13d17.chunk.js.map": "/PremiumTutors/static/js/651.bfe13d17.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2837d6eb.css",
-    "static/js/main.b92b7d8d.js"
+    "static/css/main.03d3ed55.css",
+    "static/js/main.99f0dcff.js"
   ]
 }
