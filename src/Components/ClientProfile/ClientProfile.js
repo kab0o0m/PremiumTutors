@@ -8,7 +8,6 @@ const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
   const [textOutput1, setTextOutput1] = useState(" ");
   const [textOutput2, setTextOutput2] = useState(" ");
-  const [isSeparateTutor, setIsSeparateTutor] = useState(false);
 
   //Empty form
   const initialFormData = {
@@ -170,61 +169,63 @@ const Convert = () => {
     const clientContact = formData["contact"];
 
     // Handle get address
-    // Extract postal code from the form
-    let clientPostal = "";
+    // If online checkbox is clicked
+    // Set Nearest mrt and client Address as "Online"
+    // Else check whether postal code length is === 6
     let clientAddress = "";
-
-    if (formData["postal"].length === 6) {
-      clientPostal = formData["postal"];
-    }
-
-    clientAddress = await getFullAddress(clientPostal);
-
-    //Fetch full address using the getFullAddress(postal) function
-
-    let clientLatLong = "";
-    let nearestMRT = "";
     let nameOfNearestMrt = "Not Found";
-
-    //Extract lat and long to calculate nearest mrt if clientAddress returns
-    // Ensure clientAddress is valid and not "Address not found"
-    if (clientAddress && clientAddress !== "Address not found") {
-      clientLatLong = [
-        parseFloat(clientAddress.longitude),
-        parseFloat(clientAddress.latitude),
-      ];
-
-      try {
-        // Assuming getNearestMrt returns an array, even if it's empty
-        nearestMRT = getNearestMrt(clientLatLong, false, 3000);
-        nameOfNearestMrt = nearestMRT.result[0].station.name.toLowerCase();
-        nameOfNearestMrt = nameOfNearestMrt
-          .toLowerCase()
-          .split(" ")
-          .map((address) => address.charAt(0).toUpperCase() + address.slice(1))
-          .join(" ");
-
-        // Check if nearestMRT is defined and has at least one element
-        if (!formData["online"] && nearestMRT.result <= 0) {
-          alert("No MRT station found within the specified radius.");
-        }
-      } catch (error) {
-        console.error("Error in finding nearest MRT:", error);
-        if (!formData["online"]) {
-          alert("Error in finding nearest MRT");
-        }
-      }
-    } else {
-      alert("Cannot find nearest MRT due to invalid address.");
-    }
-
-    //If online checkbox is clicked
-    //Set Nearest mrt and client Address as "Online"
     if (formData["online"]) {
       nameOfNearestMrt = "Online";
       clientAddress = {
         address: "Online",
       };
+    } else {
+      // Extract postal code from the form
+      if (formData["postal"].length === 6) {
+        let clientPostal = "";
+        clientPostal = formData["postal"];
+        clientAddress = await getFullAddress(clientPostal);
+
+        //Fetch full address using the getFullAddress(postal) function
+        let clientLatLong = "";
+        let nearestMRT = "";
+
+        //Extract lat and long to calculate nearest mrt if clientAddress returns
+        // Ensure clientAddress is valid and not "Address not found"
+        if (clientAddress && clientAddress !== "Address not found") {
+          clientLatLong = [
+            parseFloat(clientAddress.longitude),
+            parseFloat(clientAddress.latitude),
+          ];
+
+          try {
+            // Assuming getNearestMrt returns an array, even if it's empty
+            nearestMRT = getNearestMrt(clientLatLong, false, 3000);
+            nameOfNearestMrt = nearestMRT.result[0].station.name.toLowerCase();
+            nameOfNearestMrt = nameOfNearestMrt
+              .toLowerCase()
+              .split(" ")
+              .map(
+                (address) => address.charAt(0).toUpperCase() + address.slice(1)
+              )
+              .join(" ");
+
+            // Check if nearestMRT is defined and has at least one element
+            if (!formData["online"] && nearestMRT.result <= 0) {
+              alert("No MRT station found within the specified radius.");
+            }
+          } catch (error) {
+            console.error("Error in finding nearest MRT:", error);
+            if (!formData["online"]) {
+              alert("Error in finding nearest MRT");
+            }
+          }
+        } else {
+          alert("Cannot find nearest MRT due to invalid address.");
+        }
+      } else {
+        alert("Postal code must be 6 digits!");
+      }
     }
 
     //Replace all short forms
@@ -277,6 +278,7 @@ const Convert = () => {
     const clientSubject = () => {
       let parts = formData["subject"].toLowerCase();
       let subjects = "";
+      let isSeparateTutor = false;
 
       //Remove separate tutors first
       if (
@@ -284,13 +286,12 @@ const Convert = () => {
         parts.includes("separate tutors")
       ) {
         parts = parts.replace(/separate tutors|separate tutor|\(|\)/gi, "");
-        setIsSeparateTutor(true);
+        isSeparateTutor = true;
+        console.log();
       }
 
       //Split into different subjects
       parts = parts.replace(/\s/g, "").split(/,|and/g).filter(Boolean);
-      console.log(parts);
-
       //Join using "," and "and"
       subjects = parts
         .map((s, index) => {
@@ -310,7 +311,6 @@ const Convert = () => {
       if (isSeparateTutor) {
         subjects = subjects + " (Separate Tutors)";
       }
-      setIsSeparateTutor(false);
       return subjects;
     };
 
