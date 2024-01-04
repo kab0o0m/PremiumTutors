@@ -9,8 +9,8 @@ const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
   const [textOutput1, setTextOutput1] = useState(" ");
   const [textOutput2, setTextOutput2] = useState(" ");
-  const [copy, setCopy] = useState("Copy to Clipboard");
-  const [copy2, setCopy2] = useState("Copy to Clipboard");
+  const [copy, setCopy] = useState("");
+  const [copy2, setCopy2] = useState("");
 
   //Empty form
   const initialFormData = {
@@ -37,8 +37,8 @@ const Convert = () => {
     setFormData(initialFormData);
     setTextOutput1("");
     setTextOutput2("");
-    setCopy("Copy to Clipboard");
-    setCopy2("Copy to Clipboard");
+    setCopy("");
+    setCopy2("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
