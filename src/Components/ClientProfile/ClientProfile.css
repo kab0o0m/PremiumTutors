@@ -181,3 +181,8 @@
 .clip span {
   padding : 0.2rem;
 }
+
+.convert-button button {
+  cursor: pointer;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+}

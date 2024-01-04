@@ -4,14 +4,13 @@ import getNearestMrt from "nearest-mrt";
 import fees from "../../Fees";
 import axios from "axios";
 import clipboard from "../../img/clipboard.png";
-import { set } from "countapi-js";
 
 const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
   const [textOutput1, setTextOutput1] = useState(" ");
   const [textOutput2, setTextOutput2] = useState(" ");
-  const [copy, setCopy] = useState(" ");
-  const [copy2, setCopy2] = useState(" ");
+  const [copy, setCopy] = useState("< Copy to Clipboard");
+  const [copy2, setCopy2] = useState("< Copy to Clipboard");
 
   //Empty form
   const initialFormData = {
@@ -38,8 +37,8 @@ const Convert = () => {
     setFormData(initialFormData);
     setTextOutput1("");
     setTextOutput2("");
-    setCopy("");
-    setCopy2("");
+    setCopy("< Copy to Clipboard");
+    setCopy2("< Copy to Clipboard");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -396,6 +395,33 @@ const Convert = () => {
     }
   };
 
+  const convertTeleToMany = () => {
+    //Replace interested applicants and application form to just interested applicants
+    let manyTutor = textOutput1.replace(
+      /Interested applicants, please apply via https:\/\/forms.gle\/KhPULcKSQGrNrPWo6 or message @PHTapplications\n\nApplication Form for Registered Tutors: https:\/\/forms.gle\/VCuCj7Pkdm7kMRX49/,
+      "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"
+    );
+
+    manyTutor =
+      manyTutor +
+      `\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`;
+    setTextOutput2(manyTutor);
+  };
+
+  const convertManyToTele = () => {
+    let teleFormat = textOutput2.replace(
+      /Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:/,
+      "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications\n\nApplication Form for Registered Tutors: https://forms.gle/VCuCj7Pkdm7kMRX49"
+    );
+
+    teleFormat = teleFormat.replace(
+      /Full name:[\s\S]*?Expected hourly rate:/,
+      ""
+    );
+
+    setTextOutput1(teleFormat);
+  };
+
   return (
     <div className="convert">
       <div className="convert-row-1">
@@ -615,7 +641,7 @@ const Convert = () => {
           <textarea
             name=""
             id=""
-            cols="60"
+            cols="50"
             rows="30"
             value={textOutput1}
             onChange={(e) => setTextOutput1(e.target.value)}
@@ -633,13 +659,18 @@ const Convert = () => {
             </button>
             <span>{copy}</span>
           </div>
+          <div className="convert-button">
+            <button onClick={convertTeleToMany}>
+              Convert to Many Tutors Format
+            </button>
+          </div>
         </div>
         <div className="convert-output-2">
           <div className="convert-output-title-2">Many Tutors Template</div>
           <textarea
             name=""
             id=""
-            cols="60"
+            cols="50"
             rows="30"
             value={textOutput2}
             onChange={(e) => setTextOutput2(e.target.value)}
@@ -656,6 +687,11 @@ const Convert = () => {
               <img src={clipboard} alt="" />
             </button>
             <span>{copy2}</span>
+          </div>
+          <div className="convert-button">
+            <button onClick={convertManyToTele}>
+              Convert to Many Tutors Format
+            </button>
           </div>
         </div>
       </div>
