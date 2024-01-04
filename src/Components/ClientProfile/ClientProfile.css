@@ -164,22 +164,28 @@
 
 .clip {
   display: flex;
-  align-items: start;
+  align-items: center;
+  padding: 0 0 0 1rem;
 }
 
 .clipboard,
 .clipboard2 {
-  width: 2rem;
   cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
-.clipboard img,
-.clipboard2 img{
-  width: 100%;
-}
+
 
 .clip span {
   padding : 0.2rem;
+}
+.convert-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
 }
 
 .convert-button button {

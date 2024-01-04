@@ -397,10 +397,15 @@ const Convert = () => {
 
   const convertTeleToMany = () => {
     //Replace interested applicants and application form to just interested applicants
-    let manyTutor = textOutput1.replace(
-      /Interested applicants, please apply via https:\/\/forms.gle\/KhPULcKSQGrNrPWo6 or message @PHTapplications\n\nApplication Form for Registered Tutors: https:\/\/forms.gle\/VCuCj7Pkdm7kMRX49/,
-      "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"
-    );
+    let manyTutor = textOutput1
+      .replace(
+        /Interested applicants, please apply via https:\/\/forms.gle\/KhPULcKSQGrNrPWo6 or message @PHTapplications\n\nApplication Form for Registered Tutors: https:\/\/forms.gle\/VCuCj7Pkdm7kMRX49/,
+        "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"
+      )
+      .replace(
+        /Interested applicants, please apply via https:\/\/forms.gle\/G38YJgFVxLwTpvSr7 or message @PHTapplications\n\nApplication Form for Registered Tutors: https:\/\/forms.gle\/VCuCj7Pkdm7kMRX49/,
+        "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"
+      );
 
     manyTutor =
       manyTutor +
@@ -646,23 +651,24 @@ const Convert = () => {
             value={textOutput1}
             onChange={(e) => setTextOutput1(e.target.value)}
           ></textarea>
-          <div className="clip">
-            <button
-              className="clipboard"
-              onClick={() => {
-                copyToClipboard(textOutput1);
-                setCopy("✓ Copied to Clipboard!");
-                setCopy2(" ");
-              }}
-            >
-              <img src={clipboard} alt="" />
-            </button>
-            <span>{copy}</span>
-          </div>
+
           <div className="convert-button">
             <button onClick={convertTeleToMany}>
               Convert to Many Tutors Format
             </button>
+            <div className="clip">
+              <button
+                className="clipboard"
+                onClick={() => {
+                  copyToClipboard(textOutput1);
+                  setCopy("✓ Copied to Clipboard!");
+                  setCopy2(" ");
+                }}
+              >
+                Copy to Clipboard
+              </button>
+              <span>{copy}</span>
+            </div>
           </div>
         </div>
         <div className="convert-output-2">
@@ -675,23 +681,24 @@ const Convert = () => {
             value={textOutput2}
             onChange={(e) => setTextOutput2(e.target.value)}
           ></textarea>
-          <div className="clip">
-            <button
-              className="clipboard2"
-              onClick={() => {
-                copyToClipboard(textOutput2);
-                setCopy(" ");
-                setCopy2("✓ Copied to Clipboard!");
-              }}
-            >
-              <img src={clipboard} alt="" />
-            </button>
-            <span>{copy2}</span>
-          </div>
+
           <div className="convert-button">
             <button onClick={convertManyToTele}>
-              Convert to Many Tutors Format
+              Convert to Telegram Format
             </button>
+            <div className="clip">
+              <button
+                className="clipboard2"
+                onClick={() => {
+                  copyToClipboard(textOutput2);
+                  setCopy(" ");
+                  setCopy2("✓ Copied to Clipboard!");
+                }}
+              >
+                Copy to Clipboard
+              </button>
+              <span>{copy2}</span>
+            </div>
           </div>
         </div>
       </div>
