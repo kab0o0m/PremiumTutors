@@ -9,7 +9,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Navbar />
+        {/* <Navbar /> */}
         <Routes>
           <Route path="/PremiumTutors/" element={<ClientProfile />} />
           <Route path="/PremiumTutors/tutor" element={<TutorProfile />} />
