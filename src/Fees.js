@@ -74,7 +74,12 @@ const fees = {
     ftt: "$45 - $60",
     moe: "$65 - $90",
   },
-  "junior college": {
+  "junior college 1": {
+    ptt: "$40 - $55",
+    ftt: "$65 - $80",
+    moe: "$90- $120",
+  },
+  "junior college 2": {
     ptt: "$40 - $55",
     ftt: "$65 - $80",
     moe: "$90- $120",

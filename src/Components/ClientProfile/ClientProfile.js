@@ -265,6 +265,7 @@ const Convert = () => {
         .replace(/\bjunior college\b/i, "Junior College")
         .replace(/\bjunior\b/i, "Junior College")
         .replace(/\bjc\b/i, "Junior College")
+        .replace(/(jc|junior|junior college)(\d+)/i, "Junior College $2")
         .replace(/\bis\b/i, "IGCSE")
         .replace(/\bigcse\b/i, "IGCSE")
         .replace(/\bib/i, "IB Diploma")
