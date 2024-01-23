@@ -20,6 +20,8 @@ const Convert = () => {
     online: false,
     level: "",
     subject: "",
+    separateTutor: false,
+    sameTutor: false,
     frequency: "",
     timings: "",
     tutor1: false,
@@ -291,7 +293,17 @@ const Convert = () => {
     let clientLevel = shortForm();
 
     //Extract Subjects
+    //Gets Remarks
+    let clientRemarks = formData["remarks"];
     const clientSubject = formData["subject"];
+    let tutorType = "";
+    if (formData["separateTutor"]) {
+      tutorType = " (Separate Tutors)";
+      clientRemarks += "\nTutor to state subject(s) they can teach";
+    } else if (formData["sameTutor"]) {
+      tutorType = " (Same Tutor)";
+      clientRemarks += "\nSame tutor needed for all subjects";
+    }
 
     //gets music subject
     const musicSubject = formData["subject"].toLowerCase();
@@ -312,9 +324,6 @@ const Convert = () => {
     };
 
     const commission = calculateCommission();
-
-    //Gets Remarks
-    const clientRemarks = formData["remarks"];
 
     let clientFees = "";
     try {
@@ -360,7 +369,12 @@ const Convert = () => {
       //Set output for Telegram template
       setTextOutput1(
         `${
-          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
+          clientLevel +
+          " " +
+          clientSubject +
+          tutorType +
+          " @ " +
+          nameOfNearestMrt
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
@@ -374,7 +388,12 @@ const Convert = () => {
 
       setTextOutput2(
         `${
-          clientLevel + " " + clientSubject + " @ " + nameOfNearestMrt
+          clientLevel +
+          " " +
+          clientSubject +
+          tutorType +
+          " @ " +
+          nameOfNearestMrt
         }\n\n${"Details of assignment"}\n${
           "Location: " + clientAddress.address
         }\n${"Duration: " + clientFrequency}\n${
@@ -486,15 +505,40 @@ const Convert = () => {
               onChange={handleInputChange}
               placeholder="Eg. p5"
             />
-            <label htmlFor="subject">Subject</label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              value={formData.subject}
-              onChange={handleInputChange}
-              placeholder="Eg. math, science, english"
-            />
+            <div className="subject">
+              <label htmlFor="subject">Subject</label>
+              <input
+                type="text"
+                id="subject"
+                name="subject"
+                value={formData.subject}
+                onChange={handleInputChange}
+                placeholder="Eg. math, science, english"
+              />
+              <div id="separateTutor">
+                <input
+                  type="checkbox"
+                  id="separateTutor"
+                  name="separateTutor"
+                  value="separateTutor"
+                  checked={formData.separateTutor}
+                  onChange={handleInputChange}
+                />
+                <label htmlFor="separateTutor">Separate Tutors</label>
+              </div>
+              <div id="sameTutor">
+                <input
+                  type="checkbox"
+                  id="sameTutor"
+                  name="sameTutor"
+                  value="sameTutor"
+                  checked={formData.sameTutor}
+                  onChange={handleInputChange}
+                />
+                <label htmlFor="sameTutor">Same Tutor</label>
+              </div>
+            </div>
+
             <label htmlFor="frequency">Duration</label>
             <input
               type="text"

@@ -101,7 +101,8 @@
   margin: 0 0 2rem 0;
 }
 
-.postal-code {
+.postal-code,
+.subject {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -121,11 +122,15 @@
 #tutor2 input,
 #tutor3 input,
 #music input,
-#online input {
+#online input,
+#separateTutor input,
+#sameTutor input{
   width: 2rem;
 }
 
-#online {
+#online, 
+#separateTutor,
+#sameTutor {
   display: flex;
   align-items: center;
   justify-content: start;
