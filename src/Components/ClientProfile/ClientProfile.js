@@ -299,10 +299,10 @@ const Convert = () => {
     let tutorType = "";
     if (formData["separateTutor"]) {
       tutorType = " (Separate Tutors)";
-      clientRemarks += "\nTutor to state subject(s) they can teach";
+      clientRemarks += "Tutor to state subject(s) they can teach";
     } else if (formData["sameTutor"]) {
       tutorType = " (Same Tutor)";
-      clientRemarks += "\nSame tutor needed for all subjects";
+      clientRemarks += "Same tutor needed for all subjects";
     }
 
     //gets music subject
