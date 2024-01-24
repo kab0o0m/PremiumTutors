@@ -3,7 +3,6 @@ import "./ClientProfile.css";
 import getNearestMrt from "nearest-mrt";
 import fees from "../../Fees";
 import axios from "axios";
-import clipboard from "../../img/clipboard.png";
 
 const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
@@ -248,7 +247,7 @@ const Convert = () => {
     //Replace all short forms
     const shortForm = () => {
       //Extract Study Level
-      const level = formData["level"].toLowerCase();
+      const level = formData["level"].toLowerCase().trim();
       return level
         .replace(/\bnursery\b/i, "Nursery")
         .replace(/\bn\b/i, "Nursery")
@@ -295,7 +294,7 @@ const Convert = () => {
     //Extract Subjects
     //Gets Remarks
     let clientRemarks = formData["remarks"];
-    const clientSubject = formData["subject"];
+    const clientSubject = formData["subject"].trim();
     let tutorType = "";
     if (formData["separateTutor"]) {
       tutorType = " (Separate Tutors)";
