@@ -14,7 +14,6 @@ const Convert = () => {
   //Empty form
   const initialFormData = {
     client_name: "",
-    contact: "",
     postal: "",
     online: false,
     level: "",
@@ -182,7 +181,6 @@ const Convert = () => {
     const clientName =
       formData["client_name"].charAt(0).toUpperCase() +
       formData["client_name"].slice(1);
-    const clientContact = formData["contact"];
 
     // Handle get address
     // If online checkbox is clicked
@@ -463,15 +461,6 @@ const Convert = () => {
               onChange={handleInputChange}
               placeholder="Eg. Ms Nana"
             />
-            <label htmlFor="contact">Client Contact no.</label>
-            <input
-              type="text"
-              id="contact"
-              name="contact"
-              value={formData.contact}
-              onChange={handleInputChange}
-              placeholder="Eg. 91234567"
-            />
             <div className="postal-code">
               <label htmlFor="postal">Postal Code</label>
               <input
@@ -569,7 +558,6 @@ const Convert = () => {
               />
               <label htmlFor="tutor1">Part Time/Undergrad Tutor</label>
             </div>
-            <br />
             <div id="tutor2">
               <input
                 type="checkbox"
@@ -581,7 +569,6 @@ const Convert = () => {
               />
               <label htmlFor="tutor2">Full Time/Graduate Tutor</label>
             </div>
-            <br />
             <div id="tutor3">
               <input
                 type="checkbox"
@@ -593,7 +580,6 @@ const Convert = () => {
               />
               <label htmlFor="tutor3">Ex /Current School Teachers</label>
             </div>
-            <br />
             <div id="music">
               <input
                 type="checkbox"

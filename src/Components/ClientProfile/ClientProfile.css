@@ -71,13 +71,10 @@
   align-items: start;
 }
 
-.convert-form form label{
-  padding: 0.5rem 0 0.5rem 0;
-}
-
 .convert-form form input {
   padding: 0.5rem;
   width: 100%;
+  margin: 0.5rem 0 0.5rem 0;
 }
 
 .name, 
@@ -110,11 +107,12 @@
   align-items: start;
 }
 
-.tutor1, 
-.tutor2,
-.tutor3,
+#tutor1, 
+#tutor2,
+#tutor3,
 .music {
   display: flex;
+  align-items: center;
 }
 
 
