@@ -70,7 +70,7 @@ const Convert = () => {
         .replace(/\bDiploma\b/i, "D")
         .replace(/\bLeisure\b/i, "L")
         .replace(/\bBadminton\b/i, "B")
-        .replace(/\bTennis\b/i, "B")
+        .replace(/\bTennis\b/i, "T")
         .replace(/\d+/g, "")
         .replace(/\s+/g, "");
 
