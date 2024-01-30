@@ -303,7 +303,7 @@ const Convert = () => {
     }
 
     //gets music subject
-    const musicSubject = formData["subject"].toLowerCase();
+    const musicSubject = formData["subject"].toLowerCase().trim();
 
     //Gets frequency
     const clientFrequency = formData["frequency"];
