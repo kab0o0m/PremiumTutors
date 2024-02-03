@@ -86,6 +86,9 @@ const Convert = () => {
         .replace(/\d+/g, "")
         .replace(/\s+/g, "");
 
+      second_letter = second_letter[0];
+      third_letter = third_letter[0];
+
       second_third_letter = (second_letter + third_letter).toUpperCase();
     } else {
       //Second and third letter
