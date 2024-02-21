@@ -59,7 +59,7 @@ const Convert = () => {
   */
   const codeGeneration = (clientName, clientLevel, clientSubject) => {
     //First letter
-    const first_letter = "C";
+    const first_letter = "B";
     let second_third_letter = "";
 
     //If client subject is music
