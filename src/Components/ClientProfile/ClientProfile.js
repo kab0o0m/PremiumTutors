@@ -125,11 +125,7 @@ const Convert = () => {
 
   //For academic template
   let interested_applicants =
-    "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications";
-
-  //For many tutors template
-  const application_form =
-    "Application Form for Registered Tutors: https://forms.gle/VCuCj7Pkdm7kMRX49";
+    "Interested applicants, please apply via https://forms.gle/VCuCj7Pkdm7kMRX49 or message @PHTapplications";
 
   // Get Full address from Onemap API, postal code is obtained from form
   const getFullAddress = async (postal) => {
@@ -294,15 +290,15 @@ const Convert = () => {
 
     //Extract Subjects
     //Gets Remarks
-    let clientRemarks = formData["remarks"];
+    let clientRemarks = " " + formData["remarks"];
     const clientSubject = formData["subject"].trim();
     let tutorType = "";
     if (formData["separateTutor"]) {
       tutorType = " (Separate Tutors)";
-      clientRemarks += "Tutor to state subject(s) they can teach.";
+      clientRemarks += " Tutor to state subject(s) they can teach.";
     } else if (formData["sameTutor"]) {
       tutorType = " (Same Tutor)";
-      clientRemarks += "Same tutor needed for all subjects.";
+      clientRemarks += " Same tutor needed for all subjects.";
     }
 
     //gets music subject
@@ -356,8 +352,6 @@ const Convert = () => {
         }
         if (formData["music"]) {
           clientFees = clientFees + rate[musicSubject] + "/lesson";
-          interested_applicants =
-            "Interested applicants, please apply via https://forms.gle/G38YJgFVxLwTpvSr7 or message @PHTapplications";
         }
       } else {
         clientFees = "";
@@ -380,8 +374,8 @@ const Convert = () => {
         }\n${"Duration: " + clientFrequency}\n${
           "Timing: " + clientTimings
         }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
-          "Remarks: " + clientRemarks
-        }\n\n${interested_applicants}\n\n${application_form}\n\n${
+          "Remarks:" + clientRemarks
+        }\n\n${interested_applicants}\n\n${
           "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
         }`
       );
@@ -399,7 +393,7 @@ const Convert = () => {
         }\n${"Duration: " + clientFrequency}\n${
           "Timing: " + clientTimings
         }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
-          "Remarks: " + clientRemarks
+          "Remarks:" + clientRemarks
         }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${
           "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
         }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`
@@ -417,15 +411,10 @@ const Convert = () => {
 
   const convertTeleToMany = () => {
     //Replace interested applicants and application form to just interested applicants
-    let manyTutor = textOutput1
-      .replace(
-        /Interested applicants, please apply via https:\/\/forms.gle\/KhPULcKSQGrNrPWo6 or message @PHTapplications\n\nApplication Form for Registered Tutors: https:\/\/forms.gle\/VCuCj7Pkdm7kMRX49/,
-        "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"
-      )
-      .replace(
-        /Interested applicants, please apply via https:\/\/forms.gle\/G38YJgFVxLwTpvSr7 or message @PHTapplications\n\nApplication Form for Registered Tutors: https:\/\/forms.gle\/VCuCj7Pkdm7kMRX49/,
-        "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"
-      );
+    let manyTutor = textOutput1.replace(
+      /Interested applicants, please apply via https:\/\/forms.gle\/VCuCj7Pkdm7kMRX49 or message @PHTapplications/,
+      "Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"
+    );
 
     manyTutor =
       manyTutor +
@@ -436,7 +425,7 @@ const Convert = () => {
   const convertManyToTele = () => {
     let teleFormat = textOutput2.replace(
       /Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:/,
-      "Interested applicants, please apply via https://forms.gle/KhPULcKSQGrNrPWo6 or message @PHTapplications\n\nApplication Form for Registered Tutors: https://forms.gle/VCuCj7Pkdm7kMRX49"
+      "Interested applicants, please apply via https://forms.gle/VCuCj7Pkdm7kMRX49 or message @PHTapplications"
     );
 
     teleFormat = teleFormat.replace(
@@ -696,6 +685,7 @@ const Convert = () => {
                   copyToClipboard(textOutput1);
                   setCopy("✓ Copied to Clipboard!");
                   setCopy2(" ");
+                  convertTeleToMany();
                 }}
               >
                 Copy to Clipboard
@@ -726,6 +716,7 @@ const Convert = () => {
                   copyToClipboard(textOutput2);
                   setCopy(" ");
                   setCopy2("✓ Copied to Clipboard!");
+                  convertManyToTele();
                 }}
               >
                 Copy to Clipboard
