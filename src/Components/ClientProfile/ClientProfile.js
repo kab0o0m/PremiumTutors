@@ -675,9 +675,6 @@ const Convert = () => {
           ></textarea>
 
           <div className="convert-button">
-            <button onClick={convertTeleToMany}>
-              Convert to Many Tutors Format
-            </button>
             <div className="clip">
               <button
                 className="clipboard"
@@ -706,9 +703,6 @@ const Convert = () => {
           ></textarea>
 
           <div className="convert-button">
-            <button onClick={convertManyToTele}>
-              Convert to Telegram Format
-            </button>
             <div className="clip">
               <button
                 className="clipboard2"
