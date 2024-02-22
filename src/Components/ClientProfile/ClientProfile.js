@@ -276,7 +276,7 @@ const Convert = () => {
     const calculateFees = () => {
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
-        if (formData["tutor1"]) {
+        if (formData["tutor1"] && rate["ptt"]) {
           clientFees =
             clientFees +
             rate["ptt"] +
@@ -284,7 +284,7 @@ const Convert = () => {
             " Part Time/Undergrad Tutor" +
             "\n";
         }
-        if (formData["tutor2"]) {
+        if (formData["tutor2"] && rate["ftt"]) {
           clientFees =
             clientFees +
             rate["ftt"] +
@@ -292,7 +292,7 @@ const Convert = () => {
             " Full Time/Graduate Tutor" +
             "\n";
         }
-        if (formData["tutor3"]) {
+        if (formData["tutor3"] && rate["moe"]) {
           clientFees =
             clientFees +
             rate["moe"] +
