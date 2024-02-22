@@ -25,7 +25,6 @@ const Convert = () => {
     tutor1: false,
     tutor2: false,
     tutor3: false,
-    music: false,
     remarks: "",
   };
 
@@ -60,65 +59,20 @@ const Convert = () => {
   const codeGeneration = (clientName, clientLevel, clientSubject) => {
     //First letter
     const first_letter = "B";
-    let second_third_letter = "";
 
-    //If client subject is music
-    if (formData["music"]) {
-      let second_letter = clientLevel
-        .replace(/\bBeginner\b/i, "B")
-        .replace(/\bGrade\b/i, "G")
-        .replace(/\bDiploma\b/i, "D")
-        .replace(/\bLeisure\b/i, "L")
-        .replace(/\bBadminton\b/i, "B")
-        .replace(/\bTennis\b/i, "T")
-        .replace(/\d+/g, "")
-        .replace(/\s+/g, "");
+    //Get array of words by splitting them
+    const clientArr = (clientLevel + " " + clientSubject).split(" ");
 
-      let third_letter = clientSubject
-        .replace(/\bPiano\b/i, "P")
-        .replace(/\bGuitar\b/i, "G")
-        .replace(/\bViolin\b/i, "V")
-        .replace(/\bDrums\b/i, "D")
-        .replace(/\bUkulele\b/i, "U")
-        .replace(/\bPrivate\b/i, "P")
-        .replace(/\bPair\b/i, "P")
-        .replace(/\bGroup\b/i, "G")
-        .replace(/\d+/g, "")
-        .replace(/\s+/g, "");
+    //Second and third letter of the code generator
+    //By getting first letter of first two words to uppercase
+    const second_third_letter = (
+      clientArr[0][0] + clientArr[1][0]
+    ).toUpperCase();
 
-      second_letter = second_letter[0];
-      third_letter = third_letter[0];
-
-      second_third_letter = (second_letter + third_letter).toUpperCase();
-    } else {
-      //Second and third letter
-      second_third_letter = clientLevel
-        .replace(/\bPre School\b/i, "PS")
-        .replace(/\bPrimary\b/i, "P")
-        .replace(/\bSecondary\b/i, "S")
-        .replace(/\bJunior College\b/i, "JC")
-        .replace(/\bTertiary\b/i, "TE")
-        .replace(/\bUniversity\b/i, "UN")
-        .replace(/\bIGCSE\b/i, "IG")
-        .replace(/\bIB Diploma\b/i, "IB")
-        .replace(/\blangauges\b/i, "LA")
-        .replace(/\s+/g, "");
-      second_third_letter = (
-        second_third_letter[0] + second_third_letter[1]
-      ).toUpperCase();
-    }
-
-    //Extracts first two letters of any string for fourth and fifth letter of the code generator
-    const extractFirstTwoLetters = (name) => {
-      // Remove common prefixes from the name
-      const cleanedName = name.replace(/^(Mr|Ms|Mrs|Dr|Doc|Mdm|Md)\.?\s+/i, "");
-
-      // Extract the first two letters of the remaining name
-      return cleanedName.slice(0, 2).toUpperCase();
-    };
-
-    //Fourth and fifth letter
-    const fourth_fifth_letter = extractFirstTwoLetters(clientName);
+    //Fourth and fifth letter of the code generator
+    //By getting first two letters of client name after removing ms, mr, etc
+    const name = clientName.replace(/^(Mr|Ms|Mrs|Dr|Doc|Mdm|Md)\.?\s+/i, "");
+    const fourth_fifth_letter = (name[0] + name[1]).toUpperCase();
 
     return first_letter + second_third_letter + fourth_fifth_letter;
   };
@@ -301,9 +255,6 @@ const Convert = () => {
       clientRemarks += " Same tutor needed for all subjects.";
     }
 
-    //gets music subject
-    const musicSubject = formData["subject"].toLowerCase().trim();
-
     //Gets frequency
     const clientFrequency = formData["frequency"];
 
@@ -322,8 +273,7 @@ const Convert = () => {
     const commission = calculateCommission();
 
     let clientFees = "";
-    try {
-      //Calculate Fees
+    const calculateFees = () => {
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
         if (formData["tutor1"]) {
@@ -350,14 +300,14 @@ const Convert = () => {
             " Ex/Current School Teachers" +
             "\n";
         }
-        if (formData["music"]) {
-          clientFees = clientFees + rate[musicSubject] + "/lesson";
+        if (rate[clientSubject.toLowerCase()]) {
+          clientFees = clientFees + rate[clientSubject] + "/lesson";
         }
-      } else {
-        clientFees = "";
-        clientLevel =
-          clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       }
+    };
+    calculateFees();
+    try {
+      clientLevel = clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       setCopy(" ");
       setCopy2(" ");
       //Set output for Telegram template
@@ -571,17 +521,6 @@ const Convert = () => {
                 onChange={handleInputChange}
               />
               <label htmlFor="tutor3">Ex /Current School Teachers</label>
-            </div>
-            <div id="music">
-              <input
-                type="checkbox"
-                id="music"
-                name="music"
-                value="music"
-                checked={formData.music}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="tutor3">Music / Sports</label>
             </div>
 
             <br />
