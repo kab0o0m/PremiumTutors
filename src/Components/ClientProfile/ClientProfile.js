@@ -244,7 +244,11 @@ const Convert = () => {
 
     //Extract Subjects
     //Gets Remarks
-    let clientRemarks = " " + formData["remarks"];
+    let clientRemarks = "";
+    if (formData["remarks"]) {
+      clientRemarks = " " + formData["remarks"];
+    }
+
     const clientSubject = formData["subject"].trim();
     let tutorType = "";
     if (formData["separateTutor"]) {
