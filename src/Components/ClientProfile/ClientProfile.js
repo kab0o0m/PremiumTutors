@@ -305,7 +305,8 @@ const Convert = () => {
             "\n";
         }
         if (rate[clientSubject.toLowerCase()]) {
-          clientFees = clientFees + rate[clientSubject] + "/lesson";
+          clientFees =
+            clientFees + rate[clientSubject.toLowerCase()] + "/lesson";
         }
       }
     };
@@ -618,6 +619,9 @@ const Convert = () => {
           ></textarea>
 
           <div className="convert-button">
+            <button onClick={convertTeleToMany}>
+              Convert to Many Tutors Format
+            </button>
             <div className="clip">
               <button
                 className="clipboard"
@@ -625,7 +629,6 @@ const Convert = () => {
                   copyToClipboard(textOutput1);
                   setCopy("✓ Copied to Clipboard!");
                   setCopy2(" ");
-                  convertTeleToMany();
                 }}
               >
                 Copy to Clipboard
@@ -646,6 +649,9 @@ const Convert = () => {
           ></textarea>
 
           <div className="convert-button">
+            <button onClick={convertManyToTele}>
+              Convert to Telegram Format
+            </button>
             <div className="clip">
               <button
                 className="clipboard2"
@@ -653,7 +659,6 @@ const Convert = () => {
                   copyToClipboard(textOutput2);
                   setCopy(" ");
                   setCopy2("✓ Copied to Clipboard!");
-                  convertManyToTele();
                 }}
               >
                 Copy to Clipboard
