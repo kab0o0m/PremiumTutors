@@ -79,7 +79,7 @@ const Convert = () => {
 
   //For academic template
   let interested_applicants =
-    "Interested applicants, please apply via https://forms.gle/VCuCj7Pkdm7kMRX49 or message @PHTapplications";
+    "Interested applicants, please apply via https://forms.gle/VCuCj7Pkdm7kMRX49 or message @premiumtutorsjobs";
 
   // Get Full address from Onemap API, postal code is obtained from form
   const getFullAddress = async (postal) => {
