@@ -674,7 +674,7 @@ const Convert = () => {
               <br />
               <p>Sports: private, pair, group</p>
             </div>
-          </div>
+          </div>  
         </div>
         {/* First row Right section (form-output) */}
       </div>
