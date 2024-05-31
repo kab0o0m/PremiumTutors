@@ -515,7 +515,7 @@ const Convert = () => {
     });
       Swal.fire({
         title: 'Success',
-        text: 'Message sent to Telegram channel!',
+        text: 'Message sent to ACADEMIC Telegram channel!',
         icon: 'success',
         confirmButtonText: 'Cool'
       });
@@ -579,7 +579,7 @@ const Convert = () => {
 
       Swal.fire({
         title: 'Success',
-        text: 'Message sent to Telegram channel!',
+        text: 'Message sent to ACADEMIC & MUSIC Telegram channel!',
         icon: 'success',
         confirmButtonText: 'Cool'
       });
@@ -644,7 +644,7 @@ const Convert = () => {
     });
       Swal.fire({
         title: 'Success',
-        text: 'Message sent to Telegram channel!',
+        text: 'Message sent to ACADEMIC & SPORTS Telegram channel!',
         icon: 'success',
         confirmButtonText: 'Cool'
       });
