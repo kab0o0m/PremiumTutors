@@ -6,6 +6,7 @@ import axios from "axios";
 import { DotLoader } from "react-spinners";
 import Swal from 'sweetalert2'
 
+
 const Convert = () => {
   //Text output1 and output2 is used to generate formatted data
   const [textOutput1, setTextOutput1] = useState(" ");
@@ -13,6 +14,12 @@ const Convert = () => {
   const [copy, setCopy] = useState("Copy to Clipboard");
   const [copy2, setCopy2] = useState("Copy to Clipboard");
   const [isLoading, setIsLoading] = useState(false);
+  const botToken = import.meta.env.VITE_TEST_TOKEN;
+  const academicChannel = import.meta.env.VITE_TEST_ACADEMIC; 
+  const musicChannel = import.meta.env.VITE_TEST_MUSIC;
+  const sportsChannel = import.meta.env.VITE_TEST_SPORTS;
+  const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdvn3QkUnGl7JX8WehOuHXdl8sijfnENOLgz9pKOIPCEh388g/viewform?usp=pp_url&entry.1366584600='
+
 
   //Empty form
   const initialFormData = {
@@ -432,7 +439,7 @@ const Convert = () => {
       //Scroll to the Bottom of the page to see results
       setIsLoading(false);
       window.scrollTo({
-        top: document.documentElement.scrollHeight,
+        top: 800,
         behavior: "smooth",
       });
     } catch (error) {
@@ -467,6 +474,197 @@ const Convert = () => {
     setTextOutput1(teleFormat);
   };
 
+
+  const sendToAcademic = async () => {
+    const academicId = academicChannel; // Add your Telegram chat ID here
+    const message = textOutput1;
+    const extractedCode = extractCode(textOutput1);
+
+    if ((extractedCode.match(/\d/g) || []).length < 3) {
+      Swal.fire({
+        title: "Check your Case Code!",
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+      return;
+    }
+
+    const inlineButton = {
+      inline_keyboard: [
+        [
+          {
+            text: "Apply Here",
+            url: `${formURL}` + extractedCode
+          },
+          {
+            text: "Filter Assignments",
+            url: "https://t.me/PremiumTutorsAssignmentBot?start="
+          }
+        ]
+      ]
+    };
+  
+    try {
+      await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: academicId,
+      text: message,
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+      reply_markup: JSON.stringify(inlineButton)
+    });
+      Swal.fire({
+        title: 'Success',
+        text: 'Message sent to Telegram channel!',
+        icon: 'success',
+        confirmButtonText: 'Cool'
+      });
+    } catch (error) {
+      console.error("Error sending message to Telegram:", error);
+      Swal.fire({
+        title: error.message,
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+    }
+  };
+
+  const sendToMusic = async () => {
+    const academicId = academicChannel;
+    const musicId = musicChannel; // Add your Telegram chat ID here
+    const message = textOutput1;
+    const extractedCode = extractCode(textOutput1);
+
+    if ((extractedCode.match(/\d/g) || []).length < 3) {
+      Swal.fire({
+        title: "Check your Case Code!",
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+      return;
+    }
+
+    const inlineButton = {
+      inline_keyboard: [
+        [
+          {
+            text: "Apply Here",
+            url: `${formURL}` + extractedCode
+          },
+          {
+            text: "Filter Assignments",
+            url: "https://t.me/PremiumTutorsAssignmentBot?start="
+          }
+        ]
+      ]
+    };
+  
+    try {
+      await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: academicId,
+      text: message,
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+      reply_markup: JSON.stringify(inlineButton)
+    });
+    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: musicId,
+      text: message,
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+      reply_markup: JSON.stringify(inlineButton)
+    });
+
+      Swal.fire({
+        title: 'Success',
+        text: 'Message sent to Telegram channel!',
+        icon: 'success',
+        confirmButtonText: 'Cool'
+      });
+    } catch (error) {
+      console.error("Error sending message to Telegram:", error);
+      Swal.fire({
+        title: error.message,
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+    }
+
+    
+  };
+
+  const sendToSports = async () => {
+    const academicId = academicChannel; // Add your Telegram chat ID here
+    const sportsId = sportsChannel;
+    const message = textOutput1;
+    const extractedCode = extractCode(textOutput1);
+
+    if ((extractedCode.match(/\d/g) || []).length < 3) {
+      Swal.fire({
+        title: "Check your Case Code!",
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+      return;
+    }
+
+    const inlineButton = {
+      inline_keyboard: [
+        [
+          {
+            text: "Apply Here",
+            url: `${formURL}` + extractedCode
+          },
+          {
+            text: "Filter Assignments",
+            url: "https://t.me/PremiumTutorsAssignmentBot?start="
+          }
+        ]
+      ]
+    };
+  
+    try {
+      await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: academicId,
+      text: message,
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+      reply_markup: JSON.stringify(inlineButton)
+    });
+    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: sportsId,
+      text: message,
+      parse_mode: "HTML",
+      disable_web_page_preview: true,
+      reply_markup: JSON.stringify(inlineButton)
+    });
+      Swal.fire({
+        title: 'Success',
+        text: 'Message sent to Telegram channel!',
+        icon: 'success',
+        confirmButtonText: 'Cool'
+      });
+    } catch (error) {
+      console.error("Error sending message to Telegram:", error);
+      Swal.fire({
+        title: error.message,
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+    }
+  };
+
+  const extractCode = (message) => {
+    const codePattern = /Code:\s(\w+)/;
+    const match = message.match(codePattern);
+    return match ? match[1] : null;
+  }
+  
   return (
     <div className="convert">
       <div className="convert-row-1">
@@ -714,6 +912,7 @@ const Convert = () => {
               >
                 {copy}
               </button>
+
             </div>
           </div>
         </div>
@@ -746,6 +945,22 @@ const Convert = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="send-telegram">
+        <h1>Send to Telegram Channels</h1>
+        <div className="channel">
+          <button onClick={sendToAcademic}>
+            ACADEMIC
+          </button>
+          <button onClick={sendToMusic}>
+            MUSIC
+          </button>
+          <button onClick={sendToSports}>
+            SPORTS
+          </button>
+        </div>
+        
       </div>
     </div>
   );
