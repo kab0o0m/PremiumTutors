@@ -145,9 +145,6 @@ const Convert = () => {
     setIsLoading(true);
     e.preventDefault();
 
-    console.log("TOKEN" + botToken);
-    console.log(academicChannel);
-
     //Extract Client Name
     const clientName =
       formData["client_name"].charAt(0).toUpperCase() +
