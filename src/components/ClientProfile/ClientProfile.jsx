@@ -479,10 +479,21 @@ const Convert = () => {
     const academicId = academicChannel; // Add your Telegram chat ID here
     const message = textOutput1;
     const extractedCode = extractCode(textOutput1);
+    const extractedFees = extractFees(textOutput1);
 
     if ((extractedCode.match(/\d/g) || []).length < 3) {
       Swal.fire({
         title: "Check your Case Code!",
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+      return;
+    } 
+
+    if (extractedFees === null) {
+      Swal.fire({
+        title: "Check your Fees!",
         text: 'Failed to send message to Telegram channel!',
         icon: 'error',
         confirmButtonText: 'Okay'
@@ -535,10 +546,21 @@ const Convert = () => {
     const musicId = musicChannel; // Add your Telegram chat ID here
     const message = textOutput1;
     const extractedCode = extractCode(textOutput1);
+    const extractedFees = extractFees(textOutput1);
 
     if ((extractedCode.match(/\d/g) || []).length < 3) {
       Swal.fire({
         title: "Check your Case Code!",
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+      return;
+    } 
+
+    if (extractedFees === null) {
+      Swal.fire({
+        title: "Check your Fees!",
         text: 'Failed to send message to Telegram channel!',
         icon: 'error',
         confirmButtonText: 'Okay'
@@ -601,6 +623,7 @@ const Convert = () => {
     const sportsId = sportsChannel;
     const message = textOutput1;
     const extractedCode = extractCode(textOutput1);
+    const extractedFees = extractFees(textOutput1);
 
     if ((extractedCode.match(/\d/g) || []).length < 3) {
       Swal.fire({
@@ -610,7 +633,18 @@ const Convert = () => {
         confirmButtonText: 'Okay'
       });
       return;
+    } 
+
+    if (extractedFees === null) {
+      Swal.fire({
+        title: "Check your Fees!",
+        text: 'Failed to send message to Telegram channel!',
+        icon: 'error',
+        confirmButtonText: 'Okay'
+      });
+      return;
     }
+    
 
     const inlineButton = {
       inline_keyboard: [
@@ -664,6 +698,14 @@ const Convert = () => {
     const match = message.match(codePattern);
     return match ? match[1] : null;
   }
+
+  const extractFees = (message) => {
+    const codePattern = /Fees:\s(\w+)/;
+    const match = message.match(codePattern);
+    return match ? match[1] : null;
+  }
+
+
   
   return (
     <div className="convert">
@@ -962,6 +1004,10 @@ const Convert = () => {
         </div>
         
       </div>
+
+      {/* <div class="iframe-container">
+        <iframe src="https://kab0o0m.github.io/PI/" allowfullscreen></iframe>
+    </div> */}
     </div>
   );
 };

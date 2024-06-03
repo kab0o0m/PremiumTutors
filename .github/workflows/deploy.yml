@@ -33,5 +33,10 @@ jobs:
           VITE_LIVE_SPORTS: ${{ secrets.VITE_LIVE_SPORTS }}
         run: npm run build
 
+      - name: Configure Git user
+        run: |
+          git config --global user.email "jroot97@hotmail.com"
+          git config --global user.name "kab0o0m"
+
       - name: Deploy to GitHub Pages
         run: npx gh-pages -d dist
