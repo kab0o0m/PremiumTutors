@@ -14,10 +14,10 @@ const Convert = () => {
   const [copy, setCopy] = useState("Copy to Clipboard");
   const [copy2, setCopy2] = useState("Copy to Clipboard");
   const [isLoading, setIsLoading] = useState(false);
-  const botToken = import.meta.env.VITE_TEST_TOKEN.replace(/"/g, '');
-  const academicChannel = import.meta.env.VITE_TEST_ACADEMIC.replace(/"/g, ''); 
-  const musicChannel = import.meta.env.VITE_TEST_MUSIC.replace(/"/g, '');
-  const sportsChannel = import.meta.env.VITE_TEST_SPORTS.replace(/"/g, '');
+  const botToken = import.meta.env.VITE_LIVE_TOKEN.replace(/"/g, '');
+  const academicChannel = import.meta.env.VITE_LIVE_ACADEMIC.replace(/"/g, ''); 
+  const musicChannel = import.meta.env.VITE_LIVE_MUSIC.replace(/"/g, '');
+  const sportsChannel = import.meta.env.VITE_LIVE_SPORTS.replace(/"/g, '');
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`
 
   const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdvn3QkUnGl7JX8WehOuHXdl8sijfnENOLgz9pKOIPCEh388g/viewform?usp=pp_url&entry.1366584600='
