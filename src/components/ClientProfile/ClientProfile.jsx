@@ -480,6 +480,7 @@ const Convert = () => {
     const message = textOutput1;
     const extractedCode = extractCode(textOutput1);
     const extractedFees = extractFees(textOutput1);
+    console.log(extractedFees);
 
     if ((extractedCode.match(/\d/g) || []).length < 3) {
       Swal.fire({
@@ -702,8 +703,10 @@ const Convert = () => {
   const extractFees = (message) => {
     const codePattern = /Fees:\s(\w+)/;
     const match = message.match(codePattern);
+    console.log(match);
     return match ? match[1] : null;
   }
+  
 
 
   
