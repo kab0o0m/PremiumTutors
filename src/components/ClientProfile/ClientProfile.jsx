@@ -18,6 +18,7 @@ const Convert = () => {
   const academicChannel = import.meta.env.VITE_TEST_ACADEMIC; 
   const musicChannel = import.meta.env.VITE_TEST_MUSIC;
   const sportsChannel = import.meta.env.VITE_TEST_SPORTS;
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage`
 
   const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdvn3QkUnGl7JX8WehOuHXdl8sijfnENOLgz9pKOIPCEh388g/viewform?usp=pp_url&entry.1366584600='
 
@@ -521,13 +522,15 @@ const Convert = () => {
     };
   
     try {
-      await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+
+      await axios.post(url, {
       chat_id: academicId,
       text: message,
       parse_mode: "HTML",
       disable_web_page_preview: true,
       reply_markup: JSON.stringify(inlineButton)
     });
+      
       Swal.fire({
         title: 'Success',
         text: 'Message sent to ACADEMIC Telegram channel!',
@@ -588,14 +591,14 @@ const Convert = () => {
     };
   
     try {
-      await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      await axios.post(url, {
       chat_id: academicId,
       text: message,
       parse_mode: "HTML",
       disable_web_page_preview: true,
       reply_markup: JSON.stringify(inlineButton)
     });
-    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    await axios.post(url, {
       chat_id: musicId,
       text: message,
       parse_mode: "HTML",
@@ -628,7 +631,6 @@ const Convert = () => {
     const message = textOutput1;
     const extractedCode = extractCode(message);
     const extractedFees = extractFees(message);
-    console.log(extractCode);
 
     if ((extractedCode.match(/\d/g) || []).length < 3) {
       Swal.fire({
@@ -667,14 +669,14 @@ const Convert = () => {
     };
   
     try {
-      await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      await axios.post(url, {
       chat_id: academicId,
       text: message,
       parse_mode: "HTML",
       disable_web_page_preview: true,
       reply_markup: JSON.stringify(inlineButton)
     });
-    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    await axios.post(url, {
       chat_id: sportsId,
       text: message,
       parse_mode: "HTML",
