@@ -218,7 +218,6 @@ const Convert = () => {
               return;
             }
           } catch (error) {
-            console.error("Error in finding nearest MRT:", error);
             if (!formData["online"]) {
               Swal.fire({
                 title: 'No MRT Station found',
@@ -535,7 +534,6 @@ const Convert = () => {
         confirmButtonText: 'Cool'
       });
     } catch (error) {
-      console.error("Error sending message to Telegram:", error);
       Swal.fire({
         title: error.message,
         text: 'Failed to send message to Telegram channel!',
@@ -610,7 +608,6 @@ const Convert = () => {
         confirmButtonText: 'Cool'
       });
     } catch (error) {
-      console.error("Error sending message to Telegram:", error);
       Swal.fire({
         title: error.message,
         text: 'Failed to send message to Telegram channel!',
@@ -687,7 +684,6 @@ const Convert = () => {
         confirmButtonText: 'Cool'
       });
     } catch (error) {
-      console.error("Error sending message to Telegram:", error);
       Swal.fire({
         title: error.message,
         text: 'Failed to send message to Telegram channel!',
