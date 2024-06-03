@@ -21,6 +21,15 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build project
+        env:
+          VITE_TEST_TOKEN: ${{ secrets.VITE_TEST_TOKEN }}
+          VITE_TEST_ACADEMIC: ${{ secrets.VITE_TEST_ACADEMIC }}
+          VITE_TEST_MUSIC: ${{ secrets.VITE_TEST_MUSIC }}
+          VITE_TEST_SPORTS: ${{ secrets.VITE_TEST_SPORTS }}
+          VITE_LIVE_TOKEN: ${{ secrets.VITE_LIVE_TOKEN }}
+          VITE_LIVE_ACADEMIC: ${{ secrets.VITE_LIVE_ACADEMIC }}
+          VITE_LIVE_MUSIC: ${{ secrets.VITE_LIVE_MUSIC }}
+          VITE_LIVE_SPORTS: ${{ secrets.VITE_LIVE_SPORTS }}
         run: npm run build
 
       - name: Upload production-ready build files
