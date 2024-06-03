@@ -18,8 +18,7 @@ const Convert = () => {
   const academicChannel = import.meta.env.VITE_TEST_ACADEMIC; 
   const musicChannel = import.meta.env.VITE_TEST_MUSIC;
   const sportsChannel = import.meta.env.VITE_TEST_SPORTS;
-  console.log("TOKEN" + botToken);
-  console.log(academicChannel)
+
   const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdvn3QkUnGl7JX8WehOuHXdl8sijfnENOLgz9pKOIPCEh388g/viewform?usp=pp_url&entry.1366584600='
 
 
@@ -144,6 +143,9 @@ const Convert = () => {
     //Stops page from refreshing
     setIsLoading(true);
     e.preventDefault();
+
+    console.log("TOKEN" + botToken);
+    console.log(academicChannel);
 
     //Extract Client Name
     const clientName =
