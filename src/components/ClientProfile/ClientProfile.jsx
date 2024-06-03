@@ -480,7 +480,6 @@ const Convert = () => {
     const message = textOutput1;
     const extractedCode = extractCode(textOutput1);
     const extractedFees = extractFees(textOutput1);
-    console.log(extractedFees);
 
     if ((extractedCode.match(/\d/g) || []).length < 3) {
       Swal.fire({
@@ -623,8 +622,9 @@ const Convert = () => {
     const academicId = academicChannel; // Add your Telegram chat ID here
     const sportsId = sportsChannel;
     const message = textOutput1;
-    const extractedCode = extractCode(textOutput1);
-    const extractedFees = extractFees(textOutput1);
+    const extractedCode = extractCode(message);
+    const extractedFees = extractFees(message);
+    console.log(extractCode);
 
     if ((extractedCode.match(/\d/g) || []).length < 3) {
       Swal.fire({
@@ -701,9 +701,8 @@ const Convert = () => {
   }
 
   const extractFees = (message) => {
-    const codePattern = /Fees:\s(\w+)/;
+    const codePattern = /Fees:\s(.+)/;
     const match = message.match(codePattern);
-    console.log(match);
     return match ? match[1] : null;
   }
   
