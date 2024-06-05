@@ -724,6 +724,7 @@ const Convert = () => {
               value={formData.client_name}
               onChange={handleInputChange}
               placeholder="Eg. Ms Nana"
+              required
             />
             <div className="postal-code">
               <label htmlFor="postal">Postal Code</label>
@@ -734,6 +735,7 @@ const Convert = () => {
                 value={formData.postal}
                 onChange={handleInputChange}
                 placeholder="Eg. 051531"
+                required
               />
               <div id="online">
                 <input
@@ -756,6 +758,7 @@ const Convert = () => {
               value={formData.level}
               onChange={handleInputChange}
               placeholder="Eg. p5"
+              required
             />
             <div className="subject">
               <label htmlFor="subject">Subject</label>
@@ -766,6 +769,7 @@ const Convert = () => {
                 value={formData.subject}
                 onChange={handleInputChange}
                 placeholder="Eg. math, science, english"
+                required
               />
               <div id="separateTutor">
                 <input
@@ -799,6 +803,7 @@ const Convert = () => {
               value={formData.frequency}
               onChange={handleInputChange}
               placeholder="Eg. 1 x 2 hrs/ week"
+              required
             />
 
             <label htmlFor="timings">Timings</label>
@@ -809,6 +814,7 @@ const Convert = () => {
               value={formData.timings}
               onChange={handleInputChange}
               placeholder="Eg. Wednesday 7pm-8pm"
+              required
             />
             <label htmlFor="tutor">Category of Tutor</label>
             <div id="tutor1">
