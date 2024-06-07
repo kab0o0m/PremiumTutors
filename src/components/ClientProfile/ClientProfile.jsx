@@ -145,6 +145,9 @@ const Convert = () => {
     setIsLoading(true);
     e.preventDefault();
 
+    //When testing
+    console.log("Test");
+
     //Extract Client Name
     const clientName =
       formData["client_name"].charAt(0).toUpperCase() +
