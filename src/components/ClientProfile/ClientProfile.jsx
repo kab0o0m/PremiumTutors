@@ -18,7 +18,7 @@ const Convert = () => {
   const academicChannel = import.meta.env.VITE_TEST_ACADEMIC.replace(/"/g, ''); 
   const musicChannel = import.meta.env.VITE_TEST_MUSIC.replace(/"/g, '');
   const sportsChannel = import.meta.env.VITE_TEST_SPORTS.replace(/"/g, '');
-  // let origin = import.meta.env.VITE_TEST_IFRAME_ORIGIN.replace(/"/g, '');
+  let origin = import.meta.env.VITE_TEST_IFRAME_ORIGIN.replace(/"/g, '');
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`
 
   const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdvn3QkUnGl7JX8WehOuHXdl8sijfnENOLgz9pKOIPCEh388g/viewform?usp=pp_url&entry.1366584600='
@@ -423,14 +423,14 @@ const Convert = () => {
       //Scroll to the Bottom of the page to see results
       setIsLoading(false);
 
-      // window.top.postMessage(
-      //   {
-      //     type: "CREATE_ASSIGNMENT",
-      //     TelegramTemplate,
-      //     ManyTutorsTemplate,
-      //   },
-      //   origin
-      // )
+      window.top.postMessage(
+        {
+          type: "CREATE_ASSIGNMENT",
+          TelegramTemplate,
+          ManyTutorsTemplate,
+        },
+        origin
+      )
 
       window.scrollTo({
         top: 800,
@@ -698,14 +698,14 @@ const Convert = () => {
     return match ? match[1] : null;
   }
   
-  // const ConfirmationTemplate = (e) => {
-  //   setTextOutput1(e.target.value);
-  //   window.top.postMessage(
-  //     { type: "CONFIRM_TEMPLATE_CHANGE_VALUE", changeValue: e.target.value },
-  //     origin
-  //   );
-  //   console.log(e.target.value, origin, "ss");
-  // };
+  const ConfirmationTemplate = (e) => {
+    setTextOutput1(e.target.value);
+    window.top.postMessage(
+      { type: "CONFIRM_TEMPLATE_CHANGE_VALUE", changeValue: e.target.value },
+      origin
+    );
+    console.log(e.target.value, origin, "ss");
+  };
 
 
   
@@ -944,8 +944,8 @@ const Convert = () => {
             cols="50"
             rows="30"
             value={textOutput1}
-            onChange={(e) => setTextOutput1(e.target.value)}
-            // onChange={(e) => ConfirmationTemplate(e)}
+            // onChange={(e) => setTextOutput1(e.target.value)}
+            onChange={(e) => ConfirmationTemplate(e)}
           ></textarea>
 
           <div className="convert-button">
