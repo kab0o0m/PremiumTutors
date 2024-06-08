@@ -18,6 +18,7 @@ const Convert = () => {
   const academicChannel = import.meta.env.VITE_TEST_ACADEMIC.replace(/"/g, ''); 
   const musicChannel = import.meta.env.VITE_TEST_MUSIC.replace(/"/g, '');
   const sportsChannel = import.meta.env.VITE_TEST_SPORTS.replace(/"/g, '');
+  // let origin = import.meta.env.VITE_TEST_IFRAME_ORIGIN.replace(/"/g, '');
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`
 
   const formURL = 'https://docs.google.com/forms/d/e/1FAIpQLSdvn3QkUnGl7JX8WehOuHXdl8sijfnENOLgz9pKOIPCEh388g/viewform?usp=pp_url&entry.1366584600='
@@ -402,46 +403,35 @@ const Convert = () => {
       setCopy("Copy to Clipboard");
       setCopy2("Copy to Clipboard");
       //Set output for Telegram template
-      setTextOutput1(
-        `${
-          clientLevel +
-          " " +
-          clientSubject +
-          tutorType +
-          " @ " +
-          nameOfNearestMrt
-        }\n\n${"Details of assignment"}\n${
-          "Location: " + clientAddress.address
-        }\n${"Duration: " + clientFrequency}\n${
-          "Timing: " + clientTimings
-        }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
-          "Remarks:" + clientRemarks
-        }\n\n${interested_applicants}\n\n${
-          "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
-        }`
-      );
-
-      setTextOutput2(
-        `${
-          clientLevel +
-          " " +
-          clientSubject +
-          tutorType +
-          " @ " +
-          nameOfNearestMrt
-        }\n\n${"Details of assignment"}\n${
-          "Location: " + clientAddress.address
-        }\n${"Duration: " + clientFrequency}\n${
-          "Timing: " + clientTimings
-        }\n\n${"Fees: " + clientFees}\n${"Commission: " + commission}\n\n${
-          "Remarks:" + clientRemarks
-        }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${
-          "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
-        }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`
-      );
+      let TelegramTemplate = `${clientLevel + " " + clientSubject + tutorType + " @ " + nameOfNearestMrt
+        }\n\n${"Details of assignment"}\n${"Location: " + clientAddress.address
+        }\n${"Duration: " + clientFrequency}\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees
+        }\n${"Commission: " + commission}\n\n${"Remarks:" + clientRemarks
+        }\n\n${interested_applicants}\n\n${"Code: " + codeGeneration(clientName, clientLevel, clientSubject)
+        }`;
+      setTextOutput1(TelegramTemplate);
+      
+      let ManyTutorsTemplate = `${clientLevel + " " + clientSubject + tutorType + " @ " + nameOfNearestMrt
+        }\n\n${"Details of assignment"}\n${"Location: " + clientAddress.address
+        }\n${"Duration: " + clientFrequency}\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees
+        }\n${"Commission: " + commission}\n\n${"Remarks:" + clientRemarks
+        }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${"Code: " + codeGeneration(clientName, clientLevel, clientSubject)
+        }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`;
+      
+      setTextOutput2(ManyTutorsTemplate);
 
       //Scroll to the Bottom of the page to see results
       setIsLoading(false);
+
+      // window.top.postMessage(
+      //   {
+      //     type: "CREATE_ASSIGNMENT",
+      //     TelegramTemplate,
+      //     ManyTutorsTemplate,
+      //   },
+      //   origin
+      // )
+
       window.scrollTo({
         top: 800,
         behavior: "smooth",
@@ -523,11 +513,11 @@ const Convert = () => {
     try {
 
       await axios.post(url, {
-      chat_id: academicId,
-      text: message,
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-      reply_markup: JSON.stringify(inlineButton)
+        chat_id: academicId,
+        text: message,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+        reply_markup: JSON.stringify(inlineButton)
     });
       
       Swal.fire({
@@ -590,19 +580,19 @@ const Convert = () => {
   
     try {
       await axios.post(url, {
-      chat_id: academicId,
-      text: message,
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-      reply_markup: JSON.stringify(inlineButton)
-    });
-    await axios.post(url, {
-      chat_id: musicId,
-      text: message,
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-      reply_markup: JSON.stringify(inlineButton)
-    });
+        chat_id: academicId,
+        text: message,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+        reply_markup: JSON.stringify(inlineButton)
+      });
+      await axios.post(url, {
+        chat_id: musicId,
+        text: message,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+        reply_markup: JSON.stringify(inlineButton)
+      });
 
       Swal.fire({
         title: 'Success',
@@ -672,14 +662,14 @@ const Convert = () => {
       parse_mode: "HTML",
       disable_web_page_preview: true,
       reply_markup: JSON.stringify(inlineButton)
-    });
-    await axios.post(url, {
-      chat_id: sportsId,
-      text: message,
-      parse_mode: "HTML",
-      disable_web_page_preview: true,
-      reply_markup: JSON.stringify(inlineButton)
-    });
+      });
+      await axios.post(url, {
+        chat_id: sportsId,
+        text: message,
+        parse_mode: "HTML",
+        disable_web_page_preview: true,
+        reply_markup: JSON.stringify(inlineButton)
+      });
       Swal.fire({
         title: 'Success',
         text: 'Message sent to ACADEMIC & SPORTS Telegram channel!',
@@ -708,6 +698,14 @@ const Convert = () => {
     return match ? match[1] : null;
   }
   
+  // const ConfirmationTemplate = (e) => {
+  //   setTextOutput1(e.target.value);
+  //   window.top.postMessage(
+  //     { type: "CONFIRM_TEMPLATE_CHANGE_VALUE", changeValue: e.target.value },
+  //     origin
+  //   );
+  //   console.log(e.target.value, origin, "ss");
+  // };
 
 
   
@@ -947,6 +945,7 @@ const Convert = () => {
             rows="30"
             value={textOutput1}
             onChange={(e) => setTextOutput1(e.target.value)}
+            // onChange={(e) => ConfirmationTemplate(e)}
           ></textarea>
 
           <div className="convert-button">
@@ -1015,9 +1014,6 @@ const Convert = () => {
         
       </div>
 
-      {/* <div class="iframe-container">
-        <iframe src="https://kab0o0m.github.io/PI/" allowfullscreen></iframe>
-    </div> */}
     </div>
   );
 };
