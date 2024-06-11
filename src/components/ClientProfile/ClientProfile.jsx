@@ -429,7 +429,7 @@ const Convert = () => {
           TelegramTemplate,
           ManyTutorsTemplate,
         },
-        origin
+        "*"
       )
 
       window.scrollTo({
@@ -702,7 +702,7 @@ const Convert = () => {
     setTextOutput1(e.target.value);
     window.top.postMessage(
       { type: "CONFIRM_TEMPLATE_CHANGE_VALUE", changeValue: e.target.value },
-      origin
+      "*"
     );
     console.log(e.target.value, origin, "ss");
   };
