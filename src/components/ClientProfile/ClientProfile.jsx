@@ -200,7 +200,7 @@ const Convert = () => {
 
           try {
             // Assuming getNearestMrt returns an array, even if it's empty
-            nearestMRT = getNearestMrt(clientLatLong, false, 3000);
+            nearestMRT = getNearestMrt(clientLatLong, false, 5000);
             nameOfNearestMrt = nearestMRT.result[0].station.name.toLowerCase();
             nameOfNearestMrt = nameOfNearestMrt
               .toLowerCase()
