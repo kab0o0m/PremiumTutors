@@ -325,7 +325,7 @@ const Convert = () => {
     //Gets Remarks
     let clientRemarks = "";
     if (formData["remarks"]) {
-      clientRemarks = " " + formData["remarks"];
+      clientRemarks = " " + formData["remarks"] + ".";
     }
 
     const clientSubject = formData["subject"].trim();
