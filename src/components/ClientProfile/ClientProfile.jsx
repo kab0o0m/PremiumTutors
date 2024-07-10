@@ -990,8 +990,8 @@ const Convert = () => {
               <p>"sec1", "Sec 3", "Secondary4"</p>
               <p>Junior College (JC)</p>
               <p>"jc", "junior", "junior college"</p>
-              <p>IGCSE 1-2</p>
-              <p>"is1", "igcse2"</p>
+              <p>IGCSE 1-4</p>
+              <p>"is1", "igcse3"</p>
               <p>IB Diploma</p>
               <p>"ib"</p>
               <p>Tertiary</p>
