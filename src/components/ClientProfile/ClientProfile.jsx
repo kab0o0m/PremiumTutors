@@ -298,6 +298,7 @@ const Convert = () => {
         .replace(/(jc|junior|junior college)(\d+)/i, "Junior College $2")
         .replace(/\bis\b/i, "IGCSE")
         .replace(/\bigcse\b/i, "IGCSE")
+        .replace(/(is|igcse)(\d+)/i, "IGCSE $2")
         .replace(/\bib/i, "IB Diploma")
         .replace(/\bpoly\b/i, "Polytechnic")
         .replace(/\bpolytechnic\b/i, "Polytechnic")
@@ -356,6 +357,7 @@ const Convert = () => {
 
     let clientFees = "";
     const calculateFees = () => {
+      console.log(clientLevel);
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
         if (formData["tutor1"] && rate["ptt"]) {
