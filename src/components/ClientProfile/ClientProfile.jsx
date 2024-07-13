@@ -296,9 +296,9 @@ const Convert = () => {
         .replace(/\bjunior\b/i, "Junior College")
         .replace(/\bjc\b/i, "Junior College")
         .replace(/(jc|junior|junior college)(\d+)/i, "Junior College $2")
-        .replace(/\bis\b/i, "IGCSE")
-        .replace(/\bigcse\b/i, "IGCSE")
-        .replace(/(is|igcse)(\d+)/i, "IGCSE $2")
+        .replace(/\bis\b/i, "IGCSE Year")
+        .replace(/\bigcse\b/i, "IGCSE Year")
+        .replace(/(is|igcse)(\d+)/i, "IGCSE Year $2")
         .replace(/\bib/i, "IB Diploma")
         .replace(/\bpoly\b/i, "Polytechnic")
         .replace(/\bpolytechnic\b/i, "Polytechnic")
@@ -357,39 +357,42 @@ const Convert = () => {
 
     let clientFees = "";
     const calculateFees = () => {
-      console.log(clientLevel);
+
       if (clientLevel.toLowerCase() in fees) {
         const rate = fees[clientLevel.toLowerCase()];
-        if (formData["tutor1"] && rate["ptt"]) {
-          clientFees =
-            clientFees +
-            rate["ptt"] +
-            "/hour" +
-            " Part Time/Undergrad Tutor" +
-            "\n";
-        }
-        if (formData["tutor2"] && rate["ftt"]) {
-          clientFees =
-            clientFees +
-            rate["ftt"] +
-            "/hour" +
-            " Full Time/Graduate Tutor" +
-            "\n";
-        }
-        if (formData["tutor3"] && rate["moe"]) {
-          clientFees =
-            clientFees +
-            rate["moe"] +
-            "/hour" +
-            " Ex/Current School Teachers" +
-            "\n";
-        }
         if (rate[clientSubject.toLowerCase()]) {
           clientFees =
             clientFees + rate[clientSubject.toLowerCase()] + "/lesson";
+        } else {
+          if (formData["tutor1"] && rate["ptt"]) {
+            clientFees =
+              clientFees +
+              rate["ptt"] +
+              "/hour" +
+              " Part Time/Undergrad Tutor" +
+              "\n";
+          }
+          if (formData["tutor2"] && rate["ftt"]) {
+            clientFees =
+              clientFees +
+              rate["ftt"] +
+              "/hour" +
+              " Full Time/Graduate Tutor" +
+              "\n";
+          }
+          if (formData["tutor3"] && rate["moe"]) {
+            clientFees =
+              clientFees +
+              rate["moe"] +
+              "/hour" +
+              " Ex/Current School Teachers" +
+              "\n";
+          }
         }
       } else {
         clientFees = "";
+      }
+      if (clientFees == "") {
         Swal.fire({
           title: "Fees",
           text: "Fees not calculated, please key in fees manually!",
@@ -429,6 +432,7 @@ const Convert = () => {
       }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${
         "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
       }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`;
+
       setTextOutput2(ManyTutorsTemplate);
 
       //Scroll to the Bottom of the page to see results
@@ -990,8 +994,8 @@ const Convert = () => {
               <p>"sec1", "Sec 3", "Secondary4"</p>
               <p>Junior College (JC)</p>
               <p>"jc", "junior", "junior college"</p>
-              <p>IGCSE 1-4</p>
-              <p>"is1", "igcse3"</p>
+              <p>IGCSE 1-6</p>
+              <p>"is1", "igcse3", "igcse 5"</p>
               <p>IB Diploma</p>
               <p>"ib"</p>
               <p>Tertiary</p>
@@ -1000,6 +1004,8 @@ const Convert = () => {
               <p>"u","uni", "university"</p>
               <p>Adult Learner</p>
               <p>"adult", "adult learner"</p>
+              <p>Grade 1-10 (Academics)</p>
+              <p>"grade1", "g2", "g 5"</p>
             </div>
             <div className="music">
               <p>Beginner (Music)</p>
@@ -1017,9 +1023,9 @@ const Convert = () => {
               <br />
               <br />
               <p>Subjects available</p>
-              <p>Music: Piano, Guitar, Violin, Drums, Ukulele</p>
+              <p><strong>Music:</strong> Piano, Guitar, Violin, Drums, Ukulele</p>
               <br />
-              <p>Sports: private, pair, group</p>
+              <p><strong>Sports:</strong> private, pair, group</p>
             </div>
           </div>
         </div>

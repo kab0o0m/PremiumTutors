@@ -4,7 +4,7 @@
       ftt: "$35 - $45",
       moe: "$50 - $70",
     },
-    nursery: {
+    "nursery": {
       ptt: "$25 - $30",
       ftt: "$35 - $45",
       moe: "$50 - $70",
@@ -89,43 +89,47 @@
       ftt: "$60 - $80",
       moe: "$90 - $120",
     },
-    igcse: {
-      ptt: "$35 - $50",
-      ftt: "$45 - $75",
-      moe: "$60 - $110",
-    },
-    "igcse 1": {
+    "igcse year 1": {
       ptt: "$40 - $45",
       ftt: "$50 - $60",
       moe: "$65 - $85",
     },
-    "igcse 2": {
+    "igcse year 2": {
       ptt: "$40 - $45",
       ftt: "$50 - $60",
       moe: "$65 - $85",
     },
-    "igcse 3": {
+    "igcse year 3": {
       ptt: "$40 - $45",
       ftt: "$55 - $65",
       moe: "$70 - $95",
     },
-    "igcse 4": {
+    "igcse year 4": {
       ptt: "$40 - $45",
       ftt: "$55 - $65",
       moe: "$70 - $95",
     },
-
+    "igcse year 5": {
+      ptt: "$40 - $55",
+      ftt: "$65 - $85",
+      moe: "$90 - $120",
+    },
+    "igcse year 6": {
+      ptt: "$40 - $55",
+      ftt: "$65 - $85",
+      moe: "$90 - $120",
+    },
     "ib diploma": {
       ptt: "$40 - $55",
       ftt: "$65 - $85",
       moe: "$90 - $120",
     },
-    polytechnic: {
+    "polytechnic": {
       ptt: "$40 - $60",
       ftt: "$60 - $95",
       moe: "$100 - $130",
     },
-    university: {
+    "university": {
       ptt: "$40 - $60",
       ftt: "$60 - $95",
       moe: "$100 - $130",
@@ -135,7 +139,7 @@
       ftt: "$50 - $70",
       moe: "$70 - $100",
     },
-    beginner: {
+    "beginner": {
       piano: "$40 - $45",
       guitar: "$35 - $45",
       violin: "$50 - $60",
@@ -143,10 +147,10 @@
       ukulele: "$35 - $45",
       vocals: "$45 - $60",
     },
-    intermediate: {
+    "intermediate": {
       vocals: "$60 - $80",
     },
-    advanced: {
+    "advanced": {
       vocals: "$85 - $100"
     },
     "grade 1": {
@@ -155,6 +159,9 @@
       violin: "$50 - $60",
       drums: "$55 - $65",
       ukulele: "$40 - $50",
+      ptt: "$30 - $35",
+      ftt: "$40 - $50",
+      moe: "$55 - $70"
     },
     "grade 2": {
       piano: "$45 - $60",
@@ -162,6 +169,9 @@
       violin: "$55 - $65",
       drums: "$60 - $70",
       ukulele: "$45 - $55",
+      ptt: "$30 - $35",
+      ftt: "$40 - $50",
+      moe: "$55 - $70"
     },
     "grade 3": {
       piano: "$50 - $60",
@@ -169,6 +179,9 @@
       violin: "$50 - $55",
       drums: "$65 - $70",
       ukulele: "$55 - $60",
+      ptt: "$30 - $35",
+      ftt: "$40 - $50",
+      moe: "$55 - $70"
     },
     "grade 4": {
       piano: "$50 - $70",
@@ -176,6 +189,9 @@
       violin: "$60 - $75",
       drums: "$70 - $80",
       ukulele: "$50 - $60",
+      ptt: "$35 - $40",
+      ftt: "$45 - $55",
+      moe: "$65 - $80"
     },
     "grade 5": {
       piano: "$55 - $75",
@@ -183,6 +199,9 @@
       violin: "$65 - $75",
       drums: "$75 - $85",
       ukulele: "$55 - $65",
+      ptt: "$35 - $40",
+      ftt: "$45 - $55",
+      moe: "$65 - $80"
     },
     "grade 6": {
       piano: "$60 - $80",
@@ -190,6 +209,9 @@
       violin: "$70 - $80",
       drums: "$85 - $95",
       ukulele: "$60 - $70",
+      ptt: "$35 - $40",
+      ftt: "$45 - $55",
+      moe: "$65 - $80"
     },
     "grade 7": {
       piano: "$65 - $85",
@@ -197,6 +219,9 @@
       violin: "$75 - $90",
       drums: "$90 - $100",
       ukulele: "$65 - $70",
+      ptt: "$40 - $45",
+      ftt: "$50 - $60",
+      moe: "$65 - $85",
     },
     "grade 8": {
       piano: "$70 - $90",
@@ -204,23 +229,36 @@
       violin: "$80 - $100",
       drums: "$95 - $110",
       ukulele: "$70 - $80",
+      ptt: "$40 - $45",
+      ftt: "$50 - $60",
+      moe: "$65 - $85",
     },
-    diploma: {
+    "grade 9": {
+      ptt: "$40 - $45",
+      ftt: "$55 - $65",
+      moe: "$70 - $95",
+    },
+    "grade 10": {
+      ptt: "$40 - $45",
+      ftt: "$55 - $65",
+      moe: "$70 - $95",
+    },
+    "diploma": {
       piano: "$75 & above",
       guitar: "$75 & above",
       violin: "$90 & above",
       drums: "$95 & above",
       ukulele: "$75 & above",
     },
-    leisure: {
+    "leisure": {
       piano: "$40 - $70",
     },
-    tennis: {
+    "tennis": {
       private: "$60 - $75",
       pair: "$90 - $100",
       group: "$110 - $130",
     },
-    badminton: {
+    "badminton": {
       private: "$50 - $60",
       pair: "$60 - $80",
       group: "$80 - $100",
