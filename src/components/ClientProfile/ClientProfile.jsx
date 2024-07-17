@@ -68,90 +68,31 @@ const Convert = () => {
     }
   };
 
+  /*Code generation:
+    First letter is "C"
+    Second and third letter is obtained from client level
+    Fourth and Fifth letter is obtained from client name
+  */
+  const codeGeneration = (clientName, clientLevel, clientSubject) => {
+    //First letter
+    const first_letter = "B";
 
-  //Fetch case
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-  const fetchCase = async (caseCode) => {
-    try {
-      const url = `https://admin.premiumtutors.sg/api/assignment/${caseCode}`;
-      const response = await axios.get(url);
-      const assignment = response.data.data;
-  
-      // If no assignment is found matching the caseCode
-      if (!assignment) {
-        console.log("Assignment code is valid");
-        return "valid"
-      } else {
-        console.log("Assignment code has been taken")
-        return "invalid"
-      }
-
-    } catch (error) {
-      if (error.message === "Network Error") {
-        Swal.fire({
-          title: "The Internet?",
-          text: "Network error! Please check your internet connection!",
-          icon: "question"
-        });
-        setIsLoading(false);
-        return;
-      } else if (error.response && error.response.status === 429) {
-        console.log("Too many requests. Please slow down.");
-        Swal.fire({
-          title: "Backend is down for awhile",
-          text: "Please wait for about 1 minute",
-          icon: "warning"
-        });
-        await delay(60000); // Delay for 1 second
-        
-        setIsLoading(false);
-        return "slow down";
-      } else {
-        console.log(error);
-        setIsLoading(false);
-        return;
-      }
-    }
-  };
-  
-  const codeGeneration = async (clientName, clientLevel, clientSubject) => {
-    let first_letter = "A";
+    //Get array of words by splitting them
     const clientArr = (clientLevel + " " + clientSubject).split(" ");
-    let second_third_letter = (clientArr[0][0] + clientArr[1][0]).toUpperCase();
+
+    //Second and third letter of the code generator
+    //By getting first letter of first two words to uppercase
+    const second_third_letter = (
+      clientArr[0][0] + clientArr[1][0]
+    ).toUpperCase();
+
+    //Fourth and fifth letter of the code generator
+    //By getting first two letters of client name after removing ms, mr, etc
     const name = clientName.replace(/^(Mr|Ms|Mrs|Dr|Doc|Mdm|Md)\.?\s+/i, "");
+    const fourth_fifth_letter = (name[0] + name[1]).toUpperCase();
 
-    let last_number = 1
-    last_number = last_number.toString().padStart(4, '0');
-
-    let fourth_letter = name[0].toUpperCase();
-    let code = first_letter + second_third_letter + fourth_letter + last_number;
-    
-
-    for (let index = 1; index <= 10000; index++) {
-      if (index === 10000) {
-        index = 1;
-        first_letter = 'B'
-      }
-
-      let existing_assignment = await fetchCase(code);
-      if (existing_assignment === 'invalid') {
-        index++;
-        last_number = index.toString().padStart(4, '0');
-        code = first_letter + second_third_letter + fourth_letter + last_number;
-        await delay(1000); // Add delay between requests to avoid rate limiting
-      } else if (existing_assignment === 'slow down') {
-        continue;
-      }
-      else {
-        break;
-      }
-    }
-    console.log(code);
-    return code;
+    return first_letter + second_third_letter + fourth_fifth_letter;
   };
-  
-  
 
   //For academic template
   let interested_applicants =
@@ -459,8 +400,6 @@ const Convert = () => {
     };
     calculateFees();
 
-    let code = await codeGeneration(clientName, clientLevel, clientSubject)
-
     try {
       clientLevel = clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       setCopy("Copy to Clipboard");
@@ -475,7 +414,7 @@ const Convert = () => {
       }\n${"Commission: " + commission}\n\n${
         "Remarks:" + clientRemarks
       }\n\n${interested_applicants}\n\n${
-        "Code: " + code
+        "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
       }`;
 
       setTextOutput1(TelegramTemplate);
@@ -489,7 +428,7 @@ const Convert = () => {
       }\n${"Commission: " + commission}\n\n${
         "Remarks:" + clientRemarks
       }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${
-        "Code: " + code
+        "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
       }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`;
 
       setTextOutput2(ManyTutorsTemplate);
