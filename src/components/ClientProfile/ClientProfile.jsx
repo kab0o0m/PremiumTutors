@@ -75,7 +75,7 @@ const Convert = () => {
   */
   const codeGeneration = (clientName, clientLevel, clientSubject) => {
     //First letter
-    const first_letter = "B";
+    const first_letter = "#B";
 
     //Get array of words by splitting them
     const clientArr = (clientLevel + " " + clientSubject).split(" ");
