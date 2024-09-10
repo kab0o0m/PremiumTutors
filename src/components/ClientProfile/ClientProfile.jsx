@@ -13,10 +13,10 @@ const Convert = () => {
   const [copy, setCopy] = useState("Copy to Clipboard");
   const [copy2, setCopy2] = useState("Copy to Clipboard");
   const [isLoading, setIsLoading] = useState(false);
-  const botToken = import.meta.env.VITE_TEST_TOKEN?.replace(/"/g, '');
-  const academicChannel = import.meta.env.VITE_TEST_ACADEMIC?.replace(/"/g, ''); 
-  const musicChannel = import.meta.env.VITE_TEST_MUSIC?.replace(/"/g, '');
-  const sportsChannel = import.meta.env.VITE_TEST_SPORTS?.replace(/"/g, '');
+  const botToken = import.meta.env.VITE_TEST_TOKEN.replace(/"/g, "");
+  const academicChannel = import.meta.env.VITE_TEST_ACADEMIC.replace(/"/g, "");
+  const musicChannel = import.meta.env.VITE_TEST_MUSIC.replace(/"/g, "");
+  const sportsChannel = import.meta.env.VITE_TEST_SPORTS.replace(/"/g, "");
   let origin = import.meta.env.VITE_TEST_IFRAME_ORIGIN;
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
@@ -80,7 +80,8 @@ const Convert = () => {
     Second and third letter is obtained from client level
     Fourth and Fifth letter is obtained from client name
   */
-  const codeGeneration = (clientName, clientLevel, clientSubject) => {
+  const codeGeneration = async (clientName, clientLevel, clientSubject) => {
+    //my work
     //First letter
     const data = await generateCode(
       "https://admin.premiumtutors.sg/api/generated-codes"
@@ -420,24 +421,23 @@ const Convert = () => {
       clientLevel = clientLevel.charAt(0).toUpperCase() + clientLevel.slice(1);
       setCopy("Copy to Clipboard");
       setCopy2("Copy to Clipboard");
-      const code = codeGeneration(clientName, clientLevel, clientSubject);
       //Set output for Telegram template
+      const code = await codeGeneration(clientName, clientLevel, clientSubject);
       let TelegramTemplate = `${
         clientLevel + " " + clientSubject + tutorType + " @ " + nameOfNearestMrt
-      }\n\n${"Details of assignment"}\n${
-        "Location: " + clientAddress.address
-      }\n${"Duration: " + clientFrequency}\n${"Timing: " + clientTimings}\n\n${
-        "Fees: " + clientFees
-      }\n${"Commission: " + commission}\n\n${
-        "Remarks:" + clientRemarks
-      }\n\n${interested_applicants}\n\n${
-        "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
+      } (#${code})\n
+      \n${"Details of assignment"}\n${"Location: " + clientAddress.address}\n${
+        "Duration: " + clientFrequency
+      }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n${
+        "Commission: " + commission
+      }\n\n${"Remarks:" + clientRemarks}\n\n${interested_applicants}\n\n${
+        "Code: " + code
       }`;
+
       setTextOutput1(TelegramTemplate);
-      
+
       let ManyTutorsTemplate = `${
         clientLevel + " " + clientSubject + tutorType + " @ " + nameOfNearestMrt
-      }(#${code})\n\n${"Details of assignment"}\n${
       }(#${code})\n\n${"Details of assignment"}\n${
         "Location: " + clientAddress.address
       }\n${"Duration: " + clientFrequency}\n${"Timing: " + clientTimings}\n\n${
@@ -447,7 +447,7 @@ const Convert = () => {
       }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${
         "Code: " + code
       }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`;
-      
+
       setTextOutput2(ManyTutorsTemplate);
 
       //Scroll to the Bottom of the page to see results
