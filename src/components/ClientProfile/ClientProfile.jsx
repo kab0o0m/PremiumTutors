@@ -68,14 +68,30 @@ const Convert = () => {
     }
   };
 
+  // generate code handler
+  const generateCode = async (url) => {
+    const response = await axios.get(url);
+    const data = await response.data;
+    return data;
+  };
+
   /*Code generation:
     First letter is "C"
     Second and third letter is obtained from client level
     Fourth and Fifth letter is obtained from client name
   */
-  const codeGeneration = (clientName, clientLevel, clientSubject) => {
+  const codeGeneration = async (clientName, clientLevel, clientSubject) => {
+    //my work
     //First letter
-    const first_letter = "#B";
+    const data = await generateCode(
+      "https://admin.premiumtutors.sg/api/generated-codes"
+    );
+    console.log(data, "functo");
+
+    const first_letter = data.letter ? data.letter : "";
+    const generatedNumber = data.generatedNumber ? data.generatedNumber : "";
+    console.log(first_letter, generatedNumber, "==>letter");
+    //my work
 
     //Get array of words by splitting them
     const clientArr = (clientLevel + " " + clientSubject).split(" ");
@@ -90,8 +106,9 @@ const Convert = () => {
     //By getting first two letters of client name after removing ms, mr, etc
     const name = clientName.replace(/^(Mr|Ms|Mrs|Dr|Doc|Mdm|Md)\.?\s+/i, "");
     const fourth_fifth_letter = (name[0] + name[1]).toUpperCase();
-
-    return first_letter + second_third_letter + fourth_fifth_letter;
+    return (
+      first_letter + second_third_letter + fourth_fifth_letter + generatedNumber
+    );
   };
 
   //For academic template
@@ -405,30 +422,30 @@ const Convert = () => {
       setCopy("Copy to Clipboard");
       setCopy2("Copy to Clipboard");
       //Set output for Telegram template
+      const code = await codeGeneration(clientName, clientLevel, clientSubject);
       let TelegramTemplate = `${
         clientLevel + " " + clientSubject + tutorType + " @ " + nameOfNearestMrt
-      }\n\n${"Details of assignment"}\n${
-        "Location: " + clientAddress.address
-      }\n${"Duration: " + clientFrequency}\n${"Timing: " + clientTimings}\n\n${
-        "Fees: " + clientFees
-      }\n${"Commission: " + commission}\n\n${
-        "Remarks:" + clientRemarks
-      }\n\n${interested_applicants}\n\n${
-        "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
+      } (#${code})\n
+      \n${"Details of assignment"}\n${"Location: " + clientAddress.address}\n${
+        "Duration: " + clientFrequency
+      }\n${"Timing: " + clientTimings}\n\n${"Fees: " + clientFees}\n${
+        "Commission: " + commission
+      }\n\n${"Remarks:" + clientRemarks}\n\n${interested_applicants}\n\n${
+        "Code: " + code
       }`;
 
       setTextOutput1(TelegramTemplate);
 
       let ManyTutorsTemplate = `${
         clientLevel + " " + clientSubject + tutorType + " @ " + nameOfNearestMrt
-      }\n\n${"Details of assignment"}\n${
+      }(#${code})\n\n${"Details of assignment"}\n${
         "Location: " + clientAddress.address
       }\n${"Duration: " + clientFrequency}\n${"Timing: " + clientTimings}\n\n${
         "Fees: " + clientFees
       }\n${"Commission: " + commission}\n\n${
         "Remarks:" + clientRemarks
       }\n\n${"Interested applicants, please email your profile to contact@premiumtutors.sg with the following details:"}\n\n${
-        "Code: " + codeGeneration(clientName, clientLevel, clientSubject)
+        "Code: " + code
       }\n\n${"Full name:"}\n${"Age, Gender:"}\n${"Address:"}\n${"Contact Number:"}\n${"Qualifications:"}\n${"Current Occupation:"}\n${"Tuition Experience (in years):"}\n${"Brief description of experience in relevant subject(s):"}\n${"Preferred timings:"}\n${"Expected hourly rate:"}`;
 
       setTextOutput2(ManyTutorsTemplate);
@@ -710,10 +727,11 @@ const Convert = () => {
   };
 
   const extractCode = (message) => {
-    const codePattern = /Code:\s(#\w+)/;
+    const codePattern = /Code:\s(\w+)/;
     const match = message.match(codePattern);
     return match ? match[1] : null;
   };
+
   const extractFees = (message) => {
     const codePattern = /Fees:\s(.+)/;
     const match = message.match(codePattern);
@@ -819,7 +837,7 @@ const Convert = () => {
                   checked={formData.separateTutor}
                   onChange={handleInputChange}
                 />
-                <label htmlFor="separateTutor">Separate Tutors</label>
+                <label for="separateTutor">Separate Tutors</label>
               </div>
               <div id="sameTutor">
                 <input
@@ -830,7 +848,7 @@ const Convert = () => {
                   checked={formData.sameTutor}
                   onChange={handleInputChange}
                 />
-                <label htmlFor="sameTutor">Same Tutor</label>
+                <label for="sameTutor">Same Tutor</label>
               </div>
             </div>
 
@@ -865,7 +883,7 @@ const Convert = () => {
                 checked={formData.tutor1}
                 onChange={handleInputChange}
               />
-              <label htmlFor="tutor1">Part Time/Undergrad Tutor</label>
+              <label for="tutor1">Part Time/Undergrad Tutor</label>
             </div>
             <div id="tutor2">
               <input
@@ -876,7 +894,7 @@ const Convert = () => {
                 checked={formData.tutor2}
                 onChange={handleInputChange}
               />
-              <label htmlFor="tutor2">Full Time/Graduate Tutor</label>
+              <label for="tutor2">Full Time/Graduate Tutor</label>
             </div>
             <div id="tutor3">
               <input
@@ -887,7 +905,7 @@ const Convert = () => {
                 checked={formData.tutor3}
                 onChange={handleInputChange}
               />
-              <label htmlFor="tutor3">Ex /Current School Teachers</label>
+              <label for="tutor3">Ex /Current School Teachers</label>
             </div>
 
             <br />
